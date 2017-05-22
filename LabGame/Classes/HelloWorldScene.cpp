@@ -72,17 +72,18 @@ bool HelloWorld::init()
 	//Player monsters 1 vector
 	//Touchable sprites 1 vector, etc
 	a = new Touchables();
-	a->init("Blue_Front1.png", "mainSprite", 100, visibleSize.height / 2 + width, "playera");
+	a->init("Button1.png", "mainSprite", visibleSize.width * 0.1, visibleSize.height * 0.1, Touchables::T_SUMMONBUT1);
+	a->getSprite()->setScale(0.5);
 
 	Touchables* b = new Touchables();
-	b->init("Blue_Front1.png", "mainSprite", 300, visibleSize.height / 2 + width, "playerb");
+	b->init("Button1.png", "mainSprite", visibleSize.width * 0.3, visibleSize.height * 0.1, Touchables::T_SUMMONBUT2);
+	b->getSprite()->setScale(0.5);
+
 	Touchables* c = new Touchables();
-	c->init("Blue_Front1.png", "mainSprite", 500, visibleSize.height / 2 + width, "playerc");
+	c->init("Button1.png", "mainSprite", visibleSize.width * 0.5, visibleSize.height * 0.1, Touchables::T_SUMMONBUT3);
+	c->getSprite()->setScale(0.5);
 
-	touchableSprites.push_back(a);
-	touchableSprites.push_back(b);
-	touchableSprites.push_back(c);
-
+	
 	/*auto mainSprite = Sprite::create("Blue_Front1.png");
 	mainSprite->setAnchorPoint(Vec2(0, 0));
 	mainSprite->setPosition(100, visibleSize.height/2 + width);
@@ -102,10 +103,19 @@ bool HelloWorld::init()
 	health2->setPosition(400, 300);
 	nodeItems->addChild(health2,1);
 
+	
+
+	touchableSprites.push_back(a);
+	touchableSprites.push_back(b);
+	touchableSprites.push_back(c);
+
 	for (auto* s : touchableSprites)
 	{
 		spriteNode->addChild(s->getSprite(), 1);
 	}
+	a->SetText("BUT 1",3, "fonts/Marker Felt.ttf");
+	b->SetText("BUT 2", 3, "fonts/Marker Felt.ttf");
+	c->SetText("BUT 3", 3, "fonts/arial.ttf");
 
 	auto moveEvent = MoveBy::create(1, Vec2(200, 0));  // Move to 200 pixels in 1 second
 	//Move to is absolute movement
@@ -132,7 +142,8 @@ bool HelloWorld::init()
 	this->addChild(spriteNode, 2);
 
 	auto _mouseListener = EventListenerMouse::create();
-	_mouseListener->onMouseUp = CC_CALLBACK_1(HelloWorld::onMouseDown, this);
+	_mouseListener->onMouseUp = CC_CALLBACK_1(HelloWorld::onMouseUp, this);
+	_mouseListener->onMouseMove = CC_CALLBACK_1(HelloWorld::onMouseMove, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
 
 	auto listener1 = EventListenerTouchOneByOne::create();
@@ -190,14 +201,14 @@ bool HelloWorld::init()
 	mLocInc.set(.005f, .01f);
 
 	//Shadow
-	auto shaderCharEffect = new GLProgram();
+	shaderCharEffect = new GLProgram();
 	shaderCharEffect->initWithFilenames("Basic.vsh", "CharEffect.fsh");
 	shaderCharEffect->bindAttribLocation(GLProgram::ATTRIBUTE_NAME_POSITION, GLProgram::VERTEX_ATTRIB_POSITION);
 	shaderCharEffect->bindAttribLocation(GLProgram::ATTRIBUTE_NAME_COLOR, GLProgram::VERTEX_ATTRIB_COLOR);
 	shaderCharEffect->bindAttribLocation(GLProgram::ATTRIBUTE_NAME_TEX_COORD, GLProgram::VERTEX_ATTRIB_TEX_COORDS);
 	shaderCharEffect->link();
 	shaderCharEffect->updateUniforms();
-	GLProgramState* state = GLProgramState::getOrCreateWithGLProgram(shaderCharEffect);
+	state = GLProgramState::getOrCreateWithGLProgram(shaderCharEffect);
 	state->setUniformVec2("loc", mLoc);
 
 	//VERTEX_ATTRIB_COLOR
@@ -226,12 +237,12 @@ bool HelloWorld::init()
 	rendtexSprite->setGLProgram(proPostProcess);
 	//this->addChild(rendtexSprite, 2);
 
-	//Shadow for touchable sprites
-	for (auto* s : touchableSprites)
-	{
-		s->getSprite()->setGLProgram(shaderCharEffect);
-		s->getSprite()->setGLProgramState(state);
-	}
+	////Shadow for touchable sprites
+	//for (auto* s : touchableSprites)
+	//{
+	//	s->getSprite()->setGLProgram(shaderCharEffect);
+	//	s->getSprite()->setGLProgramState(state);
+	//}
 
 	return true;
 }
@@ -264,6 +275,8 @@ void HelloWorld::update(float deltaTime)
 	{
 		if (s != nullptr)
 		{
+			s->Update(deltaTime);
+
 			if (s->move && s->getSprite() != nullptr)
 			{
 				if (s->GetTag() == "right")
@@ -367,7 +380,23 @@ void HelloWorld::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
 		}
 	}
 }
-void HelloWorld::onMouseDown(Event *event)
+void HelloWorld::onMouseMove(Event *event)
+{
+	//HOVERING change sprite
+	EventMouse* e = (EventMouse*)event;
+
+	for (auto* s : touchableSprites)
+	{
+		if (s->checkMouseDown(event))
+		{
+			s->getSprite()->setTexture("Button2.png");
+		}
+		else
+			s->getSprite()->setTexture("Button1.png");
+	}
+}
+
+void HelloWorld::onMouseUp(Event *event)
 {
 	EventMouse* e = (EventMouse*)event;
 	
@@ -380,37 +409,40 @@ void HelloWorld::onMouseDown(Event *event)
 	//Buttons to summon monsters/players
 	for (auto* s : touchableSprites)
 	{	
-		/*
-		float distance = s->getSprite()->getPosition().getDistance(
-			e->getLocation());*/
-
 		std::stringstream oss;
 
 		//Checking if point is within sprite's box, and the tag of sprite
 		if (s->checkMouseDown(event))
 		{
-			if (s->GetTag() == "playera")
+			if (s->GetType() == Touchables::T_SUMMONBUT1)
 			{
-				s->getSprite()->setPosition(Vec2(100, 100));
-				label->setString("touched a!");
+				s->getSprite()->setPosition(Vec2(100, 400));
+				label->setString("Touched 1st Button!");
+
+				//Spawn monster
 				GameChar* dc = new GameChar();
 				dc->init("Blue_Front1.png", "monster", visibleSize.width - visibleSize.width, visibleSize.height*0.5, "left",10,3,1);
 				this->getChildByName("spriteNode")->addChild(dc->getSprite(), 1);
+				dc->getSprite()->setGLProgram(shaderCharEffect);
+				dc->getSprite()->setGLProgramState(state);
 				monsters.push_back(dc);
 			}
-			if (s->GetTag() == "playerb")
+			if (s->GetType() == Touchables::T_SUMMONBUT2)
 			{
-				s->getSprite()->setPosition(Vec2(300, 100));
-				label->setString("touched b!");
+				//s->getSprite()->setPosition(Vec2(300, 100));
+				label->setString("Touched 2nd Button!");
+
+				//Spawn monster
 				GameChar* dc = new GameChar();
 				dc->init("ZigzagGrass_Mud_Round.png", "monster", visibleSize.width, visibleSize.height*0.5, "right",10,5,2);
-
+				dc->getSprite()->setGLProgram(shaderCharEffect);
+				dc->getSprite()->setGLProgramState(state);
 				this->getChildByName("spriteNode")->addChild(dc->getSprite(), 1);
 				monsters.push_back(dc);
 			}
-			if (s->GetTag() == "playerc")
+			if (s->GetType() == Touchables::T_SUMMONBUT3)
 			{
-				label->setString("touched c!");
+				label->setString("Touched 3rd Button!");
 			}
 		}
 	}

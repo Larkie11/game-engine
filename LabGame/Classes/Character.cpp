@@ -112,11 +112,13 @@ void GameChar::Update(float delta)
 		mainSprite->runAction(moveEvent);
 	}
 	
-
-	GLProgramState*state = GLProgramState::getOrCreateWithGLProgram(charEffect);
-	mainSprite->setGLProgram(charEffect);
-	mainSprite->setGLProgramState(state);
-	state->setUniformVec2("loc", mLoc);
+	if (mainSprite != nullptr)
+	{
+		GLProgramState*state = GLProgramState::getOrCreateWithGLProgram(charEffect);
+		mainSprite->setGLProgram(charEffect);
+		mainSprite->setGLProgramState(state);
+		state->setUniformVec2("loc", mLoc);
+	}
 }
 
 void GameChar::Stop()
