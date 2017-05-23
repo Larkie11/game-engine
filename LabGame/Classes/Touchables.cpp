@@ -12,6 +12,7 @@ void Touchables::init(const char* sprite, const char* name, float x, float y, To
 	mainSprite->setName(name);
 	this->t = t;
 	this->tag = tag;
+	disabled = false;
 	//Only for shader effect
 	/*mLoc.set(.5f, .5f);
 	mLocInc.set(.005f, .01f);
@@ -23,12 +24,29 @@ void Touchables::init(const char* sprite, const char* name, float x, float y, To
 	charEffect->link();
 	charEffect->updateUniforms();*/
 }
-void Touchables::SetText(std::string text, float scale, std::string font, cocos2d::Color3B & color)
+void Touchables::SetDisabled(bool disabled)
+{
+	this->disabled = disabled;
+}
+bool Touchables::GetDisabled()
+{
+	return disabled;
+}
+void Touchables::SetImage(const char* sprite, const char* name)
+{
+	auto imgSprite = Sprite::create(sprite);
+	imgSprite->setName(name);
+	imgSprite->setPosition(Vec2(mainSprite->getContentSize().width*.5, mainSprite->getContentSize().height*.5));
+
+	mainSprite->addChild(imgSprite, 1);
+}
+void Touchables::SetText(std::string text, float scale, std::string font, cocos2d::Color3B & color, float offsetx = 0, float offsety = 0)
 {
 	auto label = Label::createWithTTF(text, font, 32);
+	this->color = color;
 	label->setColor(color);
 	// Position the text in the center of the sprite
-	label->setPosition(Vec2(mainSprite->getContentSize().width*.5,mainSprite->getContentSize().height*.5));
+	label->setPosition(Vec2(mainSprite->getContentSize().width*.5+offsetx,mainSprite->getContentSize().height*.5+offsety));
 	label->setScale(scale);
 	label->enableShadow(Color4B(0, 0, 255, 255), Size(2, 5), 0);
 	label->setName("label");
@@ -56,7 +74,7 @@ bool Touchables::checkMouseDown(Event *event)
 	//Check if this is getting touched
 	EventMouse* e = (EventMouse*)event;
 
-	if (mainSprite->getBoundingBox().containsPoint(e->getLocationInView()))
+	if (mainSprite->getBoundingBox().containsPoint(e->getLocationInView()) && !disabled)
 	{
 		return true;
 	}
@@ -66,6 +84,11 @@ bool Touchables::checkMouseDown(Event *event)
 
 void Touchables::Update(float delta)
 {
+	if (disabled && GetLabel()->getString() != "Locked")
+	{
+		GetLabel()->setString("Locked");
+		GetLabel()->setColor(ccc3(0, 0, 0));
+	}
 	//Only for shader effect
 	/*GLProgramState*state = GLProgramState::getOrCreateWithGLProgram(charEffect);
 	mainSprite->setGLProgram(charEffect);

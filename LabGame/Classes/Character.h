@@ -21,7 +21,7 @@ private:
 	float attackTimer;
 	int damage;
 public: 
-	void init(const char*, const char*, float, float, std::string, int, float, int);
+	void init(const char*, const char*, float, float, std::string, int, float, int, float);
 	void MoveChar(int);
 	void MoveCharByCoord(float, float);
 	void Update(float);
@@ -29,6 +29,10 @@ public:
 	void Left();
 	void Right();
 	bool move;
+	float GetSpeed()
+	{
+		return fSpeed;
+	}
 	void ResetAttackTime()
 	{
 		attackTimer = defaultAttackTimer;

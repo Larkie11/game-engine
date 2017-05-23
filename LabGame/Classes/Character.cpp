@@ -1,10 +1,10 @@
 #include "Character.h"
 #include "HelloWorldScene.h"
 
-void GameChar::init(const char* sprite, const char* name, float x, float y, std::string tag, int health, float attackTimer, int damage)
+void GameChar::init(const char* sprite, const char* name, float x, float y, std::string tag, int health, float attackTimer, int damage,float speed)
 {
 	intDir = 0;
-	fSpeed = 0.01;
+	fSpeed = speed;
 
 	mainSprite = Sprite::create(sprite);
 	mainSprite->setAnchorPoint(Vec2(0, 0));

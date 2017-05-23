@@ -1,5 +1,5 @@
-#ifndef __HELLOWORLD_SCENE_H__
-#define __HELLOWORLD_SCENE_H__
+#ifndef __SELECTLEVEL_SCENE_H__
+#define __SELECTLEVEL_SCENE_H__
 
 #include "cocos2d.h"
 #include "Character.h"
@@ -9,7 +9,7 @@ using namespace cocos2d;
 #include <vector>
 using std::vector;
 
-class HelloWorld : public cocos2d::Layer
+class SelectLevel : public cocos2d::Layer
 {
 
 private:
@@ -33,7 +33,7 @@ private:
 	Label* health2;
 	GLProgram* shaderCharEffect;
 	GLProgramState* state;
-	int high_score = 0;
+	int levelunlocked = 1;
 
 public:
     static cocos2d::Scene* createScene();
@@ -57,7 +57,7 @@ public:
 	}
 	
     // implement the "static create()" method manually
-    CREATE_FUNC(HelloWorld);
+    CREATE_FUNC(SelectLevel);
 };
 
 #endif // __HELLOWORLD_SCENE_H__

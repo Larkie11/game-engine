@@ -9,13 +9,13 @@ using std::string;
 
 USING_NS_CC;
 
-Scene* HelloWorld::createScene()
+Scene* SelectLevel::createScene()
 {
     // 'scene' is an autorelease object
     auto scene = Scene::create();
     
     // 'layer' is an autorelease object
-    auto layer = HelloWorld::create();
+    auto layer = SelectLevel::create();
 
     // add layer as a child to scene
     scene->addChild(layer,0,999);
@@ -25,7 +25,7 @@ Scene* HelloWorld::createScene()
 }
 
 // on "init" you need to initialize your instance
-bool HelloWorld::init()
+bool SelectLevel::init()
 {
 	//////////////////////////////
 	// 1. super init first
@@ -34,6 +34,8 @@ bool HelloWorld::init()
 		return false;
 	}
 
+	CCUserDefault *def = CCUserDefault::sharedUserDefault();
+	levelunlocked = def->getIntegerForKey("LevelUnlockedTest");
 	touchableSprites.clear();
 
 	visibleSize = Director::getInstance()->getVisibleSize();
@@ -46,7 +48,7 @@ bool HelloWorld::init()
 	sprite->setAnchorPoint(Vec2::ZERO);
 	float width = sprite->getContentSize().width;
 
-	backgroundSprite = Sprite::create("1.png");
+	backgroundSprite = Sprite::create("4.png");
 	backgroundSprite->setAnchorPoint(Vec2::ZERO);
 	backgroundSprite->setContentSize(playingSize);
 	backgroundSprite->setScaleX((visibleSize.width / backgroundSprite->getContentSize().width) * 1);
@@ -57,14 +59,6 @@ bool HelloWorld::init()
 
 	sprite->setPosition(0, 0);
 
-	for (int i = 0; i < loop; i++)
-	{
-		auto sprite2 = Sprite::create("ZigzagGrass_Mud_Round.png");
-		sprite2->setAnchorPoint(Vec2::ZERO);
-		sprite2->setPosition(i * width, (visibleSize.height / 2) - sprite2->getContentSize().height);
-		nodeItems->addChild(sprite2, 1);
-	}
-
 	auto spriteNode = Node::create();
 	spriteNode->setName("spriteNode");
 
@@ -73,19 +67,19 @@ bool HelloWorld::init()
 	//Player monsters 1 vector
 	//Touchable sprites 1 vector, etc
 	a = new Touchables();
-	a->init("Button1.png", "mainSprite", visibleSize.width * 0.1, visibleSize.height * 0.1, Touchables::T_SUMMONBUT1);
+	a->init("Button1.png", "mainSprite", visibleSize.width * 0.1, visibleSize.height * 0.7, Touchables::T_LEVEL1);
 	a->getSprite()->setScale(0.5);
 
 	Touchables* b = new Touchables();
-	b->init("Button1.png", "mainSprite", visibleSize.width * 0.3, visibleSize.height * 0.1, Touchables::T_SUMMONBUT2);
+	b->init("Button1.png", "mainSprite", visibleSize.width * 0.3, visibleSize.height * 0.7, Touchables::T_LEVEL2);
 	b->getSprite()->setScale(0.5);
 
 	Touchables* c = new Touchables();
-	c->init("Button1.png", "mainSprite", visibleSize.width * 0.5, visibleSize.height * 0.1, Touchables::T_SUMMONBUT3);
+	c->init("Button1.png", "mainSprite", visibleSize.width * 0.5, visibleSize.height * 0.7, Touchables::T_LEVEL3);
 	c->getSprite()->setScale(0.5);
 
 	std::stringstream oss;
-	oss << high_score;
+	oss << levelunlocked;
 	//Texts for debugging
 	label = Label::createWithTTF("label test", "fonts/Marker Felt.ttf", 32);
 	label->setPosition(500,500);
@@ -108,11 +102,14 @@ bool HelloWorld::init()
 	{
 		spriteNode->addChild(s->getSprite(), 1);
 	}
-	a->SetImage("walk_1.png", "but1");
-	b->SetImage("walk_2.png", "but2");
-	a->SetText("Summon 1",3, "fonts/Soos.ttf", ccc3(0, 200, 255),0, -a->getSprite()->getContentSize().width*.3);
-	b->SetText("Summon 2", 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, -a->getSprite()->getContentSize().width*.3);
-	c->SetText("Summon 3", 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, -a->getSprite()->getContentSize().width*.3);
+
+	a->SetText("Level 1",3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, 0);
+	b->SetText("Level 2", 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, 0);
+	c->SetText("Level 3", 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, 0);
+	if(levelunlocked < 2)
+	b->SetDisabled(true);
+	if(levelunlocked < 3)
+	c->SetDisabled(true);
 
 	auto moveEvent = MoveBy::create(1, Vec2(200, 0));  // Move to 200 pixels in 1 second
 	//Move to is absolute movement
@@ -127,8 +124,8 @@ bool HelloWorld::init()
 
 	auto listener = EventListenerKeyboard::create();
 
-	listener->onKeyPressed = CC_CALLBACK_2(HelloWorld::onKeyPressed, this);
-	listener->onKeyReleased = CC_CALLBACK_2(HelloWorld::onKeyReleased, this);
+	listener->onKeyPressed = CC_CALLBACK_2(SelectLevel::onKeyPressed, this);
+	listener->onKeyReleased = CC_CALLBACK_2(SelectLevel::onKeyReleased, this);
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
@@ -136,12 +133,12 @@ bool HelloWorld::init()
 	this->addChild(spriteNode, 2);
 
 	auto _mouseListener = EventListenerMouse::create();
-	_mouseListener->onMouseUp = CC_CALLBACK_1(HelloWorld::onMouseUp, this);
-	_mouseListener->onMouseMove = CC_CALLBACK_1(HelloWorld::onMouseMove, this);
+	_mouseListener->onMouseUp = CC_CALLBACK_1(SelectLevel::onMouseUp, this);
+	_mouseListener->onMouseMove = CC_CALLBACK_1(SelectLevel::onMouseMove, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
 
 	auto listener1 = EventListenerTouchOneByOne::create();
-	listener1->onTouchEnded = CC_CALLBACK_2(HelloWorld::onTouchEnded, this);
+	listener1->onTouchEnded = CC_CALLBACK_2(SelectLevel::onTouchEnded, this);
 
 	this->scheduleUpdate();
 	/*
@@ -153,7 +150,7 @@ bool HelloWorld::init()
 	   auto closeItem = MenuItemImage::create(
 	                                          "CloseNormal.png",
 	                                          "CloseSelected.png",
-	                                          CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
+	                                          CC_CALLBACK_1(SelectLevel::menuCloseCallback, this));
 	   
 	   closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
 	                               origin.y + closeItem->getContentSize().height/2));
@@ -178,8 +175,8 @@ bool HelloWorld::init()
 	   // add the label as a child to this layer
 	   this->addChild(label, 1);
 
-	   // add "HelloWorld" splash screen"
-	   auto sprite = Sprite::create("HelloWorld.png");
+	   // add "SelectLevel" splash screen"
+	   auto sprite = Sprite::create("SelectLevel.png");
 	   auto sprite2 = Sprite::create("Blue_Front1.png");
 
 	   // position the sprite on the center of the screen
@@ -238,7 +235,7 @@ bool HelloWorld::init()
 
 	return true;
 }
-void HelloWorld::update(float deltaTime)
+void SelectLevel::update(float deltaTime)
 {
 	//auto cam = Camera::getDefaultCamera();
 	/*rendtex->beginWithClear(1.0f, .0f, .0f, .0f);
@@ -258,113 +255,8 @@ void HelloWorld::update(float deltaTime)
 	{
 		s->Update(deltaTime);
 	}
-	
-	//Movement of monsters/player monsters
-	//Play their respective animation sprites for movement here
-	for (auto* s : monsters)
-	{
-		s->Update(deltaTime);
-
-		if (s != nullptr)
-		{
-			if (s->move && s->getSprite() != nullptr)
-			{
-				if (s->GetTag() == "right")
-				{
-					//s->MoveChar(1);
-					s->getSprite()->setPosition(s->getSprite()->getPosition().x - s->GetSpeed(), s->getSprite()->getPosition().y);
-				}
-				if (s->GetTag() == "left")
-					//s->MoveChar(-1);
-
-					s->getSprite()->setPosition(s->getSprite()->getPosition().x + s->GetSpeed(), s->getSprite()->getPosition().y);
-			}
-
-		}
-	}
-	//Collision detection between monsters/player's monsters
-	for (std::vector<GameChar *>::iterator a = monsters.begin(); a != monsters.end(); ++a)
-	{
-		GameChar *go = (GameChar *)*a;
-		for (std::vector<GameChar*>::iterator it2 = a + 1; it2 != monsters.end(); ++it2)
-		{
-			GameChar*other = (GameChar*)*it2;
-			GameChar *goA = go, *goB = other;
-			
-			if (goA != NULL && goB != NULL)
-			{
-				if (goA->getSprite() != nullptr && goB->getSprite() != nullptr)
-				{
-					Rect rect1 = goA->getSprite()->getBoundingBox();
-					Rect rect2 = goB->getSprite()->getBoundingBox();
-					{
-						//If anything is in collision
-						if (rect1.intersectsRect(rect2))
-						{
-							//Check if the tag not the same, all monsters have same tags, all players have same tags
-							if (goA->GetTag() != goB->GetTag())
-							{
-								goA->move = false;
-								goB->move = false;
-								goA->ReduceTimer(deltaTime);
-								goB->ReduceTimer(deltaTime);
-								std::stringstream oss;
-
-								oss << goA->GetAttackTimer() << "      " << goA->GetHealth();
-
-								//health1->setString(oss.str());
-
-								oss.str("");
-								oss << goB->GetAttackTimer() << "      " << goB->GetHealth();
-								//health2->setString(oss.str());
-								oss.str("");
-
-								//Attack timing?? Not really needed right now
-								//Can play any animations here
-								if (goA->GetAttackTimer() <= 0)
-								{
-									goB->MinusHealth(goA->GetDamage());									
-									goA->ResetAttackTime();
-								}
-								if (goB->GetAttackTimer() <= 0)
-								{
-									goA->MinusHealth(goB->GetDamage());
-									goB->ResetAttackTime();
-								}
-							}
-						}
-						if (goA->GetHealth() <= 0)
-						{
-							goA->RemoveSprite();
-							for (std::vector<GameChar *>::iterator a = monsters.begin(); a != monsters.end(); ++a)
-							{
-								GameChar *go = (GameChar *)*a;
-								if (go->GetTag() != goA->GetTag())
-								{
-									go->move = true;
-								}
-							}
-						}
-						if (goB->GetHealth() <= 0)
-						{
-							goB->RemoveSprite();
-							for (std::vector<GameChar *>::iterator a = monsters.begin(); a != monsters.end(); ++a)
-							{
-								GameChar *go = (GameChar *)*a;
-								if (go->GetTag() != goB->GetTag())
-								{
-									go->move = true;
-								}
-							}
-							goA->move = true;
-						}
-					}
-				}
-			}
-		}
-	}
 }
-void HelloWorld::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
+void SelectLevel::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
 {
 	for (auto* s : touchableSprites)
 	{
@@ -374,33 +266,36 @@ void HelloWorld::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
 		}
 	}
 }
-void HelloWorld::onMouseMove(Event *event)
+void SelectLevel::onMouseMove(Event *event)
 {
 	//HOVERING change sprite
 	EventMouse* e = (EventMouse*)event;
 
 	for (auto* s : touchableSprites)
 	{
-		if (s->checkMouseDown(event))
+		if (!s->GetDisabled())
 		{
-			s->getSprite()->setTexture("Button2.png");
-			if (s->GetLabel() != nullptr)
+			if (s->checkMouseDown(event))
 			{
-				s->GetLabel()->setColor(ccc3(0, 0, 255));
+				s->getSprite()->setTexture("Button2.png");
+				if (s->GetLabel() != nullptr)
+				{
+					s->GetLabel()->setColor(ccc3(0, 0, 255));
+				}
 			}
-		}
-		else
-		{
-			s->getSprite()->setTexture("Button1.png");
-			if (s->GetLabel() != nullptr)
+			else
 			{
-				s->GetLabel()->setColor(ccc3(0, 200, 255));
+				s->getSprite()->setTexture("Button1.png");
+				if (s->GetLabel() != nullptr)
+				{
+					s->GetLabel()->setColor(s->GetDefaultTextColor());
+				}
 			}
 		}
 	}
 }
 
-void HelloWorld::onMouseUp(Event *event)
+void SelectLevel::onMouseUp(Event *event)
 {
 	EventMouse* e = (EventMouse*)event;
 	
@@ -418,53 +313,31 @@ void HelloWorld::onMouseUp(Event *event)
 		//Checking if point is within sprite's box, and the tag of sprite
 		if (s->checkMouseDown(event))
 		{
-			GameChar* dc = new GameChar();
-
 			switch (s->GetType())
 			{
-			case Touchables::T_SUMMONBUT1:
-				//s->getSprite()->setPosition(Vec2(100, 400));
-				label->setString("Touched 1st Button!");
-				//Spawn monster
-				dc->init("walk_1.png", "monster", visibleSize.width - visibleSize.width, visibleSize.height*0.5, "left", 10, 3, 1,3);
-				dc->getSprite()->setScale(0.5);
-				this->getChildByName("spriteNode")->addChild(dc->getSprite(), 1);
-				dc->getSprite()->setGLProgram(shaderCharEffect);
-				dc->getSprite()->setGLProgramState(state);
-				monsters.push_back(dc);
+			case Touchables::T_LEVEL1:
+				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, HelloWorld::createScene(), Color3B(0, 0, 0)));
 
 				break;
-			case Touchables::T_SUMMONBUT2:
-				//s->getSprite()->setPosition(Vec2(300, 100));
-				label->setString("Touched 2nd Button!");
-				//Spawn monster
-				dc->init("walk_2.png", "monster", visibleSize.width, visibleSize.height*0.5, "right", 10, 5, 2,1);
-				dc->getSprite()->setFlippedX(true);
-				dc->getSprite()->setScale(0.5);
-				dc->getSprite()->setGLProgram(shaderCharEffect);
-				dc->getSprite()->setGLProgramState(state);
-				this->getChildByName("spriteNode")->addChild(dc->getSprite(), 1);
-				monsters.push_back(dc);
+			case Touchables::T_LEVEL2:
+				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, HelloWorld::createScene(), Color3B(0, 255, 255)));
+
 				break;
-			case Touchables::T_SUMMONBUT3:
-				label->setString("Touched 3rd Button!");
+			case Touchables::T_LEVEL3:
+				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, HelloWorld::createScene(), Color3B(0, 255, 255)));
+
 				break;
 			}
 		}
 	}
 	//a->MoveCharByCoord(e->getCursorX(), e->getCursorY());
 }
-void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
+void SelectLevel::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {
 	switch (keyCode)
 	{
 	case EventKeyboard::KeyCode::KEY_SPACE:
-		CCUserDefault *def = CCUserDefault::sharedUserDefault();
-		//Once finish then unlock second level, for now this is testing the unlock system with space
-		def->setIntegerForKey("LevelUnlockedTest", 2);
-		def->flush();
-		CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, SelectLevel::createScene(), Color3B(0, 255, 255)));
-		break;
+		CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, HelloWorld::createScene(), Color3B(0, 255, 255)));
 	}
 	if (keyCode == EventKeyboard::KeyCode::KEY_RIGHT_ARROW)
 	{
@@ -484,12 +357,12 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 		//s->getSprite()->getBoundingBox().setRect(s->getSprite()->getPosition().x + moveDir, s->getSprite()->getPosition().y, s->getSprite()->getContentSize().width, s->getSprite()->getContentSize().height);
 	}
 }
-void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
+void SelectLevel::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
 {
 	moveDir = 0;
 	//a->MoveChar(0);
 }
-void HelloWorld::menuCloseCallback(Ref* pSender)
+void SelectLevel::menuCloseCallback(Ref* pSender)
 {
     //Close the cocos2d-x game scene and quit the application
     Director::getInstance()->end();

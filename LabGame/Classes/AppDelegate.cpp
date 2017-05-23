@@ -1,6 +1,10 @@
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
 
+
+
+#include "SelectLevelScene.h"
+
 USING_NS_CC;
 
 static cocos2d::Size designResolutionSize = cocos2d::Size(1024, 768);
@@ -75,9 +79,10 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // create a scene. it's an autorelease object
     auto scene = HelloWorld::createScene();
+	auto selectlevel = SelectLevel::createScene();
 
     // run
-    director->runWithScene(scene);
+    director->runWithScene(selectlevel);
 
     return true;
 }
