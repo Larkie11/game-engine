@@ -1,3 +1,15 @@
-﻿  LabGame.vcxproj -> C:\Users\WM\Documents\game-engine\LabGame\proj.win32\Debug.win32\LabGame.exe
+﻿  HelloWorldScene.cpp
+c:\users\wm\documents\game-engine\labgame\classes\helloworldscene.cpp(6): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\wm\documents\game-engine\labgame\classes\helloworldscene.cpp(109): warning C4996: 'cocos2d::ccc3': was declared deprecated
+  c:\users\wm\documents\game-engine\labgame\cocos2d\cocos\deprecated\ccdeprecated.h(475): note: see declaration of 'cocos2d::ccc3'
+c:\users\wm\documents\game-engine\labgame\classes\helloworldscene.cpp(110): warning C4996: 'cocos2d::ccc3': was declared deprecated
+  c:\users\wm\documents\game-engine\labgame\cocos2d\cocos\deprecated\ccdeprecated.h(475): note: see declaration of 'cocos2d::ccc3'
+c:\users\wm\documents\game-engine\labgame\classes\helloworldscene.cpp(111): warning C4996: 'cocos2d::ccc3': was declared deprecated
+  c:\users\wm\documents\game-engine\labgame\cocos2d\cocos\deprecated\ccdeprecated.h(475): note: see declaration of 'cocos2d::ccc3'
+c:\users\wm\documents\game-engine\labgame\classes\helloworldscene.cpp(386): warning C4996: 'cocos2d::ccc3': was declared deprecated
+  c:\users\wm\documents\game-engine\labgame\cocos2d\cocos\deprecated\ccdeprecated.h(475): note: see declaration of 'cocos2d::ccc3'
+c:\users\wm\documents\game-engine\labgame\classes\helloworldscene.cpp(394): warning C4996: 'cocos2d::ccc3': was declared deprecated
+  c:\users\wm\documents\game-engine\labgame\cocos2d\cocos\deprecated\ccdeprecated.h(475): note: see declaration of 'cocos2d::ccc3'
+  LabGame.vcxproj -> C:\Users\WM\Documents\game-engine\LabGame\proj.win32\Debug.win32\LabGame.exe
   LabGame.vcxproj -> C:\Users\WM\Documents\game-engine\LabGame\proj.win32\Debug.win32\LabGame.pdb (Full PDB)
   0 File(s) copied

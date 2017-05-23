@@ -83,12 +83,6 @@ bool HelloWorld::init()
 	c->init("Button1.png", "mainSprite", visibleSize.width * 0.5, visibleSize.height * 0.1, Touchables::T_SUMMONBUT3);
 	c->getSprite()->setScale(0.5);
 
-	
-	/*auto mainSprite = Sprite::create("Blue_Front1.png");
-	mainSprite->setAnchorPoint(Vec2(0, 0));
-	mainSprite->setPosition(100, visibleSize.height/2 + width);
-	mainSprite->setName("mainSprite");*/
-
 	//Texts for debugging
 	label = Label::createWithTTF("label test", "fonts/Marker Felt.ttf", 32);
 	label->setPosition(500,500);
@@ -103,8 +97,6 @@ bool HelloWorld::init()
 	health2->setPosition(400, 300);
 	nodeItems->addChild(health2,1);
 
-	
-
 	touchableSprites.push_back(a);
 	touchableSprites.push_back(b);
 	touchableSprites.push_back(c);
@@ -113,9 +105,10 @@ bool HelloWorld::init()
 	{
 		spriteNode->addChild(s->getSprite(), 1);
 	}
-	a->SetText("BUT 1",3, "fonts/Marker Felt.ttf");
-	b->SetText("BUT 2", 3, "fonts/Marker Felt.ttf");
-	c->SetText("BUT 3", 3, "fonts/arial.ttf");
+
+	a->SetText("BUT 1",3, "fonts/Soos.ttf", ccc3(0, 200, 255));
+	b->SetText("BUT 2", 3, "fonts/Soos.ttf", ccc3(0, 200, 255));
+	c->SetText("BUT 3", 3, "fonts/Soos.ttf", ccc3(0, 200, 255));
 
 	auto moveEvent = MoveBy::create(1, Vec2(200, 0));  // Move to 200 pixels in 1 second
 	//Move to is absolute movement
@@ -127,8 +120,6 @@ bool HelloWorld::init()
 	auto delay = DelayTime::create(5.0f);
 	auto delaySequence = Sequence::create(delay, delay->clone(), nullptr);
 	auto sequence = Sequence::create(moveEvent, moveEvent->reverse(), delaySequence, nullptr); //Store all the events, end with nullptr for all sequence
-	//mainSprite->runAction(sequence);
-	//mainSprite->runAction(sequence->reverse());
 
 	auto listener = EventListenerKeyboard::create();
 
@@ -137,7 +128,6 @@ bool HelloWorld::init()
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-	//nodeItems->addChild(sprite, 0);
 	this->addChild(nodeItems, 1);
 	this->addChild(spriteNode, 2);
 
@@ -196,11 +186,9 @@ bool HelloWorld::init()
 	   this->addChild(sprite, 0);
 	   this->addChild(sprite2, 0);
 	   */
-
+	//Shadow
 	mLoc.set(.5f, .5f);
 	mLocInc.set(.005f, .01f);
-
-	//Shadow
 	shaderCharEffect = new GLProgram();
 	shaderCharEffect->initWithFilenames("Basic.vsh", "CharEffect.fsh");
 	shaderCharEffect->bindAttribLocation(GLProgram::ATTRIBUTE_NAME_POSITION, GLProgram::VERTEX_ATTRIB_POSITION);
@@ -213,7 +201,7 @@ bool HelloWorld::init()
 
 	//VERTEX_ATTRIB_COLOR
 	//Not working
-	//Grey scale
+	//Gray scale
 	proPostProcess = new GLProgram();
 	proPostProcess->initWithFilenames("Basic.vsh", "GreyScale.fsh");
 	proPostProcess->bindAttribLocation(GLProgram::ATTRIBUTE_NAME_COLOR, GLProgram::VERTEX_ATTRIB_COLOR);
@@ -266,26 +254,28 @@ void HelloWorld::update(float deltaTime)
 	{
 		s->Update(deltaTime);
 	}
-	auto moveEvent = MoveBy::create(0, Vec2(1, 0));
-	auto moveEvents = MoveBy::create(0, Vec2(-1, 0));
-
+	
 	//Movement of monsters/player monsters
 	//Play their respective animation sprites for movement here
 	for (auto* s : monsters)
 	{
+		s->Update(deltaTime);
+
 		if (s != nullptr)
 		{
-			s->Update(deltaTime);
-
 			if (s->move && s->getSprite() != nullptr)
 			{
 				if (s->GetTag() == "right")
 				{
+					//s->MoveChar(1);
 					s->getSprite()->setPosition(s->getSprite()->getPosition().x - 1, s->getSprite()->getPosition().y);
 				}
 				if (s->GetTag() == "left")
+					//s->MoveChar(-1);
+
 					s->getSprite()->setPosition(s->getSprite()->getPosition().x + 1, s->getSprite()->getPosition().y);
 			}
+
 		}
 	}
 	//Collision detection between monsters/player's monsters
@@ -390,9 +380,19 @@ void HelloWorld::onMouseMove(Event *event)
 		if (s->checkMouseDown(event))
 		{
 			s->getSprite()->setTexture("Button2.png");
+			if (s->GetLabel() != nullptr)
+			{
+				s->GetLabel()->setColor(ccc3(0, 0, 255));
+			}
 		}
 		else
+		{
 			s->getSprite()->setTexture("Button1.png");
+			if (s->GetLabel() != nullptr)
+			{
+				s->GetLabel()->setColor(ccc3(0, 200, 255));
+			}
+		}
 	}
 }
 
@@ -414,35 +414,34 @@ void HelloWorld::onMouseUp(Event *event)
 		//Checking if point is within sprite's box, and the tag of sprite
 		if (s->checkMouseDown(event))
 		{
-			if (s->GetType() == Touchables::T_SUMMONBUT1)
-			{
-				s->getSprite()->setPosition(Vec2(100, 400));
-				label->setString("Touched 1st Button!");
+			GameChar* dc = new GameChar();
 
+			switch (s->GetType())
+			{
+			case Touchables::T_SUMMONBUT1:
+				//s->getSprite()->setPosition(Vec2(100, 400));
+				label->setString("Touched 1st Button!");
 				//Spawn monster
-				GameChar* dc = new GameChar();
-				dc->init("Blue_Front1.png", "monster", visibleSize.width - visibleSize.width, visibleSize.height*0.5, "left",10,3,1);
+				dc->init("Blue_Front1.png", "monster", visibleSize.width - visibleSize.width, visibleSize.height*0.5, "left", 10, 3, 1);
 				this->getChildByName("spriteNode")->addChild(dc->getSprite(), 1);
 				dc->getSprite()->setGLProgram(shaderCharEffect);
 				dc->getSprite()->setGLProgramState(state);
 				monsters.push_back(dc);
-			}
-			if (s->GetType() == Touchables::T_SUMMONBUT2)
-			{
+
+				break;
+			case Touchables::T_SUMMONBUT2:
 				//s->getSprite()->setPosition(Vec2(300, 100));
 				label->setString("Touched 2nd Button!");
-
 				//Spawn monster
-				GameChar* dc = new GameChar();
-				dc->init("ZigzagGrass_Mud_Round.png", "monster", visibleSize.width, visibleSize.height*0.5, "right",10,5,2);
+				dc->init("ZigzagGrass_Mud_Round.png", "monster", visibleSize.width, visibleSize.height*0.5, "right", 10, 5, 2);
 				dc->getSprite()->setGLProgram(shaderCharEffect);
 				dc->getSprite()->setGLProgramState(state);
 				this->getChildByName("spriteNode")->addChild(dc->getSprite(), 1);
 				monsters.push_back(dc);
-			}
-			if (s->GetType() == Touchables::T_SUMMONBUT3)
-			{
+				break;
+			case Touchables::T_SUMMONBUT3:
 				label->setString("Touched 3rd Button!");
+				break;
 			}
 		}
 	}

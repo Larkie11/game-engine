@@ -13,7 +13,6 @@ public:
 		T_SUMMONBUT1,
 		T_SUMMONBUT2,
 		T_SUMMONBUT3,
-
 		T_MAX,
 	};
 
@@ -21,7 +20,16 @@ public:
 	void Update(float);
 	virtual bool checkMouseDown(Event *event);
 	virtual bool onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event);
-	void SetText(std::string text, float scale, std::string font);
+	void SetText(std::string text, float scale, std::string font, cocos2d::Color3B & color);
+
+	Label* GetLabel()
+	{
+		Label *s = dynamic_cast<Label*>(mainSprite->getChildByName("label"));
+		if (s != nullptr)
+			return s;
+		else
+			return nullptr;
+	}
 	std::string GetTag()
 	{
 		return tag;
