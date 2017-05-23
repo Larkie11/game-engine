@@ -16,6 +16,10 @@ public:
 		T_SUMMONBUT1,
 		T_SUMMONBUT2,
 		T_SUMMONBUT3,
+		T_STARTGAME,
+		T_SHOP,
+		T_SETTINGS,
+		T_EXIT,
 		T_MAX,
 	};
 

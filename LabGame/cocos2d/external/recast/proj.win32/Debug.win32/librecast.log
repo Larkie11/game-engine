@@ -5,8 +5,8 @@
   DetourObstacleAvoidance.cpp
   DetourPathCorridor.cpp
   DetourPathQueue.cpp
-  DetourProximityGrid.cpp
 ..\DetourCrowd\DetourObstacleAvoidance.cpp(334): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  DetourProximityGrid.cpp
   DetourTileCache.cpp
   DetourTileCacheBuilder.cpp
   DetourAlloc.cpp
@@ -16,4 +16,4 @@
   DetourNavMeshQuery.cpp
   DetourNode.cpp
   fastlz.c
-  librecast.vcxproj -> C:\Users\WM\Documents\game-engine\LabGame\proj.win32\Debug.win32\librecast.lib
+  librecast.vcxproj -> C:\Users\Shania\Desktop\game-engine\LabGame\proj.win32\Debug.win32\librecast.lib

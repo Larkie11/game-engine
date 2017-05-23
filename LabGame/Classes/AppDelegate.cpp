@@ -1,6 +1,6 @@
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
-
+#include "MenuScene.h"
 
 
 #include "SelectLevelScene.h"
@@ -80,9 +80,10 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // create a scene. it's an autorelease object
     auto scene = HelloWorld::createScene();
 	auto selectlevel = SelectLevel::createScene();
+	auto menuscene = MenuScene::createScene();
 
     // run
-    director->runWithScene(selectlevel);
+    director->runWithScene(menuscene);
 
     return true;
 }

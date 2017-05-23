@@ -96,15 +96,17 @@
   btConeTwistConstraint.cpp
   btContactConstraint.cpp
   btFixedConstraint.cpp
+c:\users\shania\desktop\game-engine\labgame\cocos2d\external\bullet\bulletdynamics\constraintsolver\btconetwistconstraint.cpp(866): warning C4244: '=': conversion from 'double' to 'btScalar', possible loss of data
+c:\users\shania\desktop\game-engine\labgame\cocos2d\external\bullet\bulletdynamics\constraintsolver\btconetwistconstraint.cpp(911): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\shania\desktop\game-engine\labgame\cocos2d\external\bullet\bulletdynamics\constraintsolver\btconetwistconstraint.cpp(971): warning C4244: '=': conversion from 'double' to 'btScalar', possible loss of data
+c:\users\shania\desktop\game-engine\labgame\cocos2d\external\bullet\bulletdynamics\constraintsolver\btconetwistconstraint.cpp(973): warning C4244: '=': conversion from 'double' to 'btScalar', possible loss of data
+c:\users\shania\desktop\game-engine\labgame\cocos2d\external\bullet\bulletdynamics\character\btkinematiccharactercontroller.cpp(137): warning C4305: '=': truncation from 'double' to 'btScalar'
+c:\users\shania\desktop\game-engine\labgame\cocos2d\external\bullet\bulletdynamics\character\btkinematiccharactercontroller.cpp(148): warning C4305: '=': truncation from 'double' to 'btScalar'
   btGearConstraint.cpp
+c:\users\shania\desktop\game-engine\labgame\cocos2d\external\bullet\bulletdynamics\constraintsolver\btcontactconstraint.h(25): warning C4359: 'btContactConstraint': Alignment specifier is less than actual alignment (128), and will be ignored. (compiling source file ..\BulletDynamics\ConstraintSolver\btContactConstraint.cpp)
   btGeneric6DofConstraint.cpp
   btGeneric6DofSpringConstraint.cpp
-c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\bulletdynamics\constraintsolver\btcontactconstraint.h(25): warning C4359: 'btContactConstraint': Alignment specifier is less than actual alignment (128), and will be ignored. (compiling source file ..\BulletDynamics\ConstraintSolver\btContactConstraint.cpp)
-c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\bulletdynamics\constraintsolver\btconetwistconstraint.cpp(866): warning C4244: '=': conversion from 'double' to 'btScalar', possible loss of data
-c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\bulletdynamics\constraintsolver\btconetwistconstraint.cpp(911): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   btHinge2Constraint.cpp
-c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\bulletdynamics\constraintsolver\btconetwistconstraint.cpp(971): warning C4244: '=': conversion from 'double' to 'btScalar', possible loss of data
-c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\bulletdynamics\constraintsolver\btconetwistconstraint.cpp(973): warning C4244: '=': conversion from 'double' to 'btScalar', possible loss of data
   btHingeConstraint.cpp
   btPoint2PointConstraint.cpp
   btSequentialImpulseConstraintSolver.cpp
@@ -114,37 +116,35 @@ c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\bulletdynamics
   btUniversalConstraint.cpp
   btDiscreteDynamicsWorld.cpp
   btRigidBody.cpp
-c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\bulletdynamics\character\btkinematiccharactercontroller.cpp(137): warning C4305: '=': truncation from 'double' to 'btScalar'
-c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\bulletdynamics\character\btkinematiccharactercontroller.cpp(148): warning C4305: '=': truncation from 'double' to 'btScalar'
   btSimpleDynamicsWorld.cpp
   Bullet-C-API.cpp
+c:\users\shania\desktop\game-engine\labgame\cocos2d\external\bullet\bulletdynamics\constraintsolver\btcontactconstraint.h(25): warning C4359: 'btContactConstraint': Alignment specifier is less than actual alignment (128), and will be ignored. (compiling source file ..\BulletDynamics\Dynamics\btDiscreteDynamicsWorld.cpp)
   btMultiBody.cpp
   btMultiBodyConstraint.cpp
   btMultiBodyConstraintSolver.cpp
   btMultiBodyDynamicsWorld.cpp
-c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\bulletdynamics\constraintsolver\btcontactconstraint.h(25): warning C4359: 'btContactConstraint': Alignment specifier is less than actual alignment (128), and will be ignored. (compiling source file ..\BulletDynamics\Dynamics\btDiscreteDynamicsWorld.cpp)
   btMultiBodyJointLimitConstraint.cpp
   btMultiBodyJointMotor.cpp
   btMultiBodyPoint2Point.cpp
   btDantzigLCP.cpp
   btMLCPSolver.cpp
+c:\users\shania\desktop\game-engine\labgame\cocos2d\external\bullet\bulletdynamics\mlcpsolvers\btdantziglcp.cpp(1567): warning C4473: 'printf' : not enough arguments passed for format string
+  c:\users\shania\desktop\game-engine\labgame\cocos2d\external\bullet\bulletdynamics\mlcpsolvers\btdantziglcp.cpp(1567): note: placeholders and their parameters expect 2 variadic arguments, but 1 were provided
+  c:\users\shania\desktop\game-engine\labgame\cocos2d\external\bullet\bulletdynamics\mlcpsolvers\btdantziglcp.cpp(1567): note: the missing variadic argument 2 is required by format string '% s'
   btRaycastVehicle.cpp
   btWheelInfo.cpp
-c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\bulletdynamics\mlcpsolvers\btdantziglcp.cpp(1567): warning C4473: 'printf' : not enough arguments passed for format string
-  c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\bulletdynamics\mlcpsolvers\btdantziglcp.cpp(1567): note: placeholders and their parameters expect 2 variadic arguments, but 1 were provided
-  c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\bulletdynamics\mlcpsolvers\btdantziglcp.cpp(1567): note: the missing variadic argument 2 is required by format string '% s'
   btGpu3DGridBroadphase.cpp
   btParallelConstraintSolver.cpp
   btThreadSupportInterface.cpp
+c:\users\shania\desktop\game-engine\labgame\cocos2d\external\bullet\bulletdynamics\constraintsolver\btcontactconstraint.h(25): warning C4359: 'btContactConstraint': Alignment specifier is less than actual alignment (128), and will be ignored. (compiling source file ..\BulletDynamics\Vehicle\btRaycastVehicle.cpp)
   PosixThreadSupport.cpp
   SequentialThreadSupport.cpp
-c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\bulletdynamics\constraintsolver\btcontactconstraint.h(25): warning C4359: 'btContactConstraint': Alignment specifier is less than actual alignment (128), and will be ignored. (compiling source file ..\BulletDynamics\Vehicle\btRaycastVehicle.cpp)
   SpuCollisionObjectWrapper.cpp
   SpuCollisionTaskProcess.cpp
+c:\users\shania\desktop\game-engine\labgame\cocos2d\external\bullet\bulletmultithreaded\btparallelconstraintsolver.cpp(1141): warning C4316: 'btConstraintSolverIO': object allocated on the heap may not be aligned 16
+c:\users\shania\desktop\game-engine\labgame\cocos2d\external\bullet\bulletmultithreaded\btparallelconstraintsolver.cpp(1484): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\shania\desktop\game-engine\labgame\cocos2d\external\bullet\bulletmultithreaded\sequentialthreadsupport.cpp(180): warning C4316: 'btDummyCriticalSection': object allocated on the heap may not be aligned 16
   SpuContactManifoldCollisionAlgorithm.cpp
-c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\bulletmultithreaded\btparallelconstraintsolver.cpp(1141): warning C4316: 'btConstraintSolverIO': object allocated on the heap may not be aligned 16
-c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\bulletmultithreaded\btparallelconstraintsolver.cpp(1484): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\bulletmultithreaded\sequentialthreadsupport.cpp(180): warning C4316: 'btDummyCriticalSection': object allocated on the heap may not be aligned 16
   SpuFakeDma.cpp
   SpuGatheringCollisionDispatcher.cpp
   SpuLibspe2Support.cpp
@@ -155,39 +155,39 @@ c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\bulletmultithr
   SpuMinkowskiPenetrationDepthSolver.cpp
   SpuSampleTaskProcess.cpp
   SpuSampleTask.cpp
+c:\users\shania\desktop\game-engine\labgame\cocos2d\external\bullet\bulletmultithreaded\spunarrowphasecollisiontask\spugatheringcollisiontask.cpp(130): warning C4359: 'CollisionTask_LocalStoreMemory': Alignment specifier is less than actual alignment (128), and will be ignored.
   Win32ThreadSupport.cpp
+c:\users\shania\desktop\game-engine\labgame\cocos2d\external\bullet\bulletmultithreaded\spusampletask\spusampletask.cpp(226): warning C4316: 'SampleTask_LocalStoreMemory': object allocated on the heap may not be aligned 16
   btAlignedAllocator.cpp
   btConvexHull.cpp
   btConvexHullComputer.cpp
-c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\bulletmultithreaded\spusampletask\spusampletask.cpp(226): warning C4316: 'SampleTask_LocalStoreMemory': object allocated on the heap may not be aligned 16
   btGeometryUtil.cpp
   btPolarDecomposition.cpp
-c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\bulletmultithreaded\spunarrowphasecollisiontask\spugatheringcollisiontask.cpp(130): warning C4359: 'CollisionTask_LocalStoreMemory': Alignment specifier is less than actual alignment (128), and will be ignored.
   btQuickprof.cpp
+c:\users\shania\desktop\game-engine\labgame\cocos2d\external\bullet\bulletmultithreaded\win32threadsupport.cpp(253): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: see declaration of 'sprintf'
+c:\users\shania\desktop\game-engine\labgame\cocos2d\external\bullet\bulletmultithreaded\win32threadsupport.cpp(262): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: see declaration of 'sprintf'
   btSerializer.cpp
   btVector3.cpp
   MiniCL.cpp
   MiniCLTaskScheduler.cpp
   MiniCLTask.cpp
-c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\minicl\minicl.cpp(83): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+c:\users\shania\desktop\game-engine\labgame\cocos2d\external\bullet\minicl\minicl.cpp(83): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(119): note: see declaration of 'strcpy'
-c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\minicl\minicl.cpp(96): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+c:\users\shania\desktop\game-engine\labgame\cocos2d\external\bullet\minicl\minicl.cpp(96): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(119): note: see declaration of 'strcpy'
-c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\minicl\minicl.cpp(129): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+c:\users\shania\desktop\game-engine\labgame\cocos2d\external\bullet\minicl\minicl.cpp(129): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: see declaration of 'sprintf'
-c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\minicl\minicl.cpp(194): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+c:\users\shania\desktop\game-engine\labgame\cocos2d\external\bullet\minicl\minicl.cpp(194): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(119): note: see declaration of 'strcpy'
-c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\minicl\minicl.cpp(207): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+c:\users\shania\desktop\game-engine\labgame\cocos2d\external\bullet\minicl\minicl.cpp(207): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(119): note: see declaration of 'strcpy'
-c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\minicl\minicl.cpp(166): warning C4101: 'workitem_size': unreferenced local variable
-c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\minicl\minicl.cpp(547): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+c:\users\shania\desktop\game-engine\labgame\cocos2d\external\bullet\minicl\minicl.cpp(166): warning C4101: 'workitem_size': unreferenced local variable
+c:\users\shania\desktop\game-engine\labgame\cocos2d\external\bullet\minicl\minicl.cpp(547): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(119): note: see declaration of 'strcpy'
-c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\minicl\minicl.cpp(640): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: see declaration of 'sprintf'
-c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\bulletmultithreaded\win32threadsupport.cpp(253): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: see declaration of 'sprintf'
-c:\users\wm\documents\game-engine\labgame\cocos2d\external\bullet\bulletmultithreaded\win32threadsupport.cpp(262): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+c:\users\shania\desktop\game-engine\labgame\cocos2d\external\bullet\minicl\minicl.cpp(640): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: see declaration of 'sprintf'
 PosixThreadSupport.obj : warning LNK4221: This object file does not define any previously undefined public symbols, so it will not be used by any link operation that consumes this library
 btBroadphaseProxy.obj : warning LNK4221: This object file does not define any previously undefined public symbols, so it will not be used by any link operation that consumes this library
-  libbullet.vcxproj -> C:\Users\WM\Documents\game-engine\LabGame\proj.win32\Debug.win32\libbullet.lib
+  libbullet.vcxproj -> C:\Users\Shania\Desktop\game-engine\LabGame\proj.win32\Debug.win32\libbullet.lib
