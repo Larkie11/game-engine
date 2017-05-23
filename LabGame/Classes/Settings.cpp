@@ -1,6 +1,6 @@
-#include "MenuScene.h"
-#include "Shop.h"
+//#include "Shop.h"
 #include "Settings.h"
+#include "MenuScene.h"
 #include "HelloWorldScene.h"
 #include "SelectLevelScene.h"
 #include "SimpleAudioEngine.h"
@@ -12,13 +12,13 @@ using std::string;
 
 USING_NS_CC;
 
-Scene* MenuScene::createScene()
+Scene* Settings::createScene()
 {
 	// 'scene' is an autorelease object
 	auto scene = Scene::create();
 
 	// 'layer' is an autorelease object
-	auto layer = MenuScene::create();
+	auto layer = Settings::create();
 
 	// add layer as a child to scene
 	scene->addChild(layer, 0, 999);
@@ -28,7 +28,7 @@ Scene* MenuScene::createScene()
 }
 
 // on "init" you need to initialize your instance
-bool MenuScene::init()
+bool Settings::init()
 {
 	//////////////////////////////
 	// 1. super init first
@@ -42,51 +42,41 @@ bool MenuScene::init()
 	visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	Size playingSize = Size(visibleSize.width, visibleSize.height - (visibleSize.height / 8));
+
 	auto nodeItems = Node::create();
 	nodeItems->setName("nodeItems");
-
 	// Background
-	backgroundSprite = Sprite::create("4.png");
+	backgroundSprite = Sprite::create("3.png");
 	backgroundSprite->setAnchorPoint(Vec2::ZERO);
 	backgroundSprite->setContentSize(playingSize);
 	backgroundSprite->setScaleX((visibleSize.width / backgroundSprite->getContentSize().width) * 1);
 	backgroundSprite->setScaleY((visibleSize.height / backgroundSprite->getContentSize().height) * 1);
-
 	nodeItems->addChild(backgroundSprite, -1);
 
 	auto spriteNode = Node::create();
 	spriteNode->setName("spriteNode");
+
+	// Shop sign
+	auto spriteNode2 = Node::create();
+	spriteNode2->setName("spriteNode2");
+	auto sprite = Sprite::create("settings_sign.png");
+	sprite->setAnchorPoint(Vec2::ZERO);
+	sprite->setPosition(visibleSize.width * 0.35, visibleSize.height * 0.8);
+	sprite->setScale(1.5);
+	spriteNode2->addChild(sprite, -1);
 
 	//Adding touchable sprites to vector, different type of sprites different vectors?
 	//Enemy 1 vector
 	//Player monsters 1 vector
 	//Touchable sprites 1 vector, etc
 
-	// Start game button
-	Touchables* start = new Touchables();
-	start->init("startgame_button.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.6, Touchables::T_STARTGAME);
-	start->getSprite()->setScale(1.2);
-
-	// Shop button
-	Touchables* shop = new Touchables();
-	shop->init("shop.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.5, Touchables::T_SHOP);
-	shop->getSprite()->setScale(1.2);
-
-	// Setting button
-	Touchables* settings = new Touchables();
-	settings->init("settings.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.4, Touchables::T_SETTINGS);
-	settings->getSprite()->setScale(1.2);
-
-	// Exit button
-	Touchables* exit = new Touchables();
-	exit->init("exit.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.3, Touchables::T_EXIT);
-	exit->getSprite()->setScale(1.2);
+	// Back button
+	Touchables* back = new Touchables();
+	back->init("back_button.png", "mainSprite", visibleSize.width * 0.8, visibleSize.height * 0.1, Touchables::T_BACK);
+	back->getSprite()->setScale(1.2);
 
 	// push back sprite vector
-	touchableSprites.push_back(start);
-	touchableSprites.push_back(shop);
-	touchableSprites.push_back(settings);
-	touchableSprites.push_back(exit);
+	touchableSprites.push_back(back);
 
 	//Texts for debugging
 	//label = Label::createWithTTF("label test", "fonts/Marker Felt.ttf", 32);
@@ -120,21 +110,22 @@ bool MenuScene::init()
 
 	auto listener = EventListenerKeyboard::create();
 
-	listener->onKeyPressed = CC_CALLBACK_2(MenuScene::onKeyPressed, this);
-	listener->onKeyReleased = CC_CALLBACK_2(MenuScene::onKeyReleased, this);
+	listener->onKeyPressed = CC_CALLBACK_2(Settings::onKeyPressed, this);
+	listener->onKeyReleased = CC_CALLBACK_2(Settings::onKeyReleased, this);
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
 	this->addChild(nodeItems, 1);
 	this->addChild(spriteNode, 2);
+	this->addChild(spriteNode2, 3);
 
 	auto _mouseListener = EventListenerMouse::create();
-	_mouseListener->onMouseUp = CC_CALLBACK_1(MenuScene::onMouseUp, this);
-	_mouseListener->onMouseMove = CC_CALLBACK_1(MenuScene::onMouseMove, this);
+	_mouseListener->onMouseUp = CC_CALLBACK_1(Settings::onMouseUp, this);
+	_mouseListener->onMouseMove = CC_CALLBACK_1(Settings::onMouseMove, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
 
 	auto listener1 = EventListenerTouchOneByOne::create();
-	listener1->onTouchEnded = CC_CALLBACK_2(MenuScene::onTouchEnded, this);
+	listener1->onTouchEnded = CC_CALLBACK_2(Settings::onTouchEnded, this);
 
 	this->scheduleUpdate();
 	/*
@@ -234,7 +225,7 @@ bool MenuScene::init()
 
 	return true;
 }
-void MenuScene::update(float deltaTime)
+void Settings::update(float deltaTime)
 {
 	//auto cam = Camera::getDefaultCamera();
 	/*rendtex->beginWithClear(1.0f, .0f, .0f, .0f);
@@ -255,7 +246,7 @@ void MenuScene::update(float deltaTime)
 		s->Update(deltaTime);
 	}
 }
-void MenuScene::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
+void Settings::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
 {
 	for (auto* s : touchableSprites)
 	{
@@ -265,7 +256,7 @@ void MenuScene::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
 		}
 	}
 }
-void MenuScene::onMouseMove(Event *event)
+void Settings::onMouseMove(Event *event)
 {
 	//HOVERING change sprite
 	EventMouse* e = (EventMouse*)event;
@@ -291,98 +282,97 @@ void MenuScene::onMouseMove(Event *event)
 	//}
 
 
+	//for (auto* s : touchableSprites)
+	//{
+	//	// change
+	//	if (s->checkMouseDown(event))
+	//	{
+	//		switch (s->GetType())
+	//		{
+	//		case Touchables::T_STARTGAME:
+	//		{
+	//			s->getSprite()->setTexture("startgame_button2.png");
+	//			if (s->GetLabel() != nullptr)
+	//			{
+	//				s->GetLabel()->setColor(ccc3(0, 0, 255));
+	//			}
+	//			break;
+	//		}
+	//		case Touchables::T_SHOP:
+	//		{
+	//			s->getSprite()->setTexture("shop_button2.png");
+	//			if (s->GetLabel() != nullptr)
+	//			{
+	//				s->GetLabel()->setColor(ccc3(0, 0, 255));
+	//			}
+	//			break;
+	//		}
+	//		case Touchables::T_SETTINGS:
+	//		{
+	//			s->getSprite()->setTexture("settings_button2.png");
+	//			if (s->GetLabel() != nullptr)
+	//			{
+	//				s->GetLabel()->setColor(ccc3(0, 0, 255));
+	//			}
+	//			break;
+	//		}
+	//		case Touchables::T_EXIT:
+	//		{
+	//			s->getSprite()->setTexture("exit_button2.png");
+	//			if (s->GetLabel() != nullptr)
+	//			{
+	//				s->GetLabel()->setColor(ccc3(0, 0, 255));
+	//			}
+	//			break;
+	//		}
+	//		}
+	//	}
+	//	else
+	//	{
+	//		switch (s->GetType())
+	//		{
+	//		case Touchables::T_STARTGAME:
+	//		{
+	//			s->getSprite()->setTexture("startgame_button.png");
+	//			if (s->GetLabel() != nullptr)
+	//			{
+	//				s->GetLabel()->setColor(ccc3(0, 0, 255));
+	//			}
+	//			break;
+	//		}
+	//		case Touchables::T_SHOP:
+	//		{
+	//			s->getSprite()->setTexture("shop.png");
+	//			if (s->GetLabel() != nullptr)
+	//			{
+	//				s->GetLabel()->setColor(ccc3(0, 0, 255));
+	//			}
+	//			break;
+	//		}
+	//		case Touchables::T_SETTINGS:
+	//		{
+	//			s->getSprite()->setTexture("settings.png");
+	//			if (s->GetLabel() != nullptr)
+	//			{
+	//				s->GetLabel()->setColor(ccc3(0, 0, 255));
+	//			}
+	//			break;
+	//		}
+	//		case Touchables::T_EXIT:
+	//		{
+	//			s->getSprite()->setTexture("exit.png");
+	//			if (s->GetLabel() != nullptr)
+	//			{
+	//				s->GetLabel()->setColor(ccc3(0, 0, 255));
+	//			}
+	//			break;
+	//		}
+	//		}
+	//	}
 
-	for (auto* s : touchableSprites)
-	{
-		// change
-		if (s->checkMouseDown(event))
-		{
-			switch (s->GetType())
-			{
-			case Touchables::T_STARTGAME:
-			{
-				s->getSprite()->setTexture("startgame_button2.png");
-				if (s->GetLabel() != nullptr)
-				{
-					s->GetLabel()->setColor(ccc3(0, 0, 255));
-				}
-				break;
-			}
-			case Touchables::T_SHOP:
-			{
-				s->getSprite()->setTexture("shop_button2.png");
-				if (s->GetLabel() != nullptr)
-				{
-					s->GetLabel()->setColor(ccc3(0, 0, 255));
-				}
-				break;
-			}
-			case Touchables::T_SETTINGS:
-			{
-				s->getSprite()->setTexture("settings_button2.png");
-				if (s->GetLabel() != nullptr)
-				{
-					s->GetLabel()->setColor(ccc3(0, 0, 255));
-				}
-				break;
-			}
-			case Touchables::T_EXIT:
-			{
-				s->getSprite()->setTexture("exit_button2.png");
-				if (s->GetLabel() != nullptr)
-				{
-					s->GetLabel()->setColor(ccc3(0, 0, 255));
-				}
-				break;
-			}
-			}
-		}
-		else
-		{
-			switch (s->GetType())
-			{
-			case Touchables::T_STARTGAME:
-			{
-				s->getSprite()->setTexture("startgame_button.png");
-				if (s->GetLabel() != nullptr)
-				{
-					s->GetLabel()->setColor(ccc3(0, 0, 255));
-				}
-				break;
-			}
-			case Touchables::T_SHOP:
-			{
-				s->getSprite()->setTexture("shop.png");
-				if (s->GetLabel() != nullptr)
-				{
-					s->GetLabel()->setColor(ccc3(0, 0, 255));
-				}
-				break;
-			}
-			case Touchables::T_SETTINGS:
-			{
-				s->getSprite()->setTexture("settings.png");
-				if (s->GetLabel() != nullptr)
-				{
-					s->GetLabel()->setColor(ccc3(0, 0, 255));
-				}
-				break;
-			}
-			case Touchables::T_EXIT:
-			{
-				s->getSprite()->setTexture("exit.png");
-				if (s->GetLabel() != nullptr)
-				{
-					s->GetLabel()->setColor(ccc3(0, 0, 255));
-				}
-				break;
-			}
-			}
-		}
-
-	}
+	//}
 }
-void MenuScene::onMouseUp(Event *event)
+void Settings::onMouseUp(Event *event)
 {
 	//Detection for touching any touchable sprite
 	EventMouse* e = (EventMouse*)event;
@@ -394,29 +384,10 @@ void MenuScene::onMouseUp(Event *event)
 		{
 			switch (s->GetType())
 			{
-			case Touchables::T_STARTGAME:
+			case Touchables::T_BACK:
 			{
-				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, SelectLevel::createScene(), Color3B(0, 255, 255)));
-				//CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/click.wav");
+				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, MenuScene::createScene(), Color3B(0, 255, 255)));
 				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");
-				break;
-			}
-			case Touchables::T_SHOP:
-			{
-				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, Shop::createScene(), Color3B(0, 255, 255)));
-				//CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/click.wav");
-				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");
-				break;
-			}
-			case Touchables::T_SETTINGS:
-			{
-				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, Settings::createScene(), Color3B(0, 255, 255)));
-				//CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/click.wav");
-				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");
-				break;
-			}
-			case Touchables::T_EXIT:
-			{
 				break;
 			}
 			}
@@ -424,7 +395,7 @@ void MenuScene::onMouseUp(Event *event)
 	}
 
 }
-void MenuScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
+void Settings::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {
 	switch (keyCode)
 	{
@@ -449,12 +420,12 @@ void MenuScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 		//s->getSprite()->getBoundingBox().setRect(s->getSprite()->getPosition().x + moveDir, s->getSprite()->getPosition().y, s->getSprite()->getContentSize().width, s->getSprite()->getContentSize().height);
 	}
 }
-void MenuScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
+void Settings::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
 {
 	moveDir = 0;
 	//a->MoveChar(0);
 }
-void MenuScene::menuCloseCallback(Ref* pSender)
+void Settings::menuCloseCallback(Ref* pSender)
 {
 	//Close the cocos2d-x game scene and quit the application
 	Director::getInstance()->end();

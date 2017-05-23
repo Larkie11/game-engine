@@ -20,6 +20,7 @@ public:
 		T_SHOP,
 		T_SETTINGS,
 		T_EXIT,
+		T_BACK,
 		T_MAX,
 	};
 

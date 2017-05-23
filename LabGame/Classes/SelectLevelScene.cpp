@@ -1,5 +1,6 @@
 #include "HelloWorldScene.h"
 #include "SelectLevelScene.h"
+#include "MenuScene.h"
 #include "SimpleAudioEngine.h"
 #include <string>
 using std::string;
@@ -77,6 +78,14 @@ bool SelectLevel::init()
 	Touchables* c = new Touchables();
 	c->init("Button1.png", "mainSprite", visibleSize.width * 0.5, visibleSize.height * 0.7, Touchables::T_LEVEL3);
 	c->getSprite()->setScale(0.5);
+
+	// Back button
+	Touchables* back = new Touchables();
+	back->init("back_button.png", "mainSprite", visibleSize.width * 0.8, visibleSize.height * 0.1, Touchables::T_BACK);
+	back->getSprite()->setScale(1.2);
+
+	// push back sprite vector
+	touchableSprites.push_back(back);
 
 	std::stringstream oss;
 	oss << levelunlocked;
@@ -233,6 +242,9 @@ bool SelectLevel::init()
 	//	s->getSprite()->setGLProgramState(state);
 	//}
 
+	// Load sound
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/click.wav");
+
 	return true;
 }
 void SelectLevel::update(float deltaTime)
@@ -327,6 +339,10 @@ void SelectLevel::onMouseUp(Event *event)
 				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, HelloWorld::createScene(), Color3B(0, 255, 255)));
 
 				break;
+			case Touchables::T_BACK:
+				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, MenuScene::createScene(), Color3B(0, 255, 255)));
+				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");
+			    break;
 			}
 		}
 	}

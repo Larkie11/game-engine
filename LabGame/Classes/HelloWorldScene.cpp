@@ -1,5 +1,6 @@
 #include "HelloWorldScene.h"
 #include "SelectLevelScene.h"
+#include "MenuScene.h"
 #include "SimpleAudioEngine.h"
 #include <string>
 using std::string;
@@ -84,6 +85,11 @@ bool HelloWorld::init()
 	c->init("Button1.png", "mainSprite", visibleSize.width * 0.5, visibleSize.height * 0.1, Touchables::T_SUMMONBUT3);
 	c->getSprite()->setScale(0.5);
 
+	// Back button
+	Touchables* back = new Touchables();
+	back->init("back_button.png", "mainSprite", visibleSize.width * 0.8, visibleSize.height * 0.1, Touchables::T_BACK);
+	back->getSprite()->setScale(1.2);
+
 	std::stringstream oss;
 	oss << high_score;
 	//Texts for debugging
@@ -103,6 +109,7 @@ bool HelloWorld::init()
 	touchableSprites.push_back(a);
 	touchableSprites.push_back(b);
 	touchableSprites.push_back(c);
+	touchableSprites.push_back(back);
 
 	for (auto* s : touchableSprites)
 	{
@@ -448,6 +455,10 @@ void HelloWorld::onMouseUp(Event *event)
 				break;
 			case Touchables::T_SUMMONBUT3:
 				label->setString("Touched 3rd Button!");
+				break;
+			case Touchables::T_BACK:
+				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, MenuScene::createScene(), Color3B(0, 255, 255)));
+				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");
 				break;
 			}
 		}
