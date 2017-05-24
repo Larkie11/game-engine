@@ -34,6 +34,10 @@ private:
 	GLProgram* shaderCharEffect;
 	GLProgramState* state;
 	int high_score = 0;
+	Label* gold;
+	Label* incomeSpeed;
+	int money = 0;
+	float speedOfIncome = 60;
 
 public:
     static cocos2d::Scene* createScene();

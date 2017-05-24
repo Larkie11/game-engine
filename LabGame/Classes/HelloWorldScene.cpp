@@ -90,6 +90,11 @@ bool HelloWorld::init()
 	back->init("back_button.png", "mainSprite", visibleSize.width * 0.8, visibleSize.height * 0.1, Touchables::T_BACK);
 	back->getSprite()->setScale(1.2);
 
+	// Gold Upgrade
+	Touchables* goldUpgrade = new Touchables();
+	goldUpgrade->init("gold.png", "mainSprite", visibleSize.width * 0.8, visibleSize.height * 0.5, Touchables::T_GOLDUPGRADE);
+	goldUpgrade->getSprite()->setScale(0.3);
+
 	std::stringstream oss;
 	oss << high_score;
 	//Texts for debugging
@@ -106,10 +111,22 @@ bool HelloWorld::init()
 	health2->setPosition(400, 300);
 	nodeItems->addChild(health2,1);
 
+	// Gold
+	gold = Label::createWithTTF("", "fonts/Marker Felt.ttf", 35);
+	gold->setPosition(885, 670);
+	gold->setPositionZ(10);
+	nodeItems->addChild(gold, 1);
+
+	incomeSpeed = Label::createWithTTF("", "fonts/Marker Felt.ttf", 35);
+	incomeSpeed->setPosition(700, 670);
+	incomeSpeed->setPositionZ(10);
+	nodeItems->addChild(incomeSpeed, 1);
+
 	touchableSprites.push_back(a);
 	touchableSprites.push_back(b);
 	touchableSprites.push_back(c);
 	touchableSprites.push_back(back);
+	touchableSprites.push_back(goldUpgrade);
 
 	for (auto* s : touchableSprites)
 	{
@@ -254,6 +271,17 @@ void HelloWorld::update(float deltaTime)
 	rendtexSprite->setTexture(rendtex->getSprite()->getTexture());
 	rendtexSprite->setGLProgram(proPostProcess);*/
 	//cam->setPosition(a->getSprite()->getPosition());
+
+	// Gold
+	money += 1 * speedOfIncome * deltaTime;
+	std::stringstream oss;
+	oss << money;
+	gold->setString(oss.str());
+
+	oss.str("");
+
+	oss << speedOfIncome;
+	incomeSpeed->setString(oss.str());
 
 	if (moveDir != 0)
 	{
@@ -459,6 +487,9 @@ void HelloWorld::onMouseUp(Event *event)
 			case Touchables::T_BACK:
 				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, MenuScene::createScene(), Color3B(0, 255, 255)));
 				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");
+				break;
+			case Touchables::T_GOLDUPGRADE:
+				speedOfIncome += 10;
 				break;
 			}
 		}

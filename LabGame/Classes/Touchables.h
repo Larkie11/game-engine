@@ -21,6 +21,7 @@ public:
 		T_SETTINGS,
 		T_EXIT,
 		T_BACK,
+		T_GOLDUPGRADE,
 		T_MAX,
 	};
 
