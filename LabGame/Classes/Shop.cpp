@@ -54,15 +54,15 @@ bool Shop::init()
 
 	auto spriteNode = Node::create();
 	spriteNode->setName("spriteNode");
+	auto scrollNode = Node::create();
+	scrollNode->setName("scrollNode");
 
 	// Shop sign
-	auto spriteNode2 = Node::create();
-	spriteNode2->setName("spriteNode2");
 	auto sprite = Sprite::create("shop_sign.png");
 	sprite->setAnchorPoint(Vec2::ZERO);
 	sprite->setPosition(visibleSize.width * 0.35, visibleSize.height * 0.8);
 	sprite->setScale(1.5);
-	spriteNode2->addChild(sprite, -1);
+	spriteNode->addChild(sprite, -1);
 
 	//Adding touchable sprites to vector, different type of sprites different vectors?
 	//Enemy 1 vector
@@ -71,11 +71,26 @@ bool Shop::init()
 
 	// Back button
 	Touchables* back = new Touchables();
-	back->init("back_button.png", "mainSprite", visibleSize.width * 0.8, visibleSize.height * 0.1, Touchables::T_BACK);
+	back->init("back_button.png", "mainSprite", visibleSize.width * 0.5, visibleSize.height * 0.1, Touchables::T_BACK);
 	back->getSprite()->setScale(1.2);
+
+	Touchables* monster1 = new Touchables();
+	monster1->init("ShopHover.png", "mainSprite", visibleSize.width * 0.05, visibleSize.height * 0.3, Touchables::T_SHOP1);
+	monster1->getSprite()->setScale(0.3);
+
+	Touchables* monster2 = new Touchables();
+	monster2->init("Shop2Hover.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.3, Touchables::T_SHOP2);
+	monster2->getSprite()->setScale(0.3);
+
+	Touchables* monster3 = new Touchables();
+	monster3->init("ShopHover.png", "mainSprite", visibleSize.width * 0.65, visibleSize.height * 0.3, Touchables::T_SHOP3);
+	monster3->getSprite()->setScale(0.3);
 
 	// push back sprite vector
 	touchableSprites.push_back(back);
+	touchableSprites.push_back(monster1);
+	touchableSprites.push_back(monster2);
+	touchableSprites.push_back(monster3);
 
 	//Texts for debugging
 	//label = Label::createWithTTF("label test", "fonts/Marker Felt.ttf", 32);
@@ -93,8 +108,20 @@ bool Shop::init()
 
 	for (auto* s : touchableSprites)
 	{
-		spriteNode->addChild(s->getSprite(), 1);
+		if (s->GetType() == Touchables::T_BACK)
+			spriteNode->addChild(s->getSprite(), 1);
+		else
+			scrollNode->addChild(s->getSprite(), 1);
 	}
+
+	monster1->SetToolTip("Monster unlock: YO", "Button1.png",200,0, -monster1->getSprite()->getContentSize().height,2);
+	monster1->SetImage("walk_1.png", "but1",3);
+
+	monster2->SetToolTip("Monster unlock: TOOOO", "Button1.png", 200, 0, -monster2->getSprite()->getContentSize().height, 2);
+	monster2->SetImage("walk_1.png", "but1",3);
+
+	monster3->SetToolTip("Monster unlock: BOOOO", "Button1.png", 200, 0, -monster2->getSprite()->getContentSize().height, 2);
+	monster3->SetImage("walk_1.png", "but1",3);
 
 	auto moveEvent = MoveBy::create(1, Vec2(200, 0));  // Move to 200 pixels in 1 second
 													   //Move to is absolute movement
@@ -116,7 +143,7 @@ bool Shop::init()
 
 	this->addChild(nodeItems, 1);
 	this->addChild(spriteNode, 2);
-	this->addChild(spriteNode2, 3);
+	this->addChild(scrollNode, 3);
 
 	auto _mouseListener = EventListenerMouse::create();
 	_mouseListener->onMouseUp = CC_CALLBACK_1(Shop::onMouseUp, this);
@@ -260,116 +287,55 @@ void Shop::onMouseMove(Event *event)
 	//HOVERING change sprite
 	EventMouse* e = (EventMouse*)event;
 
-	//for (auto* s : touchableSprites)
-	//{
-	//	if (s->checkMouseDown(event))
-	//	{
-	//		s->getSprite()->setTexture("shop.png");
-	//		if (s->GetLabel() != nullptr)
-	//		{
-	//			s->GetLabel()->setColor(ccc3(0, 0, 255));
-	//		}
-	//	}
-	//	else
-	//	{
-	//		s->getSprite()->setTexture("settings.png");
-	//		if (s->GetLabel() != nullptr)
-	//		{
-	//			s->GetLabel()->setColor(ccc3(0, 200, 255));
-	//		}
-	//	}
-	//}
+	for (auto* s : touchableSprites)
+	{
+		//change
+		if (s->checkMouseDown(event))
+		{
+			if (s->GetToolTip() != nullptr && s->GetDisabled() != true)
+				s->GetToolTip()->setVisible(true);
 
+			switch (s->GetType())
+			{
+				
+			case Touchables::T_SHOP1:
+			case Touchables::T_SHOP3:
+			{
+				s->getSprite()->setTexture("ShopNoHover.png");
+			}			
+			break;
+			case Touchables::T_SHOP2:
+			{
+				s->getSprite()->setTexture("Shop2NoHover.png");
+			}
+			break;
+			}
 
-	//for (auto* s : touchableSprites)
-	//{
-	//	// change
-	//	if (s->checkMouseDown(event))
-	//	{
-	//		switch (s->GetType())
-	//		{
-	//		case Touchables::T_STARTGAME:
-	//		{
-	//			s->getSprite()->setTexture("startgame_button2.png");
-	//			if (s->GetLabel() != nullptr)
-	//			{
-	//				s->GetLabel()->setColor(ccc3(0, 0, 255));
-	//			}
-	//			break;
-	//		}
-	//		case Touchables::T_SHOP:
-	//		{
-	//			s->getSprite()->setTexture("shop_button2.png");
-	//			if (s->GetLabel() != nullptr)
-	//			{
-	//				s->GetLabel()->setColor(ccc3(0, 0, 255));
-	//			}
-	//			break;
-	//		}
-	//		case Touchables::T_SETTINGS:
-	//		{
-	//			s->getSprite()->setTexture("settings_button2.png");
-	//			if (s->GetLabel() != nullptr)
-	//			{
-	//				s->GetLabel()->setColor(ccc3(0, 0, 255));
-	//			}
-	//			break;
-	//		}
-	//		case Touchables::T_EXIT:
-	//		{
-	//			s->getSprite()->setTexture("exit_button2.png");
-	//			if (s->GetLabel() != nullptr)
-	//			{
-	//				s->GetLabel()->setColor(ccc3(0, 0, 255));
-	//			}
-	//			break;
-	//		}
-	//		}
-	//	}
-	//	else
-	//	{
-	//		switch (s->GetType())
-	//		{
-	//		case Touchables::T_STARTGAME:
-	//		{
-	//			s->getSprite()->setTexture("startgame_button.png");
-	//			if (s->GetLabel() != nullptr)
-	//			{
-	//				s->GetLabel()->setColor(ccc3(0, 0, 255));
-	//			}
-	//			break;
-	//		}
-	//		case Touchables::T_SHOP:
-	//		{
-	//			s->getSprite()->setTexture("shop.png");
-	//			if (s->GetLabel() != nullptr)
-	//			{
-	//				s->GetLabel()->setColor(ccc3(0, 0, 255));
-	//			}
-	//			break;
-	//		}
-	//		case Touchables::T_SETTINGS:
-	//		{
-	//			s->getSprite()->setTexture("settings.png");
-	//			if (s->GetLabel() != nullptr)
-	//			{
-	//				s->GetLabel()->setColor(ccc3(0, 0, 255));
-	//			}
-	//			break;
-	//		}
-	//		case Touchables::T_EXIT:
-	//		{
-	//			s->getSprite()->setTexture("exit.png");
-	//			if (s->GetLabel() != nullptr)
-	//			{
-	//				s->GetLabel()->setColor(ccc3(0, 0, 255));
-	//			}
-	//			break;
-	//		}
-	//		}
-	//	}
+		}
+		else
+		{
+			if (s->GetToolTip() != nullptr)
+				s->GetToolTip()->setVisible(false);
 
-	//}
+			switch (s->GetType())
+			{
+			
+			case Touchables::T_SHOP1:
+			case Touchables::T_SHOP3:
+			{
+				s->getSprite()->setTexture("ShopHover.png");
+			}
+			break; 
+			case Touchables::T_SHOP2:
+			{
+				s->getSprite()->setTexture("Shop2Hover.png");
+			}
+			break;
+			}
+
+		}
+
+	}
 }
 void Shop::onMouseUp(Event *event)
 {
@@ -387,6 +353,14 @@ void Shop::onMouseUp(Event *event)
 				{
 					CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, MenuScene::createScene(), Color3B(0, 255, 255)));
 					CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");
+					break;
+				}
+				case Touchables::T_SHOP1:
+				case Touchables::T_SHOP2:
+				case Touchables::T_SHOP3:
+				{
+					s->SetDisabled(true);
+					s->SetImage("ducttape.png", "but2", 1);
 					break;
 				}
 			}	

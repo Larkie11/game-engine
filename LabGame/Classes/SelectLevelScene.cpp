@@ -115,6 +115,7 @@ bool SelectLevel::init()
 	a->SetText("Level 1",3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, 0);
 	b->SetText("Level 2", 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, 0);
 	c->SetText("Level 3", 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, 0);
+	a->SetToolTip("but1","Button1.png",150,0,-a->getSprite()->getContentSize().height,1);
 	if(levelunlocked < 2)
 	b->SetDisabled(true);
 	if(levelunlocked < 3)
@@ -290,11 +291,27 @@ void SelectLevel::onMouseMove(Event *event)
 			if (s->checkMouseDown(event))
 			{
 				if (s->GetType() != Touchables::T_BACK)
-				s->getSprite()->setTexture("Button2.png");
+					s->getSprite()->setTexture("Button2.png");
 				if (s->GetLabel() != nullptr)
 				{
 					s->GetLabel()->setColor(ccc3(0, 0, 255));
 				}
+				switch (s->GetType())
+				{
+				case Touchables::T_BACK:
+					break;
+
+				case Touchables::T_LEVEL1:
+					s->GetToolTip()->setVisible(true);
+					break;
+
+				case Touchables::T_LEVEL2:
+					break;
+
+				case Touchables::T_LEVEL3:
+					break;
+				}
+				
 			}
 			else
 			{
@@ -303,6 +320,21 @@ void SelectLevel::onMouseMove(Event *event)
 				if (s->GetLabel() != nullptr)
 				{
 					s->GetLabel()->setColor(s->GetDefaultTextColor());
+				}
+				switch (s->GetType())
+				{
+				case Touchables::T_BACK:
+					break;
+
+				case Touchables::T_LEVEL1:
+					s->GetToolTip()->setVisible(false);
+					break;
+
+				case Touchables::T_LEVEL2:
+					break;
+
+				case Touchables::T_LEVEL3:
+					break;
 				}
 			}
 		}

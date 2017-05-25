@@ -22,6 +22,9 @@ public:
 		T_EXIT,
 		T_BACK,
 		T_GOLDUPGRADE,
+		T_SHOP1,
+		T_SHOP2,
+		T_SHOP3,
 		T_MAX,
 	};
 
@@ -31,7 +34,8 @@ public:
 	virtual bool checkMouseDown(Event *event);
 	virtual bool onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event);
 	void SetText(std::string text, float scale, std::string font, cocos2d::Color3B & color, float offsetx, float offsety);
-	void SetImage(const char* sprite, const char* name);
+	void SetToolTip(std::string text, const char* sprite, int opacity, float offsetx, float offsety, float scale);
+	void SetImage(const char* sprite, const char* name, float scale);
 	bool GetDisabled();
 	cocos2d::Color3B GetDefaultTextColor()
 	{
@@ -40,6 +44,22 @@ public:
 	Label* GetLabel()
 	{
 		Label *s = dynamic_cast<Label*>(mainSprite->getChildByName("label"));
+		if (s != nullptr)
+			return s;
+		else
+			return nullptr;
+	}
+	Sprite* GetImg()
+	{
+		Sprite *s = dynamic_cast<Sprite*>(mainSprite->getChildByName("image"));
+		if (s != nullptr)
+			return s;
+		else
+			return nullptr;
+	}
+	Sprite* GetToolTip()
+	{
+		Sprite *s = dynamic_cast<Sprite*>(mainSprite->getChildByName("ToolTip"));
 		if (s != nullptr)
 			return s;
 		else

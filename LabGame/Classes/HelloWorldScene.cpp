@@ -132,8 +132,8 @@ bool HelloWorld::init()
 	{
 		spriteNode->addChild(s->getSprite(), 1);
 	}
-	a->SetImage("walk_1.png", "but1");
-	b->SetImage("walk_2.png", "but2");
+	a->SetImage("walk_1.png", "but1",1);
+	b->SetImage("walk_2.png", "but2",1);
 	a->SetText("Summon 1",3, "fonts/Soos.ttf", ccc3(0, 200, 255),0, -a->getSprite()->getContentSize().width*.3);
 	b->SetText("Summon 2", 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, -a->getSprite()->getContentSize().width*.3);
 	c->SetText("Summon 3", 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, -a->getSprite()->getContentSize().width*.3);
@@ -418,8 +418,7 @@ void HelloWorld::onMouseMove(Event *event)
 	{
 		if (s->checkMouseDown(event))
 		{
-			if (s->GetType() != Touchables::T_BACK)
-
+			if (s->GetType() != Touchables::T_BACK && s->GetType() != Touchables::T_GOLDUPGRADE)
 			s->getSprite()->setTexture("Button2.png");
 			if (s->GetLabel() != nullptr)
 			{
@@ -428,7 +427,7 @@ void HelloWorld::onMouseMove(Event *event)
 		}
 		else
 		{
-			if (s->GetType() != Touchables::T_BACK)
+			if (s->GetType() != Touchables::T_BACK && s->GetType() != Touchables::T_GOLDUPGRADE)
 
 			s->getSprite()->setTexture("Button1.png");
 			if (s->GetLabel() != nullptr)
