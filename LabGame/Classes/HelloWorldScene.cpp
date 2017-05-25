@@ -418,6 +418,8 @@ void HelloWorld::onMouseMove(Event *event)
 	{
 		if (s->checkMouseDown(event))
 		{
+			if (s->GetType() != Touchables::T_BACK)
+
 			s->getSprite()->setTexture("Button2.png");
 			if (s->GetLabel() != nullptr)
 			{
@@ -426,6 +428,8 @@ void HelloWorld::onMouseMove(Event *event)
 		}
 		else
 		{
+			if (s->GetType() != Touchables::T_BACK)
+
 			s->getSprite()->setTexture("Button1.png");
 			if (s->GetLabel() != nullptr)
 			{
