@@ -87,7 +87,7 @@ bool Touchables::checkMouseDown(Event *event)
 	//Check if this is getting touched
 	EventMouse* e = (EventMouse*)event;
 
-	if (mainSprite->getBoundingBox().containsPoint(e->getLocationInView()) && !disabled)
+	if (mainSprite->getBoundingBox().containsPoint(e->getLocationInView()))
 	{
 		return true;
 	}

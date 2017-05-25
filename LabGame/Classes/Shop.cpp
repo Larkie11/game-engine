@@ -92,20 +92,6 @@ bool Shop::init()
 	touchableSprites.push_back(monster2);
 	touchableSprites.push_back(monster3);
 
-	//Texts for debugging
-	//label = Label::createWithTTF("label test", "fonts/Marker Felt.ttf", 32);
-	//label->setPosition(500, 500);
-	//nodeItems->addChild(label, 1);
-	//label2 = Label::createWithTTF("label test", "fonts/Marker Felt.ttf", 32);
-	//label2->setPosition(500, 200);
-	//nodeItems->addChild(label2, 1);
-	//health1 = Label::createWithTTF("", "fonts/Marker Felt.ttf", 32);
-	//health1->setPosition(400, 330);
-	//nodeItems->addChild(health1, 1);
-	//health2 = Label::createWithTTF("", "fonts/Marker Felt.ttf", 32);
-	//health2->setPosition(400, 300);
-	//nodeItems->addChild(health2, 1);
-
 	for (auto* s : touchableSprites)
 	{
 		if (s->GetType() == Touchables::T_BACK)
@@ -114,6 +100,8 @@ bool Shop::init()
 			scrollNode->addChild(s->getSprite(), 1);
 	}
 
+	//Tool tips (Pop up UI)
+	//Image in the middle of button
 	monster1->SetToolTip("Monster unlock: YO", "Button1.png",200,0, -monster1->getSprite()->getContentSize().height,2);
 	monster1->SetImage("walk_1.png", "but1",3);
 
@@ -154,52 +142,7 @@ bool Shop::init()
 	listener1->onTouchEnded = CC_CALLBACK_2(Shop::onTouchEnded, this);
 
 	this->scheduleUpdate();
-	/*
-	/////////////////////////////
-	// 2. add a menu item with "X" image, which is clicked to quit the program
-	//    you may modify it.
 
-	// add a "close" icon to exit the progress. it's an autorelease object
-	auto closeItem = MenuItemImage::create(
-	"CloseNormal.png",
-	"CloseSelected.png",
-	CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
-
-	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
-	origin.y + closeItem->getContentSize().height/2));
-
-	// create menu, it's an autorelease object
-	auto menu = Menu::create(closeItem, NULL);
-	menu->setPosition(Vec2::ZERO);
-	this->addChild(menu, 1);
-
-	/////////////////////////////
-	// 3. add your codes below...
-
-	// add a label shows "Hello World"
-	// create and initialize a label
-
-	auto label = Label::createWithTTF("HAIIIIIIIII", "fonts/Marker Felt.ttf", 24);
-
-	// position the label on the center of the screen
-	label->setPosition(Vec2(origin.x + visibleSize.width/2,
-	origin.y + visibleSize.height - label->getContentSize().height));
-
-	// add the label as a child to this layer
-	this->addChild(label, 1);
-
-	// add "HelloWorld" splash screen"
-	auto sprite = Sprite::create("HelloWorld.png");
-	auto sprite2 = Sprite::create("Blue_Front1.png");
-
-	// position the sprite on the center of the screen
-	sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-	sprite2->setPosition(Vec2(visibleSize.width / 3 + origin.x, visibleSize.height / 5 + origin.y));
-
-	// add the sprite as a child to this layer
-	this->addChild(sprite, 0);
-	this->addChild(sprite2, 0);
-	*/
 	//Shadow
 	mLoc.set(.5f, .5f);
 	mLocInc.set(.005f, .01f);
@@ -241,26 +184,13 @@ bool Shop::init()
 
 	// Load sound
 	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/click.wav");
-
-	////Shadow for touchable sprites
-	//for (auto* s : touchableSprites)
-	//{
-	//	s->getSprite()->setGLProgram(shaderCharEffect);
-	//	s->getSprite()->setGLProgramState(state);
-	//}
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/purchase.wav");
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/disabled.mp3");
 
 	return true;
 }
 void Shop::update(float deltaTime)
 {
-	//auto cam = Camera::getDefaultCamera();
-	/*rendtex->beginWithClear(1.0f, .0f, .0f, .0f);
-	this->visit();
-	rendtex->end();
-	rendtexSprite->setTexture(rendtex->getSprite()->getTexture());
-	rendtexSprite->setGLProgram(proPostProcess);*/
-	//cam->setPosition(a->getSprite()->getPosition());
-
 	if (moveDir != 0)
 	{
 		auto cam = Camera::getDefaultCamera();
@@ -284,7 +214,7 @@ void Shop::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
 }
 void Shop::onMouseMove(Event *event)
 {
-	//HOVERING change sprite
+	//HOVERING over
 	EventMouse* e = (EventMouse*)event;
 
 	for (auto* s : touchableSprites)
@@ -292,22 +222,29 @@ void Shop::onMouseMove(Event *event)
 		//change
 		if (s->checkMouseDown(event))
 		{
-			if (s->GetToolTip() != nullptr && s->GetDisabled() != true)
-				s->GetToolTip()->setVisible(true);
-
+			if (s->GetDisabled() != true)
+			{
+				if (s->GetToolTip() != nullptr && s->GetDisabled() != true)
+					s->GetToolTip()->setVisible(true);
+			}
 			switch (s->GetType())
 			{
-				
 			case Touchables::T_SHOP1:
 			case Touchables::T_SHOP3:
-			{
-				s->getSprite()->setTexture("ShopNoHover.png");
-			}			
+				if (s->GetDisabled() != true)
+				{
+					{
+						s->getSprite()->setTexture("ShopNoHover.png");
+					}
+				}
 			break;
 			case Touchables::T_SHOP2:
-			{
-				s->getSprite()->setTexture("Shop2NoHover.png");
-			}
+				if (s->GetDisabled() != true)
+				{
+					{
+						s->getSprite()->setTexture("Shop2NoHover.png");
+					}
+				}
 			break;
 			}
 
@@ -323,11 +260,14 @@ void Shop::onMouseMove(Event *event)
 			case Touchables::T_SHOP1:
 			case Touchables::T_SHOP3:
 			{
-				s->getSprite()->setTexture("ShopHover.png");
+				
+					s->getSprite()->setTexture("ShopHover.png");
+				
 			}
 			break; 
 			case Touchables::T_SHOP2:
 			{
+				
 				s->getSprite()->setTexture("Shop2Hover.png");
 			}
 			break;
@@ -359,8 +299,15 @@ void Shop::onMouseUp(Event *event)
 				case Touchables::T_SHOP2:
 				case Touchables::T_SHOP3:
 				{
-					s->SetDisabled(true);
-					s->SetImage("ducttape.png", "but2", 1);
+					if (!s->GetDisabled())
+					{
+						CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/purchase.wav");
+						s->SetDisabled(true);
+						s->SetImage("ducttape.png", "but2", 1);
+					}
+					else
+						CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/disabled.mp3");
+
 					break;
 				}
 			}	
