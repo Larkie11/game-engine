@@ -64,24 +64,24 @@ bool MenuScene::init()
 
 	// Start game button
 	Touchables* start = new Touchables();
-	start->init("startgame_button.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.6, Touchables::T_STARTGAME);
+	start->init("yellow_button1.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.6, Touchables::T_STARTGAME);
 	start->getSprite()->setScale(1.2);
 
 	// Shop button
 	Touchables* shop = new Touchables();
-	shop->init("shop.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.5, Touchables::T_SHOP);
+	shop->init("red_button1.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.5, Touchables::T_SHOP);
 	shop->getSprite()->setScale(1.2);
 
 	// Setting button
 	Touchables* settings = new Touchables();
-	settings->init("settings.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.4, Touchables::T_SETTINGS);
+	settings->init("green_button1.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.4, Touchables::T_SETTINGS);
 	settings->getSprite()->setScale(1.2);
 
 	// Exit button
 	Touchables* exit = new Touchables();
-	exit->init("exit.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.3, Touchables::T_EXIT);
+	exit->init("blue_button1.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.3, Touchables::T_EXIT);
 	exit->getSprite()->setScale(1.2);
-
+	
 	// push back sprite vector
 	touchableSprites.push_back(start);
 	touchableSprites.push_back(shop);
@@ -102,10 +102,24 @@ bool MenuScene::init()
 	//health2->setPosition(400, 300);
 	//nodeItems->addChild(health2, 1);
 
+
 	for (auto* s : touchableSprites)
 	{
 		spriteNode->addChild(s->getSprite(), 1);
 	}
+
+	// Text on button
+	start->SetText("START GAME", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0);
+	start->GetLabel()->disableEffect();
+
+	shop->SetText("SHOP", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0);
+	shop->GetLabel()->disableEffect();
+
+	settings->SetText("SETTINGS", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0);
+	settings->GetLabel()->disableEffect();
+
+	exit->SetText("EXIT", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0);
+	exit->GetLabel()->disableEffect();
 
 	auto moveEvent = MoveBy::create(1, Vec2(200, 0));  // Move to 200 pixels in 1 second
 													   //Move to is absolute movement
@@ -301,37 +315,37 @@ void MenuScene::onMouseMove(Event *event)
 			{
 			case Touchables::T_STARTGAME:
 			{
-				s->getSprite()->setTexture("startgame_button2.png");
+				s->getSprite()->setTexture("yellow_button2.png");
 				if (s->GetLabel() != nullptr)
 				{
-					s->GetLabel()->setColor(ccc3(0, 0, 255));
+					s->GetLabel()->setColor(ccc3(245, 245, 245));
 				}
 				break;
 			}
 			case Touchables::T_SHOP:
 			{
-				s->getSprite()->setTexture("shop_button2.png");
+				s->getSprite()->setTexture("red_button2.png");
 				if (s->GetLabel() != nullptr)
 				{
-					s->GetLabel()->setColor(ccc3(0, 0, 255));
+					s->GetLabel()->setColor(ccc3(245, 245, 245));
 				}
 				break;
 			}
 			case Touchables::T_SETTINGS:
 			{
-				s->getSprite()->setTexture("settings_button2.png");
+				s->getSprite()->setTexture("green_button2.png");
 				if (s->GetLabel() != nullptr)
 				{
-					s->GetLabel()->setColor(ccc3(0, 0, 255));
+					s->GetLabel()->setColor(ccc3(245, 245, 245));
 				}
 				break;
 			}
 			case Touchables::T_EXIT:
 			{
-				s->getSprite()->setTexture("exit_button2.png");
+				s->getSprite()->setTexture("blue_button2.png");
 				if (s->GetLabel() != nullptr)
 				{
-					s->GetLabel()->setColor(ccc3(0, 0, 255));
+					s->GetLabel()->setColor(ccc3(245, 245, 245));
 				}
 				break;
 			}
@@ -343,37 +357,37 @@ void MenuScene::onMouseMove(Event *event)
 			{
 			case Touchables::T_STARTGAME:
 			{
-				s->getSprite()->setTexture("startgame_button.png");
+				s->getSprite()->setTexture("yellow_button1.png");
 				if (s->GetLabel() != nullptr)
 				{
-					s->GetLabel()->setColor(ccc3(0, 0, 255));
+					s->GetLabel()->setColor(ccc3(255, 255, 255));
 				}
 				break;
 			}
 			case Touchables::T_SHOP:
 			{
-				s->getSprite()->setTexture("shop.png");
+				s->getSprite()->setTexture("red_button1.png");
 				if (s->GetLabel() != nullptr)
 				{
-					s->GetLabel()->setColor(ccc3(0, 0, 255));
+					s->GetLabel()->setColor(ccc3(255, 255, 255));
 				}
 				break;
 			}
 			case Touchables::T_SETTINGS:
 			{
-				s->getSprite()->setTexture("settings.png");
+				s->getSprite()->setTexture("green_button1.png");
 				if (s->GetLabel() != nullptr)
 				{
-					s->GetLabel()->setColor(ccc3(0, 0, 255));
+					s->GetLabel()->setColor(ccc3(255, 255, 255));
 				}
 				break;
 			}
 			case Touchables::T_EXIT:
 			{
-				s->getSprite()->setTexture("exit.png");
+				s->getSprite()->setTexture("blue_button1.png");
 				if (s->GetLabel() != nullptr)
 				{
-					s->GetLabel()->setColor(ccc3(0, 0, 255));
+					s->GetLabel()->setColor(ccc3(255, 255, 255));
 				}
 				break;
 			}

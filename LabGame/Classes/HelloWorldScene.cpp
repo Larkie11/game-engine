@@ -92,7 +92,7 @@ bool HelloWorld::init()
 
 	// Gold Upgrade
 	Touchables* goldUpgrade = new Touchables();
-	goldUpgrade->init("gold.png", "mainSprite", visibleSize.width * 0.8, visibleSize.height * 0.5, Touchables::T_GOLDUPGRADE);
+	goldUpgrade->init("gold.png", "mainSprite", visibleSize.width * 0.7, visibleSize.height * 0.1, Touchables::T_GOLDUPGRADE);
 	goldUpgrade->getSprite()->setScale(0.3);
 
 	std::stringstream oss;

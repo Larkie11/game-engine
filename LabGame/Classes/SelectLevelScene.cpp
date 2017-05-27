@@ -36,7 +36,7 @@ bool SelectLevel::init()
 	}
 
 	CCUserDefault *def = CCUserDefault::sharedUserDefault();
-	levelunlocked = def->getIntegerForKey("LevelUnlockedTest");
+	levelunlocked= def->getIntegerForKey("LevelUnlockedTest");
 	touchableSprites.clear();
 
 	visibleSize = Director::getInstance()->getVisibleSize();
@@ -81,7 +81,7 @@ bool SelectLevel::init()
 
 	// Back button
 	Touchables* back = new Touchables();
-	back->init("back_button.png", "mainSprite", visibleSize.width * 0.8, visibleSize.height * 0.1, Touchables::T_BACK);
+	back->init("back_button.png", "mainSprite", visibleSize.width * 0.8, visibleSize.height * 0.05, Touchables::T_BACK);
 	back->getSprite()->setScale(1.2);
 
 	// push back sprite vector
