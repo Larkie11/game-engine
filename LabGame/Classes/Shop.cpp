@@ -229,22 +229,39 @@ void Shop::onMouseMove(Event *event)
 				if (s->GetToolTip() != nullptr && s->GetDisabled() != true)
 					s->GetToolTip()->setVisible(true);
 			}
+			else
+			{
+				if(s->GetImg("but1")->getActionManager()!=nullptr)
+				s->GetImg("but1")->stopAllActions();
+			}
 			switch (s->GetType())
 			{
+				
 			case Touchables::T_SHOP1:
+					if (s->GetDisabled() != true)
+					{
+						{
+							s->getSprite()->setTexture("ShopNoHover.png");
+							s->AnimateImage("Sprites/cat/walk/walk_", 1, 7, 177, 177);
+						}
+					}
+				break;
 			case Touchables::T_SHOP3:
 				if (s->GetDisabled() != true)
 				{
 					{
 						s->getSprite()->setTexture("ShopNoHover.png");
+						s->AnimateImage("Sprites/cat/walk/walk_", 1, 7, 177, 177);
 					}
 				}
+				
 			break;
 			case Touchables::T_SHOP2:
 				if (s->GetDisabled() != true)
 				{
 					{
 						s->getSprite()->setTexture("Shop2NoHover.png");
+						s->AnimateImage("Sprites/cat/walk/walk_", 1, 7, 177, 177);
 					}
 				}
 			break;
@@ -255,10 +272,9 @@ void Shop::onMouseMove(Event *event)
 		{
 			if (s->GetToolTip() != nullptr)
 				s->GetToolTip()->setVisible(false);
-
+			s->StopAnimation();
 			switch (s->GetType())
 			{
-			
 			case Touchables::T_SHOP1:
 			case Touchables::T_SHOP3:
 			{
@@ -308,8 +324,9 @@ void Shop::onMouseUp(Event *event)
 						s->SetImage("ducttape.png", "purchased", 1);
 					}
 					else
+					{
 						CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/disabled.mp3");
-
+					}
 					break;
 				}
 			}	

@@ -38,6 +38,8 @@ public:
 	void SetToolTip(std::string text, const char* sprite, int opacity, float offsetx, float offsety, float scale);
 	void SetImage(const char* sprite, const char* name, float scale);
 	bool GetDisabled();
+	void AnimateImage(const char* spriteFrameName, int startFrame, int frameCount, float width, float height);
+
 	cocos2d::Color3B GetDefaultTextColor()
 	{
 		return color;
@@ -66,6 +68,13 @@ public:
 		else
 			return nullptr;
 	}
+	void StopAnimation()
+	{
+		if (playingAnimation)
+		{
+			GetImg(imageName)->stopAllActions();
+		}
+	}
 	std::string GetTag()
 	{
 		return tag;
@@ -82,11 +91,13 @@ public:
 	}
 
 private:
+	bool playingAnimation = false;
 	cocos2d::Sprite* mainSprite;
 	int intDir;
 	float fSpeed;
 	Vec2 mLoc;
 	Vec2 mLocInc;
+	const char* imageName;
 	GLProgram* charEffect;
 	std::string tag;
 	Types t;

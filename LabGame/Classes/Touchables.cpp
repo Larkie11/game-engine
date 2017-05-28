@@ -36,9 +36,38 @@ void Touchables::SetImage(const char* sprite, const char* name, float scale)
 {
 	auto imgSprite = Sprite::create(sprite);
 	imgSprite->setName(name);
+	imageName = name;
 	imgSprite->setScale(scale);
 	imgSprite->setPosition(Vec2(mainSprite->getContentSize().width*.5, mainSprite->getContentSize().height*.5));
 	mainSprite->addChild(imgSprite, 1);
+}
+void Touchables::AnimateImage(const char* spriteFrameName, int startFrame, int frameCount, float width, float height)
+{
+	if (GetImg(imageName) != nullptr && !disabled)
+	{
+		if (GetImg(imageName)->getActionManager() != nullptr)
+			GetImg(imageName)->stopAllActions();
+
+		playingAnimation = true;
+
+		Vector<SpriteFrame*> animationFrames;
+		animationFrames.reserve(frameCount);
+
+		for (int i = startFrame; i < frameCount; i++)
+		{
+			std::string frameNumber = StringUtils::format("%d", i);
+
+			std::string frameName = spriteFrameName + frameNumber + ".png";
+			animationFrames.pushBack(SpriteFrame::create(frameName, Rect(0, 0, width, height)));
+		}
+
+		Animation* animation = Animation::createWithSpriteFrames(animationFrames, 0.1f);
+		Animate* animated = Animate::create(animation);
+
+		GetImg(imageName)->runAction(RepeatForever::create(animated));
+	}
+
+	
 }
 void Touchables::SetToolTip(std::string text, const char* sprite, int opacity, float offsetx, float offsety, float scale)
 {
