@@ -17,10 +17,12 @@ private:
 	Vec2 mLocInc;
 	Touchables* a;
 	GameChar* b;
+	GameChar* c;
 	GLProgram* proPostProcess;
 	RenderTexture *rendtex;
 	Sprite* rendtexSprite;
 	Sprite* backgroundSprite;
+	Sprite* character1, character2;
 	Size visibleSize;
 	vector<Touchables*> touchableSprites;
 	Label* label;

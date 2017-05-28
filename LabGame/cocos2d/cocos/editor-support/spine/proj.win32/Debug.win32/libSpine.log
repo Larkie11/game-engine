@@ -1,44 +1,93 @@
-﻿  Animation.c
-  AnimationState.c
-  AnimationStateData.c
-  Atlas.c
-  AtlasAttachmentLoader.c
-  Attachment.c
-  AttachmentLoader.c
-  Bone.c
-  BoneData.c
-  BoundingBoxAttachment.c
-  Event.c
-  EventData.c
-  extension.c
-  IkConstraint.c
-  IkConstraintData.c
-  Json.c
-  MeshAttachment.c
-  PathAttachment.c
-  PathConstraint.c
-  PathConstraintData.c
-  RegionAttachment.c
-  Skeleton.c
-  SkeletonBinary.c
-  SkeletonBounds.c
-  SkeletonData.c
-c:\users\shania\desktop\game-engine\labgame\cocos2d\cocos\editor-support\spine\skeletonbinary.c(295): warning C4018: '<': signed/unsigned mismatch
-c:\users\shania\desktop\game-engine\labgame\cocos2d\cocos\editor-support\spine\skeletonbinary.c(358): warning C4018: '<': signed/unsigned mismatch
-c:\users\shania\desktop\game-engine\labgame\cocos2d\cocos\editor-support\spine\skeletonbinary.c(470): warning C4018: '<': signed/unsigned mismatch
-  SkeletonJson.c
-  Skin.c
-  Slot.c
-  SlotData.c
-  TransformConstraint.c
-  TransformConstraintData.c
-  VertexAttachment.c
-  AttachmentVertices.cpp
-  Cocos2dAttachmentLoader.cpp
-  SkeletonAnimation.cpp
-  SkeletonBatch.cpp
-c:\users\shania\desktop\game-engine\labgame\cocos2d\cocos\editor-support\spine\skeletonbatch.cpp(96): warning C4996: 'cocos2d::TrianglesCommand::init': was declared deprecated
-  c:\users\shania\desktop\game-engine\labgame\cocos2d\cocos\renderer\cctrianglescommand.h(73): note: see declaration of 'cocos2d::TrianglesCommand::init'
-  SkeletonRenderer.cpp
-  spine-cocos2dx.cpp
-  libSpine.vcxproj -> C:\Users\Shania\Desktop\game-engine\LabGame\proj.win32\Debug.win32\libSpine.lib
+﻿Build started 26/5/2017 1:26:43 PM.
+     1>Project "D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\editor-support\spine\proj.win32\libSpine.vcxproj" on node 3 (Build target(s)).
+     1>ClCompile:
+         D:\VisualStudios2015\VC\bin\CL.exe /c /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\\" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\cocos\editor-support" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\extensions" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\cocos" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\cocos/editor-support" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\glfw3\include\win32" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\win32-specific\gles\include\OGLES" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\freetype2\include\win32\freetype2" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\freetype2\include\win32\\" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external" /ZI /nologo /W3 /WX- /MP /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _LIB /D COCOS2DXWIN32_EXPORTS /D GL_GLEXT_PROTOTYPES /D COCOS2D_DEBUG=1 /D _CRT_SECURE_NO_WARNINGS /D _SCL_SECURE_NO_WARNINGS /D _VARIADIC_MAX=10 /D _UNICODE /D UNICODE /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug.win32\\" /Fd"Debug.win32\libSpine.pdb" /Gd /TC /wd4267 /wd4251 /wd4244 /analyze- /errorReport:prompt ..\Animation.c ..\AnimationState.c ..\AnimationStateData.c ..\Atlas.c ..\AtlasAttachmentLoader.c ..\Attachment.c ..\AttachmentLoader.c ..\Bone.c ..\BoneData.c ..\BoundingBoxAttachment.c ..\Event.c ..\EventData.c ..\extension.c ..\IkConstraint.c ..\IkConstraintData.c ..\Json.c ..\MeshAttachment.c ..\PathAttachment.c ..\PathConstraint.c ..\PathConstraintData.c ..\RegionAttachment.c ..\Skeleton.c ..\SkeletonBinary.c ..\SkeletonBounds.c ..\SkeletonData.c ..\SkeletonJson.c ..\Skin.c ..\Slot.c ..\SlotData.c ..\TransformConstraint.c ..\TransformConstraintData.c ..\VertexAttachment.c
+         Animation.c
+         AnimationState.c
+         AnimationStateData.c
+         Atlas.c
+         AtlasAttachmentLoader.c
+         Attachment.c
+         AttachmentLoader.c
+         Bone.c
+         BoneData.c
+         BoundingBoxAttachment.c
+         Event.c
+         EventData.c
+         extension.c
+         IkConstraint.c
+         IkConstraintData.c
+         Json.c
+         MeshAttachment.c
+         PathAttachment.c
+         PathConstraint.c
+         PathConstraintData.c
+         RegionAttachment.c
+         Skeleton.c
+         SkeletonBinary.c
+         SkeletonBounds.c
+         SkeletonData.c
+         SkeletonJson.c
+         Skin.c
+         Slot.c
+     1>d:\pgeng_assignment\game-engine\labgame\cocos2d\cocos\editor-support\spine\skeletonbinary.c(295): warning C4018: '<': signed/unsigned mismatch
+     1>d:\pgeng_assignment\game-engine\labgame\cocos2d\cocos\editor-support\spine\skeletonbinary.c(358): warning C4018: '<': signed/unsigned mismatch
+     1>d:\pgeng_assignment\game-engine\labgame\cocos2d\cocos\editor-support\spine\skeletonbinary.c(470): warning C4018: '<': signed/unsigned mismatch
+         SlotData.c
+         TransformConstraint.c
+         TransformConstraintData.c
+         VertexAttachment.c
+         D:\VisualStudios2015\VC\bin\CL.exe /c /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\\" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\cocos\editor-support" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\extensions" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\cocos" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\cocos/editor-support" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\glfw3\include\win32" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\win32-specific\gles\include\OGLES" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\freetype2\include\win32\freetype2" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\freetype2\include\win32\\" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external" /ZI /nologo /W3 /WX- /MP /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _LIB /D COCOS2DXWIN32_EXPORTS /D GL_GLEXT_PROTOTYPES /D COCOS2D_DEBUG=1 /D _CRT_SECURE_NO_WARNINGS /D _SCL_SECURE_NO_WARNINGS /D _VARIADIC_MAX=10 /D _UNICODE /D UNICODE /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug.win32\\" /Fd"Debug.win32\libSpine.pdb" /Gd /TP /wd4267 /wd4251 /wd4244 /analyze- /errorReport:prompt ..\AttachmentVertices.cpp ..\Cocos2dAttachmentLoader.cpp ..\SkeletonAnimation.cpp ..\SkeletonBatch.cpp ..\SkeletonRenderer.cpp "..\spine-cocos2dx.cpp"
+         AttachmentVertices.cpp
+         Cocos2dAttachmentLoader.cpp
+         SkeletonAnimation.cpp
+         SkeletonBatch.cpp
+         SkeletonRenderer.cpp
+         spine-cocos2dx.cpp
+     1>d:\pgeng_assignment\game-engine\labgame\cocos2d\cocos\editor-support\spine\skeletonbatch.cpp(96): warning C4996: 'cocos2d::TrianglesCommand::init': was declared deprecated
+         d:\pgeng_assignment\game-engine\labgame\cocos2d\cocos\renderer\cctrianglescommand.h(73): note: see declaration of 'cocos2d::TrianglesCommand::init'
+       Lib:
+         D:\VisualStudios2015\VC\bin\Lib.exe /OUT:"D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\libSpine.lib" /NOLOGO Debug.win32\Animation.obj
+         Debug.win32\AnimationState.obj
+         Debug.win32\AnimationStateData.obj
+         Debug.win32\Atlas.obj
+         Debug.win32\AtlasAttachmentLoader.obj
+         Debug.win32\Attachment.obj
+         Debug.win32\AttachmentLoader.obj
+         Debug.win32\AttachmentVertices.obj
+         Debug.win32\Bone.obj
+         Debug.win32\BoneData.obj
+         Debug.win32\BoundingBoxAttachment.obj
+         Debug.win32\Cocos2dAttachmentLoader.obj
+         Debug.win32\Event.obj
+         Debug.win32\EventData.obj
+         Debug.win32\extension.obj
+         Debug.win32\IkConstraint.obj
+         Debug.win32\IkConstraintData.obj
+         Debug.win32\Json.obj
+         Debug.win32\MeshAttachment.obj
+         Debug.win32\PathAttachment.obj
+         Debug.win32\PathConstraint.obj
+         Debug.win32\PathConstraintData.obj
+         Debug.win32\RegionAttachment.obj
+         Debug.win32\Skeleton.obj
+         Debug.win32\SkeletonAnimation.obj
+         Debug.win32\SkeletonBatch.obj
+         Debug.win32\SkeletonBinary.obj
+         Debug.win32\SkeletonBounds.obj
+         Debug.win32\SkeletonData.obj
+         Debug.win32\SkeletonJson.obj
+         Debug.win32\SkeletonRenderer.obj
+         Debug.win32\Skin.obj
+         Debug.win32\Slot.obj
+         Debug.win32\SlotData.obj
+         "Debug.win32\spine-cocos2dx.obj"
+         Debug.win32\TransformConstraint.obj
+         Debug.win32\TransformConstraintData.obj
+         Debug.win32\VertexAttachment.obj
+         libSpine.vcxproj -> D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\libSpine.lib
+     1>Done Building Project "D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\editor-support\spine\proj.win32\libSpine.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:19.68

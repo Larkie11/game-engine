@@ -1,11 +1,46 @@
-﻿  Shop.cpp
-c:\users\wm\documents\game-engine\labgame\classes\shop.cpp(9): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\wm\documents\game-engine\labgame\classes\shop.cpp(75): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\wm\documents\game-engine\labgame\classes\shop.cpp(79): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\wm\documents\game-engine\labgame\classes\shop.cpp(83): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\wm\documents\game-engine\labgame\classes\shop.cpp(87): warning C4305: 'argument': truncation from 'double' to 'float'
-  LabGame.vcxproj -> C:\Users\WM\Documents\game-engine\LabGame\proj.win32\Debug.win32\LabGame.exe
-  LabGame.vcxproj -> C:\Users\WM\Documents\game-engine\LabGame\proj.win32\Debug.win32\LabGame.pdb (Full PDB)
-  C:\Users\WM\Documents\game-engine\LabGame\Resources\audio\disabled.mp3 -> C:\Users\WM\Documents\game-engine\LabGame\proj.win32\Debug.win32\audio\disabled.mp3
-  C:\Users\WM\Documents\game-engine\LabGame\Resources\audio\purchase.wav -> C:\Users\WM\Documents\game-engine\LabGame\proj.win32\Debug.win32\audio\purchase.wav
-  2 File(s) copied
+﻿Build started 28/5/2017 3:58:00 PM.
+     1>Project "D:\PGEng_Assignment\game-engine\LabGame\proj.win32\LabGame.vcxproj" on node 3 (Build target(s)).
+     1>ClCompile:
+         D:\VisualStudios2015\VC\bin\CL.exe /c /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\cocos\audio\include" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\chipmunk\include\chipmunk" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\extensions" /I..\Classes /I.. /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\cocos" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\cocos/editor-support" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\glfw3\include\win32" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\win32-specific\gles\include\OGLES" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\freetype2\include\win32\freetype2" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\freetype2\include\win32\\" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external" /ZI /nologo /W3 /WX- /MP /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USE_MATH_DEFINES /D GL_GLEXT_PROTOTYPES /D CC_ENABLE_CHIPMUNK_INTEGRATION=1 /D COCOS2D_DEBUG=1 /D _CRT_SECURE_NO_WARNINGS /D _SCL_SECURE_NO_WARNINGS /D _VARIADIC_MAX=10 /D _UNICODE /D UNICODE /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug.win32\\" /Fd"Debug.win32\vc140.pdb" /Gd /TP /wd4267 /wd4251 /wd4244 /analyze- /errorReport:prompt ..\Classes\Character.cpp
+         Character.cpp
+     1>d:\pgeng_assignment\game-engine\labgame\classes\character.cpp(40): warning C4129: 'c': unrecognized character escape sequence
+     1>d:\pgeng_assignment\game-engine\labgame\classes\character.cpp(40): warning C4129: 'w': unrecognized character escape sequence
+     1>d:\pgeng_assignment\game-engine\labgame\classes\character.cpp(41): warning C4129: 'c': unrecognized character escape sequence
+     1>d:\pgeng_assignment\game-engine\labgame\classes\character.cpp(41): warning C4129: 'w': unrecognized character escape sequence
+     1>d:\pgeng_assignment\game-engine\labgame\classes\character.cpp(42): warning C4129: 'c': unrecognized character escape sequence
+     1>d:\pgeng_assignment\game-engine\labgame\classes\character.cpp(42): warning C4129: 'w': unrecognized character escape sequence
+     1>d:\pgeng_assignment\game-engine\labgame\classes\character.cpp(43): warning C4129: 'c': unrecognized character escape sequence
+     1>d:\pgeng_assignment\game-engine\labgame\classes\character.cpp(43): warning C4129: 'w': unrecognized character escape sequence
+     1>d:\pgeng_assignment\game-engine\labgame\classes\character.cpp(44): warning C4129: 'c': unrecognized character escape sequence
+     1>d:\pgeng_assignment\game-engine\labgame\classes\character.cpp(44): warning C4129: 'w': unrecognized character escape sequence
+     1>d:\pgeng_assignment\game-engine\labgame\classes\character.cpp(45): warning C4129: 'c': unrecognized character escape sequence
+     1>d:\pgeng_assignment\game-engine\labgame\classes\character.cpp(45): warning C4129: 'w': unrecognized character escape sequence
+     1>d:\pgeng_assignment\game-engine\labgame\classes\character.cpp(46): warning C4129: 'c': unrecognized character escape sequence
+     1>d:\pgeng_assignment\game-engine\labgame\classes\character.cpp(46): warning C4129: 'w': unrecognized character escape sequence
+     1>d:\pgeng_assignment\game-engine\labgame\classes\helloworldscene.h(63): warning C4715: 'HelloWorld::GetPlayer': not all control paths return a value
+       Link:
+         D:\VisualStudios2015\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\LabGame.exe" /INCREMENTAL /NOLOGO /LIBPATH:"D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\\" /LIBPATH:"D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\\" opengl32.lib glew32.lib libzlib.lib libwebp.lib libiconv.lib freetype.lib winmm.lib ws2_32.lib libbox2d.lib libSpine.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\LabGame.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\LabGame.lib" /MACHINE:X86 /SAFESEH Debug.win32\game.res
+         Debug.win32\AppDelegate.obj
+         Debug.win32\Character.obj
+         Debug.win32\HelloWorldScene.obj
+         Debug.win32\MenuScene.obj
+         Debug.win32\SelectLevelScene.obj
+         Debug.win32\Settings.obj
+         Debug.win32\Shop.obj
+         Debug.win32\Touchables.obj
+         Debug.win32\main.obj
+         "D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\libcocos2d.lib"
+         "D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\libSpine.lib"
+         "D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\libbox2d.lib"
+         LabGame.vcxproj -> D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\LabGame.exe
+       CustomBuildStep:
+         if not exist "D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\" mkdir "D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\"
+         xcopy "D:\PGEng_Assignment\game-engine\LabGame\proj.win32\..\Resources" "D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\" /D /E /I /F /Y
+               
+         :VCEnd
+         0 File(s) copied
+     1>Done Building Project "D:\PGEng_Assignment\game-engine\LabGame\proj.win32\LabGame.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:03.87

@@ -10,10 +10,15 @@ class GameChar
 {
 private: 
 	cocos2d::Sprite* mainSprite;
+	//cocos2d::Sprite* loadedSprite;
 	int intDir;
 	float fSpeed;
 	Vec2 mLoc;
 	Vec2 mLocInc;
+	Sprite* character1;
+	Vector<SpriteFrame*> walkFrames;
+	Animation* walkAnimation;
+	Animate* walkAction;
 	GLProgram* charEffect;
 	std::string tag;
 	int health;
@@ -23,6 +28,7 @@ private:
 public: 
 	void init(const char*, const char*, float, float, std::string, int, float, int, float);
 	void MoveChar(int);
+	void SpriteAnimation(int, const char*);
 	void MoveCharByCoord(float, float);
 	void Update(float);
 	void Stop();

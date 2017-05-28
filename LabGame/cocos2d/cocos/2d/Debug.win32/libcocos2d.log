@@ -1,18 +1,44 @@
-﻿  1 File(s) copied
-  2 File(s) copied
-  4 File(s) copied
-  2 File(s) copied
-  2 File(s) copied
-  3 File(s) copied
-  1 File(s) copied
-  1 File(s) copied
-  2 File(s) copied
-  2 File(s) copied
-  2 File(s) copied
-  2 File(s) copied
-  2 File(s) copied
-  6 File(s) copied
-  2 File(s) copied
-  2 File(s) copied
-  libcocos2d.vcxproj -> C:\Users\WM\Documents\game-engine\LabGame\proj.win32\Debug.win32\libcocos2d.dll
-  libcocos2d.vcxproj -> C:\Users\WM\Documents\game-engine\LabGame\proj.win32\Debug.win32\libcocos2d.pdb (Full PDB)
+﻿Build started 28/5/2017 3:57:59 PM.
+     1>Project "D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\libcocos2d.vcxproj" on node 2 (Build target(s)).
+     1>PreLinkEvent:
+         if not exist "D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\" mkdir "D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\"
+         xcopy /Y /Q "D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\freetype2\prebuilt\win32\*.*" "D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\"
+         xcopy /Y /Q "D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\glfw3\prebuilt\win32\*.*" "D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\"
+         xcopy /Y /Q "D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\curl\prebuilt\win32\*.*" "D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\"
+         xcopy /Y /Q "D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\jpeg\prebuilt\win32\*.*" "D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\"
+         xcopy /Y /Q "D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\png\prebuilt\win32\*.*" "D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\"
+         xcopy /Y /Q "D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\tiff\prebuilt\win32\*.*" "D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\"
+         xcopy /Y /Q "D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\webp\prebuilt\win32\*.*" "D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\"
+         xcopy /Y /Q "D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\websockets\prebuilt\win32\*.*" "D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\"
+         xcopy /Y /Q "D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\win32-specific\zlib\prebuilt\*.*" "D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\"
+         xcopy /Y /Q "D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\win32-specific\icon\prebuilt\*.*" "D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\"
+         xcopy /Y /Q "D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\win32-specific\gles\prebuilt\*.*" "D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\"
+         xcopy /Y /Q "D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\win32-specific\OpenalSoft\prebuilt\*.*" "D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\"
+         xcopy /Y /Q "D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\win32-specific\MP3Decoder\prebuilt\*.*" "D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\"
+         xcopy /Y /Q "D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\win32-specific\OggDecoder\prebuilt\*.*" "D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\"
+         xcopy /Y /Q "D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\sqlite3\libraries\win32\*.*" "D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\"
+         xcopy /Y /Q "D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\chipmunk\prebuilt\win32\debug-lib\*.*" "D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\"
+         :VCEnd
+         1 File(s) copied
+         2 File(s) copied
+         4 File(s) copied
+         2 File(s) copied
+         2 File(s) copied
+         3 File(s) copied
+         1 File(s) copied
+         1 File(s) copied
+         2 File(s) copied
+         2 File(s) copied
+         2 File(s) copied
+         2 File(s) copied
+         2 File(s) copied
+         6 File(s) copied
+         2 File(s) copied
+         2 File(s) copied
+       Link:
+         libcocos2d.vcxproj -> D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\libcocos2d.dll
+     1>Done Building Project "D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\libcocos2d.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.88

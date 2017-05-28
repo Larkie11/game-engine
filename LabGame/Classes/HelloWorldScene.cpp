@@ -53,6 +53,10 @@ bool HelloWorld::init()
 	backgroundSprite->setScaleX((visibleSize.width / backgroundSprite->getContentSize().width) * 1);
 	backgroundSprite->setScaleY((visibleSize.height / backgroundSprite->getContentSize().height) * 1);
 
+	auto towerSprite = Sprite::create("tower.png");
+	towerSprite->setAnchorPoint(Vec2::ZERO);
+	float towerWidth = towerSprite->getContentSize().width;
+
 	nodeItems->addChild(backgroundSprite, -1);
 	int loop = std::ceil(visibleSize.width / width);
 
@@ -132,13 +136,32 @@ bool HelloWorld::init()
 	{
 		spriteNode->addChild(s->getSprite(), 1);
 	}
+
 	a->SetImage("walk_1.png", "but1",1);
 	b->SetImage("walk_2.png", "but2",1);
+	//c->SetImage("Sprites\cat\death_1.png", "but1", 1);
 	a->SetText("Summon 1",3, "fonts/Soos.ttf", ccc3(0, 200, 255),0, -a->getSprite()->getContentSize().width*.3);
 	b->SetText("Summon 2", 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, -a->getSprite()->getContentSize().width*.3);
 	c->SetText("Summon 3", 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, -a->getSprite()->getContentSize().width*.3);
 
 	auto moveEvent = MoveBy::create(1, Vec2(200, 0));  // Move to 200 pixels in 1 second
+
+	// Sprite Sheet Animation Code Start
+	/*Vector<SpriteFrame*> animFrames(7);
+	char str[100] = { 0 };
+	for (int i = 0; i < 7; i++)
+	{
+		sprintf(str, "walk_1.png", i);
+		auto frame = SpriteFrame::create(str, Rect(0, 0, 40, 40));
+		animFrames.pushBack(frame);
+	}
+
+	auto animation = Animation::createWithSpriteFrames(animFrames, 0.2f);
+	auto animate = Animate::create(animation);
+	sprite->runAction(animate);*/
+
+	// Sprite Sheet Animation Code End
+
 	//Move to is absolute movement
 	//Move by is relative vector
 	//mainSprite->runAction(moveEvent->reverse());
@@ -307,11 +330,15 @@ void HelloWorld::update(float deltaTime)
 				if (s->GetTag() == "right")
 				{
 					//s->MoveChar(1);
+					//loadSprite(1);
+					//b->SpriteLoader(7, "dog-sprite-walk.png");
+					c->SpriteAnimation(7, "Sprites\dog\walk\walk_1.png");
 					s->getSprite()->setPosition(s->getSprite()->getPosition().x - s->GetSpeed(), s->getSprite()->getPosition().y);
 				}
 				if (s->GetTag() == "left")
 					//s->MoveChar(-1);
-
+					//b->SpriteLoader(7, "cat-sprite-walk.png");
+					//b->SpriteLoader(7, "walk_1.png");
 					s->getSprite()->setPosition(s->getSprite()->getPosition().x + s->GetSpeed(), s->getSprite()->getPosition().y);
 			}
 
@@ -437,6 +464,7 @@ void HelloWorld::onMouseMove(Event *event)
 		}
 	}
 }
+
 
 void HelloWorld::onMouseUp(Event *event)
 {
