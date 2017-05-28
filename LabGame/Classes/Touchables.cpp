@@ -1,7 +1,7 @@
 #include "Touchables.h"
 #include "HelloWorldScene.h"
 
-void Touchables::init(const char* sprite, const char* name, float x, float y, Touchables::Types t)
+void Touchables::init(const char* sprite, const char* name, float x, float y, Touchables::Types t, float scale)
 {
 	intDir = 0;
 	fSpeed = 0.01;
@@ -10,6 +10,7 @@ void Touchables::init(const char* sprite, const char* name, float x, float y, To
 	mainSprite->setAnchorPoint(Vec2(0, 0));
 	mainSprite->setPosition(x, y);
 	mainSprite->setName(name);
+	mainSprite->setScale(scale);
 	this->t = t;
 	this->tag = tag;
 	disabled = false;
@@ -78,6 +79,7 @@ void Touchables::SetToolTip(std::string text, const char* sprite, int opacity, f
 	imgSprite->setScale(scale);
 	auto label = Label::createWithTTF(text, "fonts/Marker Felt.ttf", 32);
 	label->setPosition(Vec2(imgSprite->getContentSize().width*.5 , imgSprite->getContentSize().height*.5));
+	label->setName("toolTipLabel");
 	mainSprite->addChild(imgSprite,2);
 	imgSprite->addChild(label,3);
 	imgSprite->setVisible(false);
@@ -128,12 +130,12 @@ bool Touchables::checkMouseDown(Event *event)
 
 void Touchables::Update(float delta)
 {
-	if (disabled && GetLabel()!=nullptr)
+	if (disabled && GetLabel("label")!=nullptr)
 	{
-		if (GetLabel()->getString() != "Locked")
+		if (GetLabel("label")->getString() != "Locked" && t != Touchables::T_SHOP)
 		{
-			GetLabel()->setString("Locked");
-			GetLabel()->setColor(ccc3(0, 0, 0));
+			GetLabel("label")->setString("Locked");
+			GetLabel("label")->setColor(ccc3(0, 0, 0));
 		}
 	}
 	//Only for shader effect

@@ -29,7 +29,7 @@ public:
 		T_MAX,
 	};
 
-	void init(const char*, const char*, float, float, Types);
+	void init(const char* sprite, const char* name, float x, float y, Touchables::Types t, float scale);
 	void Update(float);
 	void SetDisabled(bool disabled);
 	virtual bool checkMouseDown(Event *event);
@@ -44,9 +44,17 @@ public:
 	{
 		return color;
 	}
-	Label* GetLabel()
+	Label* GetLabel(const char* label)
 	{
-		Label *s = dynamic_cast<Label*>(mainSprite->getChildByName("label"));
+		Label *s = dynamic_cast<Label*>(mainSprite->getChildByName(label));
+		if (s != nullptr)
+			return s;
+		else
+			return nullptr;
+	}
+	Label* GetToolTipLabel()
+	{
+		Label *s = dynamic_cast<Label*>(GetToolTip()->getChildByName("toolTipLabel"));
 		if (s != nullptr)
 			return s;
 		else

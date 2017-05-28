@@ -81,8 +81,7 @@ bool Instructions::init()
 
 	// Back button
 	Touchables* back = new Touchables();
-	back->init("back_button.png", "mainSprite", visibleSize.width * 0.8, visibleSize.height * 0.05, Touchables::T_BACK);
-	back->getSprite()->setScale(1.2);
+	back->init("back_button.png", "mainSprite", visibleSize.width * 0.8, visibleSize.height * 0.05, Touchables::T_BACK,1.2);
 
 	// push back sprite vector
 	touchableSprites.push_back(back);
@@ -296,10 +295,10 @@ void Instructions::onMouseMove(Event *event)
 			{
 				if (s->GetType() != Touchables::T_BACK)
 					s->getSprite()->setTexture("Button2.png");
-				if (s->GetLabel() != nullptr)
+			/*	if (s->GetLabel() != nullptr)
 				{
 					s->GetLabel()->setColor(ccc3(0, 0, 255));
-				}
+				}*/
 			}
 			switch (s->GetType())
 			{
@@ -325,10 +324,10 @@ void Instructions::onMouseMove(Event *event)
 			{
 				if (s->GetType() != Touchables::T_BACK)
 					s->getSprite()->setTexture("Button1.png");
-				if (s->GetLabel() != nullptr)
+			/*	if (s->GetLabel() != nullptr)
 				{
 					s->GetLabel()->setColor(s->GetDefaultTextColor());
-				}
+				}*/
 			}
 			switch (s->GetType())
 			{

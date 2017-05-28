@@ -78,42 +78,36 @@ bool HelloWorld::init()
 	//Player monsters 1 vector
 	//Touchable sprites 1 vector, etc
 	a = new Touchables();
-	a->init("Button1.png", "mainSprite", visibleSize.width * 0.1, visibleSize.height * 0.1, Touchables::T_SUMMONBUT1);
-	a->getSprite()->setScale(0.5);
+	a->init("Button1.png", "mainSprite", visibleSize.width * 0.1, visibleSize.height * 0.1, Touchables::T_SUMMONBUT1,0.5);
 
 	Touchables* b = new Touchables();
-	b->init("Button1.png", "mainSprite", visibleSize.width * 0.3, visibleSize.height * 0.1, Touchables::T_SUMMONBUT2);
+	b->init("Button1.png", "mainSprite", visibleSize.width * 0.3, visibleSize.height * 0.1, Touchables::T_SUMMONBUT2, 0.5);
 	b->getSprite()->setScale(0.5);
 
 	Touchables* c = new Touchables();
-	c->init("Button1.png", "mainSprite", visibleSize.width * 0.5, visibleSize.height * 0.1, Touchables::T_SUMMONBUT3);
-	c->getSprite()->setScale(0.5);
+	c->init("Button1.png", "mainSprite", visibleSize.width * 0.5, visibleSize.height * 0.1, Touchables::T_SUMMONBUT3, 0.5);
 
 	// Back button
 	Touchables* back = new Touchables();
-	back->init("back_button.png", "mainSprite", visibleSize.width * 0.8, visibleSize.height * 0.1, Touchables::T_BACK);
-	back->getSprite()->setScale(1.2);
+	back->init("back_button.png", "mainSprite", visibleSize.width * 0.8, visibleSize.height * 0.1, Touchables::T_BACK, 1.2);
 
 	// Gold Upgrade
 	Touchables* goldUpgrade = new Touchables();
-	goldUpgrade->init("gold.png", "mainSprite", visibleSize.width * 0.7, visibleSize.height * 0.1, Touchables::T_GOLDUPGRADE);
-	goldUpgrade->getSprite()->setScale(0.3);
+	goldUpgrade->init("gold.png", "mainSprite", visibleSize.width * 0.1, visibleSize.height * 0.8, Touchables::T_GOLDUPGRADE,0.3);
+	goldUpgrade->SetToolTip("Increase gold speed", "Button1.png", 200, 0, -goldUpgrade->getSprite()->getContentSize().height*1.8, 2);
+	goldUpgrade->GetToolTipLabel()->setScale(1.3);
 
 	std::stringstream oss;
 	oss << high_score;
-	//Texts for debugging
-	label = Label::createWithTTF("label test", "fonts/Marker Felt.ttf", 32);
-	label->setPosition(500,500);
-	nodeItems->addChild(label,1);
 	label2 = Label::createWithTTF(oss.str(), "fonts/Marker Felt.ttf", 32);
 	label2->setPosition(500, 200);
-	nodeItems->addChild(label2,1);
+	//nodeItems->addChild(label2,1);
 	health1 = Label::createWithTTF("", "fonts/Marker Felt.ttf", 32);
 	health1->setPosition(400, 330);
-	nodeItems->addChild(health1,1);
+	//nodeItems->addChild(health1,1);
 	health2 = Label::createWithTTF("", "fonts/Marker Felt.ttf", 32);
 	health2->setPosition(400, 300);
-	nodeItems->addChild(health2,1);
+	//nodeItems->addChild(health2,1);
 
 	// Gold
 	gold = Label::createWithTTF("", "fonts/Marker Felt.ttf", 35);
@@ -302,19 +296,13 @@ void HelloWorld::update(float deltaTime)
 	// Gold
 	money += 1 * speedOfIncome * deltaTime;
 	std::stringstream oss;
-	oss << money;
+	oss << "Gold: " << money;
 	gold->setString(oss.str());
 
 	oss.str("");
 
-	oss << speedOfIncome;
+	oss << "Gold Speed: " << speedOfIncome;
 	incomeSpeed->setString(oss.str());
-
-	if (moveDir != 0)
-	{
-		auto cam = Camera::getDefaultCamera();
-		cam->setPosition(Vec2(cam->getPosition().x + moveDir, cam->getPosition().y));
-	}
 
 	for (auto* s : touchableSprites)
 	{
@@ -467,19 +455,26 @@ void HelloWorld::onMouseMove(Event *event)
 		{
 			if (s->GetType() != Touchables::T_BACK && s->GetType() != Touchables::T_GOLDUPGRADE)
 			s->getSprite()->setTexture("Button2.png");
-			if (s->GetLabel() != nullptr)
+
+			if (s->GetToolTip() != nullptr && s->GetDisabled() != true)
+				s->GetToolTip()->setVisible(true);
+
+			if (s->GetLabel("label") != nullptr)
 			{
-				s->GetLabel()->setColor(ccc3(0, 0, 255));
+				s->GetLabel("label")->setColor(ccc3(0, 0, 255));
 			}
 		}
 		else
 		{
+			if (s->GetToolTip() != nullptr)
+				s->GetToolTip()->setVisible(false);
+
 			if (s->GetType() != Touchables::T_BACK && s->GetType() != Touchables::T_GOLDUPGRADE)
 
 			s->getSprite()->setTexture("Button1.png");
-			if (s->GetLabel() != nullptr)
+			if (s->GetLabel("label") != nullptr)
 			{
-				s->GetLabel()->setColor(ccc3(0, 200, 255));
+				s->GetLabel("label")->setColor(ccc3(0, 200, 255));
 			}
 		}
 	}
@@ -489,10 +484,6 @@ void HelloWorld::onMouseMove(Event *event)
 void HelloWorld::onMouseUp(Event *event)
 {
 	EventMouse* e = (EventMouse*)event;
-	
-	std::stringstream oss;
-	oss << e->getLocationInView().x;
-	label2->setString(oss.str());
 
 	//Detection for touching any touchable sprite
 
@@ -504,13 +495,13 @@ void HelloWorld::onMouseUp(Event *event)
 		//Checking if point is within sprite's box, and the tag of sprite
 		if (s->checkMouseDown(event))
 		{
+			CCUserDefault *def = CCUserDefault::sharedUserDefault();
 			GameChar* dc = new GameChar();
 
 			switch (s->GetType())
 			{
 			case Touchables::T_SUMMONBUT1:
 				//s->getSprite()->setPosition(Vec2(100, 400));
-				label->setString("Touched 1st Button!");
 				//Spawn monster
 				dc->init("walk_1.png", "monster", visibleSize.width - visibleSize.width, visibleSize.height*0.5, GameChar::C_CAT, 10, 3, 1,3);
 				dc->getSprite()->setScale(0.5);
@@ -524,7 +515,6 @@ void HelloWorld::onMouseUp(Event *event)
 				break;
 			case Touchables::T_SUMMONBUT2:
 				//s->getSprite()->setPosition(Vec2(300, 100));
-				label->setString("Touched 2nd Button!");
 				//Spawn monster
 				dc->init("walk_2.png", "monster", visibleSize.width, visibleSize.height*0.5, GameChar::C_DOG, 10, 5, 2,1);
 				dc->getSprite()->setFlippedX(true);
@@ -536,10 +526,11 @@ void HelloWorld::onMouseUp(Event *event)
 				monsters.push_back(dc);
 				break;
 			case Touchables::T_SUMMONBUT3:
-				label->setString("Touched 3rd Button!");
 				break;
 			case Touchables::T_BACK:
-				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, MenuScene::createScene(), Color3B(0, 255, 255)));
+				
+				def->setIntegerForKey("LevelUnlockedTest", 2);
+				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, MenuScene::createScene(), Color3B(0, 0, 0)));
 				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");
 				break;
 			case Touchables::T_GOLDUPGRADE:

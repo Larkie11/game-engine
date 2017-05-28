@@ -64,27 +64,18 @@ bool Shop::init()
 	sprite->setScale(1.5);
 	spriteNode->addChild(sprite, -1);
 
-	//Adding touchable sprites to vector, different type of sprites different vectors?
-	//Enemy 1 vector
-	//Player monsters 1 vector
-	//Touchable sprites 1 vector, etc
-
 	// Back button
 	Touchables* back = new Touchables();
-	back->init("back_button.png", "mainSprite", visibleSize.width * 0.8, visibleSize.height * 0.05, Touchables::T_BACK);
-	back->getSprite()->setScale(1.2);
+	back->init("back_button.png", "mainSprite", visibleSize.width * 0.8, visibleSize.height * 0.05, Touchables::T_BACK,1.2);
 
 	Touchables* monster1 = new Touchables();
-	monster1->init("ShopHover.png", "mainSprite", visibleSize.width * 0.05, visibleSize.height * 0.3, Touchables::T_SHOP1);
-	monster1->getSprite()->setScale(0.3);
+	monster1->init("ShopHover.png", "mainSprite", visibleSize.width * 0.05, visibleSize.height * 0.3, Touchables::T_SHOP1,0.3);
 
 	Touchables* monster2 = new Touchables();
-	monster2->init("Shop2Hover.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.3, Touchables::T_SHOP2);
-	monster2->getSprite()->setScale(0.3);
+	monster2->init("Shop2Hover.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.3, Touchables::T_SHOP2,0.3);
 
 	Touchables* monster3 = new Touchables();
-	monster3->init("ShopHover.png", "mainSprite", visibleSize.width * 0.65, visibleSize.height * 0.3, Touchables::T_SHOP3);
-	monster3->getSprite()->setScale(0.3);
+	monster3->init("ShopHover.png", "mainSprite", visibleSize.width * 0.65, visibleSize.height * 0.3, Touchables::T_SHOP3,0.3);
 
 	// push back sprite vector
 	touchableSprites.push_back(back);
@@ -111,17 +102,6 @@ bool Shop::init()
 	monster3->SetToolTip("Monster unlock: BOOOO", "Button1.png", 200, 0, -monster2->getSprite()->getContentSize().height, 2);
 	monster3->SetImage("walk_1.png", "but1",3);
 
-	auto moveEvent = MoveBy::create(1, Vec2(200, 0));  // Move to 200 pixels in 1 second
-													   //Move to is absolute movement
-													   //Move by is relative vector
-													   //mainSprite->runAction(moveEvent->reverse());
-													   //Cannot use action on more than 1, need to clone
-													   //if wan to use moveEvent for another sprite, it will double to pixel and time
-
-	auto delay = DelayTime::create(5.0f);
-	auto delaySequence = Sequence::create(delay, delay->clone(), nullptr);
-	auto sequence = Sequence::create(moveEvent, moveEvent->reverse(), delaySequence, nullptr); //Store all the events, end with nullptr for all sequence
-
 	auto listener = EventListenerKeyboard::create();
 
 	listener->onKeyPressed = CC_CALLBACK_2(Shop::onKeyPressed, this);
@@ -142,45 +122,6 @@ bool Shop::init()
 	listener1->onTouchEnded = CC_CALLBACK_2(Shop::onTouchEnded, this);
 
 	this->scheduleUpdate();
-
-	//Shadow
-	mLoc.set(.5f, .5f);
-	mLocInc.set(.005f, .01f);
-	shaderCharEffect = new GLProgram();
-	shaderCharEffect->initWithFilenames("Basic.vsh", "CharEffect.fsh");
-	shaderCharEffect->bindAttribLocation(GLProgram::ATTRIBUTE_NAME_POSITION, GLProgram::VERTEX_ATTRIB_POSITION);
-	shaderCharEffect->bindAttribLocation(GLProgram::ATTRIBUTE_NAME_COLOR, GLProgram::VERTEX_ATTRIB_COLOR);
-	shaderCharEffect->bindAttribLocation(GLProgram::ATTRIBUTE_NAME_TEX_COORD, GLProgram::VERTEX_ATTRIB_TEX_COORDS);
-	shaderCharEffect->link();
-	shaderCharEffect->updateUniforms();
-	state = GLProgramState::getOrCreateWithGLProgram(shaderCharEffect);
-	state->setUniformVec2("loc", mLoc);
-
-	//VERTEX_ATTRIB_COLOR
-	//Not working
-	//Gray scale
-	proPostProcess = new GLProgram();
-	proPostProcess->initWithFilenames("Basic.vsh", "GreyScale.fsh");
-	proPostProcess->bindAttribLocation(GLProgram::ATTRIBUTE_NAME_COLOR, GLProgram::VERTEX_ATTRIB_COLOR);
-	proPostProcess->bindAttribLocation(GLProgram::ATTRIBUTE_NAME_POSITION, GLProgram::VERTEX_ATTRIB_POSITION);
-	proPostProcess->bindAttribLocation(GLProgram::ATTRIBUTE_NAME_TEX_COORD, GLProgram::VERTEX_ATTRIB_TEX_COORD);
-	proPostProcess->bindAttribLocation(GLProgram::ATTRIBUTE_NAME_TEX_COORD1, GLProgram::VERTEX_ATTRIB_TEX_COORD1);
-	proPostProcess->bindAttribLocation(GLProgram::ATTRIBUTE_NAME_TEX_COORD2, GLProgram::VERTEX_ATTRIB_TEX_COORD2);
-	proPostProcess->bindAttribLocation(GLProgram::ATTRIBUTE_NAME_TEX_COORD3, GLProgram::VERTEX_ATTRIB_TEX_COORD3);
-	proPostProcess->bindAttribLocation(GLProgram::ATTRIBUTE_NAME_NORMAL, GLProgram::VERTEX_ATTRIB_NORMAL);
-	proPostProcess->bindAttribLocation(GLProgram::ATTRIBUTE_NAME_BLEND_WEIGHT, GLProgram::VERTEX_ATTRIB_BLEND_WEIGHT);
-	proPostProcess->bindAttribLocation(GLProgram::ATTRIBUTE_NAME_BLEND_INDEX, GLProgram::VERTEX_ATTRIB_BLEND_INDEX);
-	proPostProcess->link();
-	proPostProcess->updateUniforms();
-	rendtex = RenderTexture::create(visibleSize.width, visibleSize.height);
-	rendtex->retain();
-	rendtexSprite = Sprite::createWithTexture(rendtex->getSprite()->getTexture());
-	rendtexSprite->setTextureRect(Rect(0, 0, rendtexSprite->getTexture()->getContentSize().width, rendtexSprite->getTexture()->getContentSize().height));
-	rendtexSprite->setAnchorPoint(Point::ZERO);
-	rendtexSprite->setPosition(Vec2(-1.0, -1.0));
-	rendtexSprite->setFlippedY(true);
-	rendtexSprite->setGLProgram(proPostProcess);
-	//this->addChild(rendtexSprite, 2);
 
 	// Load sound
 	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/click.wav");
@@ -309,7 +250,7 @@ void Shop::onMouseUp(Event *event)
 			{
 				case Touchables::T_BACK:
 				{
-					CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, MenuScene::createScene(), Color3B(0, 255, 255)));
+					CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, MenuScene::createScene(), Color3B(0, 0, 0)));
 					CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");
 					break;
 				}
@@ -341,28 +282,9 @@ void Shop::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 	case EventKeyboard::KeyCode::KEY_SPACE:
 		CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, HelloWorld::createScene(), Color3B(0, 255, 255)));
 	}
-	if (keyCode == EventKeyboard::KeyCode::KEY_RIGHT_ARROW)
-	{
-		//moveDir = 10;
-		//a->MoveChar(100);
-
-	}
-
-	if (keyCode == EventKeyboard::KeyCode::KEY_LEFT_ARROW)
-	{
-		//moveDir = -10;
-		//a->MoveChar(-100);
-	}
-	for (auto* s : touchableSprites)
-	{
-		//this->getChildByName("spriteNode")->getChildByName("mainSprite")->setPosition(Vec2(this->getChildByName("spriteNode")->getPosition().x + moveDir, this->getChildByName("spriteNode")->getPosition().y));
-		//s->getSprite()->getBoundingBox().setRect(s->getSprite()->getPosition().x + moveDir, s->getSprite()->getPosition().y, s->getSprite()->getContentSize().width, s->getSprite()->getContentSize().height);
-	}
 }
 void Shop::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
 {
-	moveDir = 0;
-	//a->MoveChar(0);
 }
 void Shop::menuCloseCallback(Ref* pSender)
 {

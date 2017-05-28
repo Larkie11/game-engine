@@ -1,0 +1,15 @@
+Update task list (No gameplay yet)
+
+Wei Min
+Input buttons (Hover, tool tip, set image/text, etc)
+Animations function (Now only on dog and cat - walking, attacking)
+Select Level, Shop & Main game scene
+
+Shania
+Menu, Settings Scene
+Sound effects
+Production of gold/level up of gold speed in main game scene
+
+Amos
+Background musics
+Instructions scene
