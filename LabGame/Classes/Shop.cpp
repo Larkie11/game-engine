@@ -200,6 +200,8 @@ void Shop::update(float deltaTime)
 	for (auto* s : touchableSprites)
 	{
 		s->Update(deltaTime);
+		if (s->GetImg("purchased") != nullptr)
+			int a;
 	}
 }
 void Shop::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
@@ -303,7 +305,7 @@ void Shop::onMouseUp(Event *event)
 					{
 						CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/purchase.wav");
 						s->SetDisabled(true);
-						s->SetImage("ducttape.png", "but2", 1);
+						s->SetImage("ducttape.png", "purchased", 1);
 					}
 					else
 						CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/disabled.mp3");

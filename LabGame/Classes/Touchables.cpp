@@ -35,7 +35,7 @@ bool Touchables::GetDisabled()
 void Touchables::SetImage(const char* sprite, const char* name, float scale)
 {
 	auto imgSprite = Sprite::create(sprite);
-	imgSprite->setName("image");
+	imgSprite->setName(name);
 	imgSprite->setScale(scale);
 	imgSprite->setPosition(Vec2(mainSprite->getContentSize().width*.5, mainSprite->getContentSize().height*.5));
 	mainSprite->addChild(imgSprite, 1);

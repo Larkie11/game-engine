@@ -50,9 +50,9 @@ public:
 		else
 			return nullptr;
 	}
-	Sprite* GetImg()
+	Sprite* GetImg(const char* image)
 	{
-		Sprite *s = dynamic_cast<Sprite*>(mainSprite->getChildByName("image"));
+		Sprite *s = dynamic_cast<Sprite*>(mainSprite->getChildByName(image));
 		if (s != nullptr)
 			return s;
 		else
