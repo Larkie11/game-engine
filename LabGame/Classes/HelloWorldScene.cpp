@@ -332,7 +332,7 @@ void HelloWorld::update(float deltaTime)
 					//s->MoveChar(1);
 					//loadSprite(1);
 					//b->SpriteLoader(7, "dog-sprite-walk.png");
-					c->SpriteAnimation(7, "Sprites\dog\walk\walk_1.png");
+					//c->SpriteAnimation(7, "Sprites\dog\walk\walk_1.png");
 					s->getSprite()->setPosition(s->getSprite()->getPosition().x - s->GetSpeed(), s->getSprite()->getPosition().y);
 				}
 				if (s->GetTag() == "left")

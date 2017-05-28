@@ -35,7 +35,7 @@ void GameChar::MoveChar(int dirX)
 
 void GameChar::SpriteAnimation(int frames, const char* spriteName)
 {
-	Vector<SpriteFrame*> animFrames;
+	/*Vector<SpriteFrame*> animFrames;
 	animFrames.reserve(frames);
 	animFrames.pushBack(SpriteFrame::create("Sprites\cat\walk\walk_1.png", Rect(0, 0, 256, 256)));
 	animFrames.pushBack(SpriteFrame::create("Sprites\cat\walk\walk_2.png", Rect(0, 0, 256, 256)));
@@ -47,30 +47,30 @@ void GameChar::SpriteAnimation(int frames, const char* spriteName)
 
 	Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.5f);
 	Animate* animateWalk = Animate::create(animation);
-	character1->runAction(RepeatForever::create(animateWalk));
+	mainSprite->runAction(RepeatForever::create(animateWalk));*/
 
-	//SpriteBatchNode* spritebatch = SpriteBatchNode::create(spriteName);
-	//SpriteFrameCache* cache = SpriteFrameCache::getInstance();
-	//cache->addSpriteFramesWithFile(spriteName);
+	SpriteBatchNode* spritebatch = SpriteBatchNode::create(spriteName);
+	SpriteFrameCache* cache = SpriteFrameCache::getInstance();
+	cache->addSpriteFramesWithFile(spriteName);
 
-	//character1 = Sprite::createWithSpriteFrameName("walk_1.png");
-	//spritebatch->addChild(character1);
-	////addChild(spritebatch);
+	mainSprite = Sprite::createWithSpriteFrameName("walk_1.png");
+	spritebatch->addChild(mainSprite);
+	//addChild(spritebatch);
 
-	//Vector<SpriteFrame*> animFrames(frames);
+	Vector<SpriteFrame*> animFrames(frames);
 
-	//char str[100] = { 0 };
-	//for (int i = 0; i < frames; i++)
-	//{
-	//	sprintf(str, spriteName, i);
-	//	SpriteFrame* frame = cache->getSpriteFrameByName(str);
-	//	animFrames.pushBack(frame);
-	//	//animFrames->addObject(frame);
-	//}
+	char str[100] = { 0 };
+	for (int i = 0; i < frames; i++)
+	{
+		sprintf(str, spriteName, i);
+		SpriteFrame* frame = cache->getSpriteFrameByName(str);
+		animFrames.pushBack(frame);
+		//animFrames->addObject(frame);
+	}
 
-	//auto animation = Animation::createWithSpriteFrames(animFrames, 0.3f);
-	//auto animate = Animate::create(animation);
-	//character1->runAction(RepeatForever::create(animate));
+	auto animation = Animation::createWithSpriteFrames(animFrames, 0.3f);
+	auto animate = Animate::create(animation);
+	mainSprite->runAction(RepeatForever::create(animate));
 }
 
 void GameChar::Left()

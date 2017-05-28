@@ -1,6 +1,7 @@
 #include "MenuScene.h"
 #include "Shop.h"
 #include "Settings.h"
+#include "Instructions.h"
 #include "HelloWorldScene.h"
 #include "SelectLevelScene.h"
 #include "SimpleAudioEngine.h"
@@ -77,15 +78,21 @@ bool MenuScene::init()
 	settings->init("green_button1.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.4, Touchables::T_SETTINGS);
 	settings->getSprite()->setScale(1.2);
 
+	// Instructions Button
+	Touchables* instructions = new Touchables();
+	instructions->init("purple_button1.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.3, Touchables::T_INSTRUCTIONS);
+	instructions->getSprite()->setScale(1.2);
+
 	// Exit button
 	Touchables* exit = new Touchables();
-	exit->init("blue_button1.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.3, Touchables::T_EXIT);
+	exit->init("blue_button1.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.2, Touchables::T_EXIT);
 	exit->getSprite()->setScale(1.2);
 	
 	// push back sprite vector
 	touchableSprites.push_back(start);
 	touchableSprites.push_back(shop);
 	touchableSprites.push_back(settings);
+	touchableSprites.push_back(instructions);
 	touchableSprites.push_back(exit);
 
 	//Texts for debugging
@@ -117,6 +124,9 @@ bool MenuScene::init()
 
 	settings->SetText("SETTINGS", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0);
 	settings->GetLabel()->disableEffect();
+
+	instructions->SetText("INSTRUCTIONS", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0);
+	instructions->GetLabel()->disableEffect();
 
 	exit->SetText("EXIT", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0);
 	exit->GetLabel()->disableEffect();
@@ -340,6 +350,15 @@ void MenuScene::onMouseMove(Event *event)
 				}
 				break;
 			}
+			case Touchables::T_INSTRUCTIONS:
+			{
+				s->getSprite()->setTexture("purple_button2.png");
+				if (s->GetLabel() != nullptr)
+				{
+					s->GetLabel()->setColor(ccc3(245, 245, 245));
+				}
+				break;
+			}
 			case Touchables::T_EXIT:
 			{
 				s->getSprite()->setTexture("blue_button2.png");
@@ -376,6 +395,15 @@ void MenuScene::onMouseMove(Event *event)
 			case Touchables::T_SETTINGS:
 			{
 				s->getSprite()->setTexture("green_button1.png");
+				if (s->GetLabel() != nullptr)
+				{
+					s->GetLabel()->setColor(ccc3(255, 255, 255));
+				}
+				break;
+			}
+			case Touchables::T_INSTRUCTIONS:
+			{
+				s->getSprite()->setTexture("purple_button1.png");
 				if (s->GetLabel() != nullptr)
 				{
 					s->GetLabel()->setColor(ccc3(255, 255, 255));
@@ -428,6 +456,11 @@ void MenuScene::onMouseUp(Event *event)
 				//CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/click.wav");
 				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");
 				break;
+			}
+			case Touchables::T_INSTRUCTIONS:
+			{
+				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, Instructions::createScene(), Color3B(0, 255, 255)));
+				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");
 			}
 			case Touchables::T_EXIT:
 			{

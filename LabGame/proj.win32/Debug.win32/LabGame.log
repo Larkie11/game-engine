@@ -1,28 +1,50 @@
-﻿Build started 28/5/2017 3:58:00 PM.
+﻿Build started 28/5/2017 11:33:26 PM.
      1>Project "D:\PGEng_Assignment\game-engine\LabGame\proj.win32\LabGame.vcxproj" on node 3 (Build target(s)).
      1>ClCompile:
-         D:\VisualStudios2015\VC\bin\CL.exe /c /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\cocos\audio\include" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\chipmunk\include\chipmunk" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\extensions" /I..\Classes /I.. /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\cocos" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\cocos/editor-support" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\glfw3\include\win32" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\win32-specific\gles\include\OGLES" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\freetype2\include\win32\freetype2" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\freetype2\include\win32\\" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external" /ZI /nologo /W3 /WX- /MP /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USE_MATH_DEFINES /D GL_GLEXT_PROTOTYPES /D CC_ENABLE_CHIPMUNK_INTEGRATION=1 /D COCOS2D_DEBUG=1 /D _CRT_SECURE_NO_WARNINGS /D _SCL_SECURE_NO_WARNINGS /D _VARIADIC_MAX=10 /D _UNICODE /D UNICODE /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug.win32\\" /Fd"Debug.win32\vc140.pdb" /Gd /TP /wd4267 /wd4251 /wd4244 /analyze- /errorReport:prompt ..\Classes\Character.cpp
-         Character.cpp
-     1>d:\pgeng_assignment\game-engine\labgame\classes\character.cpp(40): warning C4129: 'c': unrecognized character escape sequence
-     1>d:\pgeng_assignment\game-engine\labgame\classes\character.cpp(40): warning C4129: 'w': unrecognized character escape sequence
-     1>d:\pgeng_assignment\game-engine\labgame\classes\character.cpp(41): warning C4129: 'c': unrecognized character escape sequence
-     1>d:\pgeng_assignment\game-engine\labgame\classes\character.cpp(41): warning C4129: 'w': unrecognized character escape sequence
-     1>d:\pgeng_assignment\game-engine\labgame\classes\character.cpp(42): warning C4129: 'c': unrecognized character escape sequence
-     1>d:\pgeng_assignment\game-engine\labgame\classes\character.cpp(42): warning C4129: 'w': unrecognized character escape sequence
-     1>d:\pgeng_assignment\game-engine\labgame\classes\character.cpp(43): warning C4129: 'c': unrecognized character escape sequence
-     1>d:\pgeng_assignment\game-engine\labgame\classes\character.cpp(43): warning C4129: 'w': unrecognized character escape sequence
-     1>d:\pgeng_assignment\game-engine\labgame\classes\character.cpp(44): warning C4129: 'c': unrecognized character escape sequence
-     1>d:\pgeng_assignment\game-engine\labgame\classes\character.cpp(44): warning C4129: 'w': unrecognized character escape sequence
-     1>d:\pgeng_assignment\game-engine\labgame\classes\character.cpp(45): warning C4129: 'c': unrecognized character escape sequence
-     1>d:\pgeng_assignment\game-engine\labgame\classes\character.cpp(45): warning C4129: 'w': unrecognized character escape sequence
-     1>d:\pgeng_assignment\game-engine\labgame\classes\character.cpp(46): warning C4129: 'c': unrecognized character escape sequence
-     1>d:\pgeng_assignment\game-engine\labgame\classes\character.cpp(46): warning C4129: 'w': unrecognized character escape sequence
-     1>d:\pgeng_assignment\game-engine\labgame\classes\helloworldscene.h(63): warning C4715: 'HelloWorld::GetPlayer': not all control paths return a value
+         D:\VisualStudios2015\VC\bin\CL.exe /c /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\cocos\audio\include" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\chipmunk\include\chipmunk" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\extensions" /I..\Classes /I.. /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\cocos" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\cocos/editor-support" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\glfw3\include\win32" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\win32-specific\gles\include\OGLES" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\freetype2\include\win32\freetype2" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external\freetype2\include\win32\\" /I"D:\PGEng_Assignment\game-engine\LabGame\cocos2d\cocos\2d\..\..\external" /ZI /nologo /W3 /WX- /MP /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USE_MATH_DEFINES /D GL_GLEXT_PROTOTYPES /D CC_ENABLE_CHIPMUNK_INTEGRATION=1 /D COCOS2D_DEBUG=1 /D _CRT_SECURE_NO_WARNINGS /D _SCL_SECURE_NO_WARNINGS /D _VARIADIC_MAX=10 /D _UNICODE /D UNICODE /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug.win32\\" /Fd"Debug.win32\vc140.pdb" /Gd /TP /wd4267 /wd4251 /wd4244 /analyze- /errorReport:prompt ..\Classes\MenuScene.cpp
+         MenuScene.cpp
+     1>d:\pgeng_assignment\game-engine\labgame\classes\menuscene.cpp(11): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+     1>d:\pgeng_assignment\game-engine\labgame\classes\menuscene.cpp(69): warning C4305: 'argument': truncation from 'double' to 'float'
+     1>d:\pgeng_assignment\game-engine\labgame\classes\menuscene.cpp(74): warning C4305: 'argument': truncation from 'double' to 'float'
+     1>d:\pgeng_assignment\game-engine\labgame\classes\menuscene.cpp(79): warning C4305: 'argument': truncation from 'double' to 'float'
+     1>d:\pgeng_assignment\game-engine\labgame\classes\menuscene.cpp(84): warning C4305: 'argument': truncation from 'double' to 'float'
+     1>d:\pgeng_assignment\game-engine\labgame\classes\menuscene.cpp(89): warning C4305: 'argument': truncation from 'double' to 'float'
+     1>d:\pgeng_assignment\game-engine\labgame\classes\menuscene.cpp(119): warning C4996: 'cocos2d::ccc3': was declared deprecated
+         d:\pgeng_assignment\game-engine\labgame\cocos2d\cocos\deprecated\ccdeprecated.h(475): note: see declaration of 'cocos2d::ccc3'
+     1>d:\pgeng_assignment\game-engine\labgame\classes\menuscene.cpp(122): warning C4996: 'cocos2d::ccc3': was declared deprecated
+         d:\pgeng_assignment\game-engine\labgame\cocos2d\cocos\deprecated\ccdeprecated.h(475): note: see declaration of 'cocos2d::ccc3'
+     1>d:\pgeng_assignment\game-engine\labgame\classes\menuscene.cpp(125): warning C4996: 'cocos2d::ccc3': was declared deprecated
+         d:\pgeng_assignment\game-engine\labgame\cocos2d\cocos\deprecated\ccdeprecated.h(475): note: see declaration of 'cocos2d::ccc3'
+     1>d:\pgeng_assignment\game-engine\labgame\classes\menuscene.cpp(128): warning C4996: 'cocos2d::ccc3': was declared deprecated
+         d:\pgeng_assignment\game-engine\labgame\cocos2d\cocos\deprecated\ccdeprecated.h(475): note: see declaration of 'cocos2d::ccc3'
+     1>d:\pgeng_assignment\game-engine\labgame\classes\menuscene.cpp(131): warning C4996: 'cocos2d::ccc3': was declared deprecated
+         d:\pgeng_assignment\game-engine\labgame\cocos2d\cocos\deprecated\ccdeprecated.h(475): note: see declaration of 'cocos2d::ccc3'
+     1>d:\pgeng_assignment\game-engine\labgame\classes\menuscene.cpp(331): warning C4996: 'cocos2d::ccc3': was declared deprecated
+         d:\pgeng_assignment\game-engine\labgame\cocos2d\cocos\deprecated\ccdeprecated.h(475): note: see declaration of 'cocos2d::ccc3'
+     1>d:\pgeng_assignment\game-engine\labgame\classes\menuscene.cpp(340): warning C4996: 'cocos2d::ccc3': was declared deprecated
+         d:\pgeng_assignment\game-engine\labgame\cocos2d\cocos\deprecated\ccdeprecated.h(475): note: see declaration of 'cocos2d::ccc3'
+     1>d:\pgeng_assignment\game-engine\labgame\classes\menuscene.cpp(349): warning C4996: 'cocos2d::ccc3': was declared deprecated
+         d:\pgeng_assignment\game-engine\labgame\cocos2d\cocos\deprecated\ccdeprecated.h(475): note: see declaration of 'cocos2d::ccc3'
+     1>d:\pgeng_assignment\game-engine\labgame\classes\menuscene.cpp(358): warning C4996: 'cocos2d::ccc3': was declared deprecated
+         d:\pgeng_assignment\game-engine\labgame\cocos2d\cocos\deprecated\ccdeprecated.h(475): note: see declaration of 'cocos2d::ccc3'
+     1>d:\pgeng_assignment\game-engine\labgame\classes\menuscene.cpp(367): warning C4996: 'cocos2d::ccc3': was declared deprecated
+         d:\pgeng_assignment\game-engine\labgame\cocos2d\cocos\deprecated\ccdeprecated.h(475): note: see declaration of 'cocos2d::ccc3'
+     1>d:\pgeng_assignment\game-engine\labgame\classes\menuscene.cpp(382): warning C4996: 'cocos2d::ccc3': was declared deprecated
+         d:\pgeng_assignment\game-engine\labgame\cocos2d\cocos\deprecated\ccdeprecated.h(475): note: see declaration of 'cocos2d::ccc3'
+     1>d:\pgeng_assignment\game-engine\labgame\classes\menuscene.cpp(391): warning C4996: 'cocos2d::ccc3': was declared deprecated
+         d:\pgeng_assignment\game-engine\labgame\cocos2d\cocos\deprecated\ccdeprecated.h(475): note: see declaration of 'cocos2d::ccc3'
+     1>d:\pgeng_assignment\game-engine\labgame\classes\menuscene.cpp(400): warning C4996: 'cocos2d::ccc3': was declared deprecated
+         d:\pgeng_assignment\game-engine\labgame\cocos2d\cocos\deprecated\ccdeprecated.h(475): note: see declaration of 'cocos2d::ccc3'
+     1>d:\pgeng_assignment\game-engine\labgame\classes\menuscene.cpp(409): warning C4996: 'cocos2d::ccc3': was declared deprecated
+         d:\pgeng_assignment\game-engine\labgame\cocos2d\cocos\deprecated\ccdeprecated.h(475): note: see declaration of 'cocos2d::ccc3'
+     1>d:\pgeng_assignment\game-engine\labgame\classes\menuscene.cpp(418): warning C4996: 'cocos2d::ccc3': was declared deprecated
+         d:\pgeng_assignment\game-engine\labgame\cocos2d\cocos\deprecated\ccdeprecated.h(475): note: see declaration of 'cocos2d::ccc3'
        Link:
          D:\VisualStudios2015\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\LabGame.exe" /INCREMENTAL /NOLOGO /LIBPATH:"D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\\" /LIBPATH:"D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\\" opengl32.lib glew32.lib libzlib.lib libwebp.lib libiconv.lib freetype.lib winmm.lib ws2_32.lib libbox2d.lib libSpine.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\LabGame.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\PGEng_Assignment\game-engine\LabGame\proj.win32\Debug.win32\LabGame.lib" /MACHINE:X86 /SAFESEH Debug.win32\game.res
          Debug.win32\AppDelegate.obj
          Debug.win32\Character.obj
          Debug.win32\HelloWorldScene.obj
+         Debug.win32\Instructions.obj
          Debug.win32\MenuScene.obj
          Debug.win32\SelectLevelScene.obj
          Debug.win32\Settings.obj
@@ -43,4 +65,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.87
+Time Elapsed 00:00:04.12

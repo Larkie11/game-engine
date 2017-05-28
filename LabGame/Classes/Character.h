@@ -15,10 +15,10 @@ private:
 	float fSpeed;
 	Vec2 mLoc;
 	Vec2 mLocInc;
-	Sprite* character1;
-	Vector<SpriteFrame*> walkFrames;
-	Animation* walkAnimation;
-	Animate* walkAction;
+	//Sprite* character1;
+	//Vector<SpriteFrame*> walkFrames;
+	//Animation* walkAnimation;
+	//Animate* walkAction;
 	GLProgram* charEffect;
 	std::string tag;
 	int health;
