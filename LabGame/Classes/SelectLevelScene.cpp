@@ -372,7 +372,7 @@ void SelectLevel::onMouseUp(Event *event)
 				{
 				case Touchables::T_LEVEL1:
 					CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, HelloWorld::createScene(), Color3B(0, 0, 0)));
-
+					//CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic(true);
 					break;
 				case Touchables::T_LEVEL2:
 					CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, HelloWorld::createScene(), Color3B(0, 255, 255)));

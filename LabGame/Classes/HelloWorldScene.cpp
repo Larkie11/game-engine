@@ -284,6 +284,9 @@ bool HelloWorld::init()
 	//	s->getSprite()->setGLProgramState(state);
 	//}
 
+	//Load Sound
+	//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("audio/bgm2.wav", true);
+
 	return true;
 }
 void HelloWorld::update(float deltaTime)

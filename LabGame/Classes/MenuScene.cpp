@@ -248,6 +248,7 @@ bool MenuScene::init()
 
 	// Load sound
 	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/click.wav");
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("audio/bgm.wav", true);
 
 	////Shadow for touchable sprites
 	//for (auto* s : touchableSprites)
@@ -441,6 +442,7 @@ void MenuScene::onMouseUp(Event *event)
 				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, SelectLevel::createScene(), Color3B(0, 255, 255)));
 				//CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/click.wav");
 				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");
+				//CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic(true);
 				break;
 			}
 			case Touchables::T_SHOP:
