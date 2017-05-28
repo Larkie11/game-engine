@@ -1,7 +1,7 @@
 #include "Character.h"
 #include "HelloWorldScene.h"
 
-void GameChar::init(const char* sprite, const char* name, float x, float y, std::string tag, int health, float attackTimer, int damage,float speed)
+void GameChar::init(const char* sprite, const char* name, float x, float y, GameChar::CharacterType type, int health, float attackTimer, int damage,float speed)
 {
 	intDir = 0;
 	fSpeed = speed;
@@ -11,11 +11,12 @@ void GameChar::init(const char* sprite, const char* name, float x, float y, std:
 	mainSprite->setAnchorPoint(Vec2(0, 0));
 	mainSprite->setPosition(x, y);
 	mainSprite->setName(name);
-	this->tag = tag;
+	charType = type;
 	this->health = health;
 	this->defaultAttackTimer = attackTimer;
 	this->attackTimer = defaultAttackTimer;
 	this->damage = damage;
+	mainSprite->setScale(10);
 	mLoc.set(.5f, .5f);
 	mLocInc.set(.005f, .01f);
 	charEffect = new GLProgram();
@@ -33,6 +34,7 @@ void GameChar::MoveChar(int dirX)
 	intDir = dirX;
 }
 
+//Not working Amos
 void GameChar::SpriteAnimation(int frames, const char* spriteName)
 {
 	/*Vector<SpriteFrame*> animFrames;
@@ -72,7 +74,28 @@ void GameChar::SpriteAnimation(int frames, const char* spriteName)
 	auto animate = Animate::create(animation);
 	mainSprite->runAction(RepeatForever::create(animate));
 }
+void GameChar::AnimateSprite(const char* spriteFrameName, int startFrame, int frameCount, float width, float height)
+{
+	if (mainSprite->getActionManager() != nullptr)
+	mainSprite->stopAllActions();
 
+	Vector<SpriteFrame*> animationFrames;
+	animationFrames.reserve(frameCount);
+
+	for (int i = startFrame; i < frameCount; i++)
+	{
+		std::string frameNumber = StringUtils::format("%d", i);
+
+		std::string frameName = spriteFrameName + frameNumber + ".png";
+		animationFrames.pushBack(SpriteFrame::create(frameName, Rect(0,0,width,height)));
+	}
+
+	Animation* animation = Animation::createWithSpriteFrames(animationFrames, 0.1f);
+	Animate* animated = Animate::create(animation);
+
+	mainSprite->runAction(RepeatForever::create(animated));
+}
+//All old stuff
 void GameChar::Left()
 {
 	mainSprite->stopAllActions();

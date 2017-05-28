@@ -8,26 +8,17 @@ using namespace cocos2d;
 
 class GameChar
 {
-private: 
-	cocos2d::Sprite* mainSprite;
-	//cocos2d::Sprite* loadedSprite;
-	int intDir;
-	float fSpeed;
-	Vec2 mLoc;
-	Vec2 mLocInc;
-	//Sprite* character1;
-	//Vector<SpriteFrame*> walkFrames;
-	//Animation* walkAnimation;
-	//Animate* walkAction;
-	GLProgram* charEffect;
-	std::string tag;
-	int health;
-	float defaultAttackTimer;
-	float attackTimer;
-	int damage;
+
 public: 
-	void init(const char*, const char*, float, float, std::string, int, float, int, float);
+	enum CharacterType
+	{
+		C_DOG,
+		C_CAT,
+		C_MAX,
+	};
+	void init(const char* sprite, const char* name, float x, float y, CharacterType type, int health, float attackTimer, int damage, float speed);
 	void MoveChar(int);
+	void AnimateSprite(const char* spriteFrameName,int startFrame, int frameCount, float width, float height);
 	void SpriteAnimation(int, const char*);
 	void MoveCharByCoord(float, float);
 	void Update(float);
@@ -55,9 +46,9 @@ public:
 	{
 		health -= minus;
 	}
-	std::string GetTag()
+	CharacterType GetType()
 	{
-		return tag;
+		return charType;
 	}
 	int GetHealth()
 	{
@@ -86,4 +77,22 @@ public:
 		MOVE,
 		STOP,
 	};
+private:
+	cocos2d::Sprite* mainSprite;
+	//cocos2d::Sprite* loadedSprite;
+	CharacterType charType;
+	int intDir;
+	float fSpeed;
+	Vec2 mLoc;
+	Vec2 mLocInc;
+	Sprite* character1;
+	Vector<SpriteFrame*> walkFrames;
+	Animation* walkAnimation;
+	Animate* walkAction;
+	GLProgram* charEffect;
+	std::string tag;
+	int health;
+	float defaultAttackTimer;
+	float attackTimer;
+	int damage;
 };

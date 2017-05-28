@@ -143,6 +143,7 @@ bool HelloWorld::init()
 	a->SetText("Summon 1",3, "fonts/Soos.ttf", ccc3(0, 200, 255),0, -a->getSprite()->getContentSize().width*.3);
 	b->SetText("Summon 2", 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, -a->getSprite()->getContentSize().width*.3);
 	c->SetText("Summon 3", 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, -a->getSprite()->getContentSize().width*.3);
+	//"Sprites/dog/walk/walk_1.png"
 
 	auto moveEvent = MoveBy::create(1, Vec2(200, 0));  // Move to 200 pixels in 1 second
 
@@ -327,19 +328,14 @@ void HelloWorld::update(float deltaTime)
 		{
 			if (s->move && s->getSprite() != nullptr)
 			{
-				if (s->GetTag() == "right")
+				if (s->GetType() == GameChar::C_DOG)
 				{
-					//s->MoveChar(1);
-					//loadSprite(1);
-					//b->SpriteLoader(7, "dog-sprite-walk.png");
-					//c->SpriteAnimation(7, "Sprites\dog\walk\walk_1.png");
 					s->getSprite()->setPosition(s->getSprite()->getPosition().x - s->GetSpeed(), s->getSprite()->getPosition().y);
 				}
-				if (s->GetTag() == "left")
-					//s->MoveChar(-1);
-					//b->SpriteLoader(7, "cat-sprite-walk.png");
-					//b->SpriteLoader(7, "walk_1.png");
+				if (s->GetType() == GameChar::C_CAT)
+				{
 					s->getSprite()->setPosition(s->getSprite()->getPosition().x + s->GetSpeed(), s->getSprite()->getPosition().y);
+				}
 			}
 
 		}
@@ -364,10 +360,24 @@ void HelloWorld::update(float deltaTime)
 						if (rect1.intersectsRect(rect2))
 						{
 							//Check if the tag not the same, all monsters have same tags, all players have same tags
-							if (goA->GetTag() != goB->GetTag())
+							if (goA->GetType() != goB->GetType())
 							{
-								goA->move = false;
-								goB->move = false;
+								if (goA->move)
+								{
+									goA->move = false;
+									if(goA->GetType() == GameChar::C_CAT)
+										goA->AnimateSprite("Sprites/cat/attack/attack_", 1, 7, 177, 177);
+									if (goA->GetType() == GameChar::C_DOG)
+										goA->AnimateSprite("Sprites/dog/attack/attack_", 1, 7, 150, 173);
+								}
+								if (goB->move)
+								{
+									goB->move = false;
+									if (goB->GetType() == GameChar::C_CAT)
+										goB->AnimateSprite("Sprites/cat/attack/attack_", 1, 7, 177, 177);
+									if (goB->GetType() == GameChar::C_DOG)
+										goB->AnimateSprite("Sprites/dog/attack/attack_", 1, 7, 150, 173);
+								}
 								goA->ReduceTimer(deltaTime);
 								goB->ReduceTimer(deltaTime);
 								std::stringstream oss;
@@ -401,9 +411,13 @@ void HelloWorld::update(float deltaTime)
 							for (std::vector<GameChar *>::iterator a = monsters.begin(); a != monsters.end(); ++a)
 							{
 								GameChar *go = (GameChar *)*a;
-								if (go->GetTag() != goA->GetTag())
+								if (go->GetType() != goA->GetType())
 								{
 									go->move = true;
+									if (go->GetType() == GameChar::C_CAT)
+										go->AnimateSprite("Sprites/cat/walk/walk_", 1, 7, 177, 177);
+									if (go->GetType() == GameChar::C_DOG)
+										go->AnimateSprite("Sprites/dog/walk/walk_", 1, 7, 150, 173);
 								}
 							}
 						}
@@ -413,12 +427,15 @@ void HelloWorld::update(float deltaTime)
 							for (std::vector<GameChar *>::iterator a = monsters.begin(); a != monsters.end(); ++a)
 							{
 								GameChar *go = (GameChar *)*a;
-								if (go->GetTag() != goB->GetTag())
+								if (go->GetType() != goB->GetType())
 								{
 									go->move = true;
+									if (go->GetType() == GameChar::C_CAT)
+										go->AnimateSprite("Sprites/cat/walk/walk_", 1, 7, 177, 177);
+									if (go->GetType() == GameChar::C_DOG)
+										go->AnimateSprite("Sprites/dog/walk/walk_", 1, 7, 150, 173);
 								}
 							}
-							goA->move = true;
 						}
 					}
 				}
@@ -492,8 +509,10 @@ void HelloWorld::onMouseUp(Event *event)
 				//s->getSprite()->setPosition(Vec2(100, 400));
 				label->setString("Touched 1st Button!");
 				//Spawn monster
-				dc->init("walk_1.png", "monster", visibleSize.width - visibleSize.width, visibleSize.height*0.5, "left", 10, 3, 1,3);
+				dc->init("walk_1.png", "monster", visibleSize.width - visibleSize.width, visibleSize.height*0.5, GameChar::C_CAT, 10, 3, 1,3);
 				dc->getSprite()->setScale(0.5);
+				//dc->Left();
+				dc->AnimateSprite("Sprites/cat/walk/walk_",1,7,177,177);
 				this->getChildByName("spriteNode")->addChild(dc->getSprite(), 1);
 				dc->getSprite()->setGLProgram(shaderCharEffect);
 				dc->getSprite()->setGLProgramState(state);
@@ -504,9 +523,10 @@ void HelloWorld::onMouseUp(Event *event)
 				//s->getSprite()->setPosition(Vec2(300, 100));
 				label->setString("Touched 2nd Button!");
 				//Spawn monster
-				dc->init("walk_2.png", "monster", visibleSize.width, visibleSize.height*0.5, "right", 10, 5, 2,1);
+				dc->init("walk_2.png", "monster", visibleSize.width, visibleSize.height*0.5, GameChar::C_DOG, 10, 5, 2,1);
 				dc->getSprite()->setFlippedX(true);
 				dc->getSprite()->setScale(0.5);
+				dc->AnimateSprite("Sprites/dog/walk/walk_", 1, 7, 150, 173);
 				dc->getSprite()->setGLProgram(shaderCharEffect);
 				dc->getSprite()->setGLProgramState(state);
 				this->getChildByName("spriteNode")->addChild(dc->getSprite(), 1);
