@@ -18,7 +18,7 @@ public:
 	};
 	void init(const char* sprite, const char* name, float x, float y, CharacterType type, int health, float attackTimer, int damage, float speed);
 	void MoveChar(int);
-	void AnimateSprite(const char* spriteFrameName,int startFrame, int frameCount, float width, float height);
+	void AnimateSprite(const char* spriteFrameName,int startFrame, int frameCount, float width, float height, float delay);
 	void SpriteAnimation(int, const char*);
 	void MoveCharByCoord(float, float);
 	void Update(float);

@@ -57,12 +57,13 @@ bool Shop::init()
 	auto scrollNode = Node::create();
 	scrollNode->setName("scrollNode");
 
-	// Shop sign
-	auto sprite = Sprite::create("shop_sign.png");
-	sprite->setAnchorPoint(Vec2::ZERO);
-	sprite->setPosition(visibleSize.width * 0.35, visibleSize.height * 0.8);
-	sprite->setScale(1.5);
-	spriteNode->addChild(sprite, -1);
+	// Shop button
+	Touchables* shop = new Touchables();
+	shop->init("red_button1.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.8, Touchables::T_SHOP, 1.2);
+	shop->SetDisabled(true);
+	shop->SetText("SHOP", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0);
+	shop->GetLabel("label")->disableEffect();
+	spriteNode->addChild(shop->getSprite());
 
 	// Back button
 	Touchables* back = new Touchables();
@@ -93,13 +94,13 @@ bool Shop::init()
 
 	//Tool tips (Pop up UI)
 	//Image in the middle of button
-	monster1->SetToolTip("Monster unlock: YO", "Button1.png",200,0, -monster1->getSprite()->getContentSize().height,2);
+	monster1->SetToolTip("Monster unlock: YO", "wood.png",200,0, -monster1->getSprite()->getContentSize().height,2);
 	monster1->SetImage("walk_1.png", "but1",3);
 
-	monster2->SetToolTip("Monster unlock: TOOOO", "Button1.png", 200, 0, -monster2->getSprite()->getContentSize().height, 2);
+	monster2->SetToolTip("Monster unlock: TOOOO", "wood.png", 200, 0, -monster2->getSprite()->getContentSize().height, 2);
 	monster2->SetImage("walk_1.png", "but1",3);
 
-	monster3->SetToolTip("Monster unlock: BOOOO", "Button1.png", 200, 0, -monster2->getSprite()->getContentSize().height, 2);
+	monster3->SetToolTip("Monster unlock: BOOOO", "wood.png", 200, 0, -monster2->getSprite()->getContentSize().height, 2);
 	monster3->SetImage("walk_1.png", "but1",3);
 
 	auto listener = EventListenerKeyboard::create();

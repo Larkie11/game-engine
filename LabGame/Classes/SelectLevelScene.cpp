@@ -87,7 +87,7 @@ bool SelectLevel::init()
 	Touchables* shop = new Touchables();
 	shop->init("red_button1.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.8, Touchables::T_SHOP, 1.2);
 	shop->SetDisabled(true);
-	shop->SetText("SHOP", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0);
+	shop->SetText("LEVEL SELECTION", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0);
 	shop->GetLabel("label")->disableEffect();
 
 	// push back sprite vector
@@ -109,7 +109,7 @@ bool SelectLevel::init()
 		widthX += 0.2;
 
 		c->SetText("Level 3", 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, 0);
-		c->SetToolTip("Unlock previous levels", "Button1.png", 150, 0, -c->getSprite()->getContentSize().height*1.25, 1.3);
+		c->SetToolTip("Unlock previous levels", "wood.png", 150, 0, -c->getSprite()->getContentSize().height*1.25, 1.3);
 		c->GetToolTipLabel()->setScale(1.2);
 		c->GetToolTipLabel()->enableShadow();
 		if (levelunlocked < 3)
@@ -124,7 +124,7 @@ bool SelectLevel::init()
 
 	a->SetText("Level 1",3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, 0);
 	b->SetText("Level 2", 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, 0);
-	b->SetToolTip("Unlock previous levels", "Button1.png", 150, 0, -b->getSprite()->getContentSize().height*1.25, 1.3);
+	b->SetToolTip("Unlock previous levels", "wood.png", 150, 0, -b->getSprite()->getContentSize().height*1.25, 1.3);
 	b->GetToolTipLabel()->setScale(1.2);
 	b->GetToolTipLabel()->enableShadow();
 	if(levelunlocked < 2)

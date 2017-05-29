@@ -246,13 +246,6 @@ bool MenuScene::init()
 	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/click.wav");
 	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("audio/bgm.wav", true);
 
-	////Shadow for touchable sprites
-	//for (auto* s : touchableSprites)
-	//{
-	//	s->getSprite()->setGLProgram(shaderCharEffect);
-	//	s->getSprite()->setGLProgramState(state);
-	//}
-
 	return true;
 }
 void MenuScene::update(float deltaTime)

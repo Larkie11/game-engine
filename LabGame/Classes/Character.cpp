@@ -19,13 +19,13 @@ void GameChar::init(const char* sprite, const char* name, float x, float y, Game
 	mainSprite->setScale(10);
 	mLoc.set(.5f, .5f);
 	mLocInc.set(.005f, .01f);
-	charEffect = new GLProgram();
+	/*charEffect = new GLProgram();
 	charEffect->initWithFilenames("Basic.vsh", "CharEffect.fsh");
 	charEffect->bindAttribLocation(GLProgram::ATTRIBUTE_NAME_POSITION, GLProgram::VERTEX_ATTRIB_POSITION);
 	charEffect->bindAttribLocation(GLProgram::ATTRIBUTE_NAME_COLOR, GLProgram::VERTEX_ATTRIB_COLOR);
 	charEffect->bindAttribLocation(GLProgram::ATTRIBUTE_NAME_TEX_COORD, GLProgram::VERTEX_ATTRIB_TEX_COORDS);
 	charEffect->link();
-	charEffect->updateUniforms();
+	charEffect->updateUniforms();*/
 	move = true;
 }
 
@@ -37,7 +37,7 @@ void GameChar::MoveChar(int dirX)
 //Not working Amos
 void GameChar::SpriteAnimation(int frames, const char* spriteName)
 {
-	/*Vector<SpriteFrame*> animFrames;
+	Vector<SpriteFrame*> animFrames;
 	animFrames.reserve(frames);
 	animFrames.pushBack(SpriteFrame::create("Sprites\cat\walk\walk_1.png", Rect(0, 0, 256, 256)));
 	animFrames.pushBack(SpriteFrame::create("Sprites\cat\walk\walk_2.png", Rect(0, 0, 256, 256)));
@@ -49,7 +49,7 @@ void GameChar::SpriteAnimation(int frames, const char* spriteName)
 
 	Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.5f);
 	Animate* animateWalk = Animate::create(animation);
-	mainSprite->runAction(RepeatForever::create(animateWalk));*/
+	character1->runAction(RepeatForever::create(animateWalk));
 
 	SpriteBatchNode* spritebatch = SpriteBatchNode::create(spriteName);
 	SpriteFrameCache* cache = SpriteFrameCache::getInstance();
@@ -59,7 +59,7 @@ void GameChar::SpriteAnimation(int frames, const char* spriteName)
 	spritebatch->addChild(mainSprite);
 	//addChild(spritebatch);
 
-	Vector<SpriteFrame*> animFrames(frames);
+	//Vector<SpriteFrame*> animFrames(frames);
 
 	char str[100] = { 0 };
 	for (int i = 0; i < frames; i++)
@@ -70,30 +70,33 @@ void GameChar::SpriteAnimation(int frames, const char* spriteName)
 		//animFrames->addObject(frame);
 	}
 
-	auto animation = Animation::createWithSpriteFrames(animFrames, 0.3f);
+	/*auto animation = Animation::createWithSpriteFrames(animFrames, 0.3f);
 	auto animate = Animate::create(animation);
-	mainSprite->runAction(RepeatForever::create(animate));
+	character1->runAction(RepeatForever::create(animate));*/
 }
-void GameChar::AnimateSprite(const char* spriteFrameName, int startFrame, int frameCount, float width, float height)
+void GameChar::AnimateSprite(const char* spriteFrameName, int startFrame, int frameCount, float width, float height, float delay)
 {
-	if (mainSprite->getActionManager() != nullptr)
-	mainSprite->stopAllActions();
-
-	Vector<SpriteFrame*> animationFrames;
-	animationFrames.reserve(frameCount);
-
-	for (int i = startFrame; i < frameCount; i++)
+	if (mainSprite != NULL)
 	{
-		std::string frameNumber = StringUtils::format("%d", i);
+		if (mainSprite->getActionManager() != NULL)
+			mainSprite->stopAllActions();
 
-		std::string frameName = spriteFrameName + frameNumber + ".png";
-		animationFrames.pushBack(SpriteFrame::create(frameName, Rect(0,0,width,height)));
+		Vector<SpriteFrame*> animationFrames;
+		animationFrames.reserve(frameCount);
+
+		for (int i = startFrame; i < frameCount; i++)
+		{
+			std::string frameNumber = StringUtils::format("%d", i);
+
+			std::string frameName = spriteFrameName + frameNumber + ".png";
+			animationFrames.pushBack(SpriteFrame::create(frameName, Rect(0, 0, width, height)));
+		}
+
+		Animation* animation = Animation::createWithSpriteFrames(animationFrames, delay);
+		Animate* animated = Animate::create(animation);
+
+		mainSprite->runAction(RepeatForever::create(animated));
 	}
-
-	Animation* animation = Animation::createWithSpriteFrames(animationFrames, 0.1f);
-	Animate* animated = Animate::create(animation);
-
-	mainSprite->runAction(RepeatForever::create(animated));
 }
 //All old stuff
 void GameChar::Left()
@@ -175,14 +178,14 @@ void GameChar::Update(float delta)
 		auto moveEvent = MoveBy::create(0.0f, Vec2(1.0f, 0.f)*intDir * delta);
 		mainSprite->runAction(moveEvent);
 	}
-	
+	/*
 	if (mainSprite != nullptr)
 	{
 		GLProgramState*state = GLProgramState::getOrCreateWithGLProgram(charEffect);
 		mainSprite->setGLProgram(charEffect);
 		mainSprite->setGLProgramState(state);
 		state->setUniformVec2("loc", mLoc);
-	}
+	}*/
 }
 
 void GameChar::Stop()

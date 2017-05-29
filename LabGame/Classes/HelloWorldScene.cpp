@@ -94,8 +94,8 @@ bool HelloWorld::init()
 	// Gold Upgrade
 	Touchables* goldUpgrade = new Touchables();
 	goldUpgrade->init("gold.png", "mainSprite", visibleSize.width * 0.1, visibleSize.height * 0.8, Touchables::T_GOLDUPGRADE,0.3);
-	goldUpgrade->SetToolTip("Increase gold speed", "Button1.png", 200, 0, -goldUpgrade->getSprite()->getContentSize().height*1.8, 2);
-	goldUpgrade->GetToolTipLabel()->setScale(1.3);
+	goldUpgrade->SetToolTip("Increase gold speed", "wood.png", 200, 0, goldUpgrade->getSprite()->getContentSize().height*0.5, 1.5);
+	goldUpgrade->GetToolTipLabel()->setScale(1.5);
 
 	std::stringstream oss;
 	oss << high_score;
@@ -133,14 +133,22 @@ bool HelloWorld::init()
 
 	a->SetImage("walk_1.png", "but1",1);
 	b->SetImage("walk_2.png", "but2",1);
-	//c->SetImage("Sprites\cat\death_1.png", "but1", 1);
 	a->SetText("Summon 1",3, "fonts/Soos.ttf", ccc3(0, 200, 255),0, -a->getSprite()->getContentSize().width*.3);
 	b->SetText("Summon 2", 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, -a->getSprite()->getContentSize().width*.3);
 	c->SetText("Summon 3", 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, -a->getSprite()->getContentSize().width*.3);
-	//"Sprites/dog/walk/walk_1.png"
 
-	auto moveEvent = MoveBy::create(1, Vec2(200, 0));  // Move to 200 pixels in 1 second
+	auto tower = new GameChar();
+	tower->init("tower.png", "tower", 0, visibleSize.height*0.5, GameChar::C_MAX,10, 3, 1, 0);
+	tower->getSprite()->setPositionX(0-(tower->getSprite()->getContentSize().width*0.38));
+	tower->getSprite()->setScale(1);
+	auto tower2 = new GameChar();
+	tower2->init("tower.png", "tower", visibleSize.width, visibleSize.height*0.5, GameChar::C_MAX, 10, 3, 1, 0);
+	tower2->getSprite()->setPositionX(visibleSize.width - tower->getSprite()->getContentSize().width * 0.6);
+	tower2->getSprite()->setScale(1);
+	spriteNode->addChild(tower->getSprite(), 2);
+	spriteNode->addChild(tower2->getSprite(), 2);
 
+	//Amos try out animation
 	// Sprite Sheet Animation Code Start
 	/*Vector<SpriteFrame*> animFrames(7);
 	char str[100] = { 0 };
@@ -162,10 +170,6 @@ bool HelloWorld::init()
 	//mainSprite->runAction(moveEvent->reverse());
 	//Cannot use action on more than 1, need to clone
 	//if wan to use moveEvent for another sprite, it will double to pixel and time
-
-	auto delay = DelayTime::create(5.0f);
-	auto delaySequence = Sequence::create(delay, delay->clone(), nullptr);
-	auto sequence = Sequence::create(moveEvent, moveEvent->reverse(), delaySequence, nullptr); //Store all the events, end with nullptr for all sequence
 
 	auto listener = EventListenerKeyboard::create();
 
@@ -269,14 +273,6 @@ bool HelloWorld::init()
 	rendtexSprite->setPosition(Vec2(-1.0,-1.0));
 	rendtexSprite->setFlippedY(true);
 	rendtexSprite->setGLProgram(proPostProcess);
-	//this->addChild(rendtexSprite, 2);
-
-	////Shadow for touchable sprites
-	//for (auto* s : touchableSprites)
-	//{
-	//	s->getSprite()->setGLProgram(shaderCharEffect);
-	//	s->getSprite()->setGLProgramState(state);
-	//}
 
 	//Load Sound
 	//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("audio/bgm2.wav", true);
@@ -285,14 +281,6 @@ bool HelloWorld::init()
 }
 void HelloWorld::update(float deltaTime)
 {
-	//auto cam = Camera::getDefaultCamera();
-	/*rendtex->beginWithClear(1.0f, .0f, .0f, .0f);
-	this->visit();
-	rendtex->end();
-	rendtexSprite->setTexture(rendtex->getSprite()->getTexture());
-	rendtexSprite->setGLProgram(proPostProcess);*/
-	//cam->setPosition(a->getSprite()->getPosition());
-
 	// Gold
 	money += 1 * speedOfIncome * deltaTime;
 	std::stringstream oss;
@@ -321,11 +309,11 @@ void HelloWorld::update(float deltaTime)
 			{
 				if (s->GetType() == GameChar::C_DOG)
 				{
-					s->getSprite()->setPosition(s->getSprite()->getPosition().x - s->GetSpeed(), s->getSprite()->getPosition().y);
+					s->getSprite()->setPosition(s->getSprite()->getPosition().x - s->GetSpeed() * deltaTime, s->getSprite()->getPosition().y);
 				}
 				if (s->GetType() == GameChar::C_CAT)
 				{
-					s->getSprite()->setPosition(s->getSprite()->getPosition().x + s->GetSpeed(), s->getSprite()->getPosition().y);
+					s->getSprite()->setPosition(s->getSprite()->getPosition().x + s->GetSpeed() * deltaTime, s->getSprite()->getPosition().y);
 				}
 			}
 
@@ -357,17 +345,17 @@ void HelloWorld::update(float deltaTime)
 								{
 									goA->move = false;
 									if(goA->GetType() == GameChar::C_CAT)
-										goA->AnimateSprite("Sprites/cat/attack/attack_", 1, 7, 177, 177);
+										goA->AnimateSprite("Sprites/cat/attack/attack_", 1, 7, 177, 177,0.1);
 									if (goA->GetType() == GameChar::C_DOG)
-										goA->AnimateSprite("Sprites/dog/attack/attack_", 1, 7, 150, 173);
+										goA->AnimateSprite("Sprites/dog/attack/attack_", 1, 7, 150, 173,0.1);
 								}
 								if (goB->move)
 								{
 									goB->move = false;
 									if (goB->GetType() == GameChar::C_CAT)
-										goB->AnimateSprite("Sprites/cat/attack/attack_", 1, 7, 177, 177);
+										goB->AnimateSprite("Sprites/cat/attack/attack_", 1, 7, 177, 177, 0.1);
 									if (goB->GetType() == GameChar::C_DOG)
-										goB->AnimateSprite("Sprites/dog/attack/attack_", 1, 7, 150, 173);
+										goB->AnimateSprite("Sprites/dog/attack/attack_", 1, 7, 150, 173, 0.1);
 								}
 								goA->ReduceTimer(deltaTime);
 								goB->ReduceTimer(deltaTime);
@@ -406,9 +394,9 @@ void HelloWorld::update(float deltaTime)
 								{
 									go->move = true;
 									if (go->GetType() == GameChar::C_CAT)
-										go->AnimateSprite("Sprites/cat/walk/walk_", 1, 7, 177, 177);
+										go->AnimateSprite("Sprites/cat/walk/walk_", 1, 7, 177, 177, 0.05);
 									if (go->GetType() == GameChar::C_DOG)
-										go->AnimateSprite("Sprites/dog/walk/walk_", 1, 7, 150, 173);
+										go->AnimateSprite("Sprites/dog/walk/walk_", 1, 7, 150, 173, 0.1);
 								}
 							}
 						}
@@ -422,9 +410,9 @@ void HelloWorld::update(float deltaTime)
 								{
 									go->move = true;
 									if (go->GetType() == GameChar::C_CAT)
-										go->AnimateSprite("Sprites/cat/walk/walk_", 1, 7, 177, 177);
+										go->AnimateSprite("Sprites/cat/walk/walk_", 1, 7, 177, 177, 0.05);
 									if (go->GetType() == GameChar::C_DOG)
-										go->AnimateSprite("Sprites/dog/walk/walk_", 1, 7, 150, 173);
+										go->AnimateSprite("Sprites/dog/walk/walk_", 1, 7, 150, 173, 0.1);
 								}
 							}
 						}
@@ -503,10 +491,10 @@ void HelloWorld::onMouseUp(Event *event)
 			case Touchables::T_SUMMONBUT1:
 				//s->getSprite()->setPosition(Vec2(100, 400));
 				//Spawn monster
-				dc->init("walk_1.png", "monster", visibleSize.width - visibleSize.width, visibleSize.height*0.5, GameChar::C_CAT, 10, 3, 1,3);
+				dc->init("walk_1.png", "monster", visibleSize.width - visibleSize.width, visibleSize.height*0.5, GameChar::C_CAT, 10, 3, 1,50);
 				dc->getSprite()->setScale(0.5);
 				//dc->Left();
-				dc->AnimateSprite("Sprites/cat/walk/walk_",1,7,177,177);
+				dc->AnimateSprite("Sprites/cat/walk/walk_",1,7,177,177, 0.05);
 				this->getChildByName("spriteNode")->addChild(dc->getSprite(), 1);
 				dc->getSprite()->setGLProgram(shaderCharEffect);
 				dc->getSprite()->setGLProgramState(state);
@@ -516,10 +504,10 @@ void HelloWorld::onMouseUp(Event *event)
 			case Touchables::T_SUMMONBUT2:
 				//s->getSprite()->setPosition(Vec2(300, 100));
 				//Spawn monster
-				dc->init("walk_2.png", "monster", visibleSize.width, visibleSize.height*0.5, GameChar::C_DOG, 10, 5, 2,1);
+				dc->init("walk_2.png", "monster", visibleSize.width, visibleSize.height*0.5, GameChar::C_DOG, 10, 5, 2,40);
 				dc->getSprite()->setFlippedX(true);
 				dc->getSprite()->setScale(0.5);
-				dc->AnimateSprite("Sprites/dog/walk/walk_", 1, 7, 150, 173);
+				dc->AnimateSprite("Sprites/dog/walk/walk_", 1, 7, 150, 173, 0.1);
 				dc->getSprite()->setGLProgram(shaderCharEffect);
 				dc->getSprite()->setGLProgramState(state);
 				this->getChildByName("spriteNode")->addChild(dc->getSprite(), 1);
