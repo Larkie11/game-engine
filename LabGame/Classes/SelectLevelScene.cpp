@@ -5,7 +5,7 @@
 #include <string>
 using std::string;
 #include <iostream>
-#include <sstream>>
+#include <sstream>
 
 
 USING_NS_CC;
@@ -34,7 +34,6 @@ bool SelectLevel::init()
 	{
 		return false;
 	}
-
 	CCUserDefault *def = CCUserDefault::sharedUserDefault();
 	def->setIntegerForKey("LevelUnlockedTest",0);
 	levelunlocked= def->getIntegerForKey("LevelUnlockedTest");

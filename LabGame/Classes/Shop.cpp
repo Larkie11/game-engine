@@ -184,7 +184,7 @@ void Shop::onMouseMove(Event *event)
 					{
 						{
 							s->getSprite()->setTexture("ShopNoHover.png");
-							s->AnimateImage("Sprites/cat/walk/walk_", 1, 7, 177, 177);
+							s->AnimateImage("Sprites/cat/walk/walk_", 1, 7, 177, 177,0.1);
 						}
 					}
 				break;
@@ -193,7 +193,7 @@ void Shop::onMouseMove(Event *event)
 				{
 					{
 						s->getSprite()->setTexture("ShopNoHover.png");
-						s->AnimateImage("Sprites/cat/walk/walk_", 1, 7, 177, 177);
+						s->AnimateImage("Sprites/cat/walk/walk_", 1, 7, 177, 177,0.1);
 					}
 				}
 				
@@ -203,7 +203,7 @@ void Shop::onMouseMove(Event *event)
 				{
 					{
 						s->getSprite()->setTexture("Shop2NoHover.png");
-						s->AnimateImage("Sprites/cat/walk/walk_", 1, 7, 177, 177);
+						s->AnimateImage("Sprites/cat/walk/walk_", 1, 7, 177, 177,0.1);
 					}
 				}
 			break;

@@ -38,7 +38,7 @@ public:
 	void SetToolTip(std::string text, const char* sprite, int opacity, float offsetx, float offsety, float scale);
 	void SetImage(const char* sprite, const char* name, float scale);
 	bool GetDisabled();
-	void AnimateImage(const char* spriteFrameName, int startFrame, int frameCount, float width, float height);
+	void AnimateImage(const char* spriteFrameName, int startFrame, int frameCount, float width, float height, float delay);
 
 	cocos2d::Color3B GetDefaultTextColor()
 	{

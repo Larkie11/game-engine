@@ -1,5 +1,6 @@
 #include "Character.h"
 #include "HelloWorldScene.h"
+#include "AnimationManager.h"
 
 void GameChar::init(const char* sprite, const char* name, float x, float y, GameChar::CharacterType type, int health, float attackTimer, int damage,float speed)
 {
@@ -80,8 +81,10 @@ void GameChar::AnimateSprite(const char* spriteFrameName, int startFrame, int fr
 	{
 		if (mainSprite->getActionManager() != NULL)
 			mainSprite->stopAllActions();
+		AnimationManager a;
+		a.PlayAnimation(mainSprite, spriteFrameName, startFrame, frameCount, width, height, delay);
 
-		Vector<SpriteFrame*> animationFrames;
+	/*	Vector<SpriteFrame*> animationFrames;
 		animationFrames.reserve(frameCount);
 
 		for (int i = startFrame; i < frameCount; i++)
@@ -95,7 +98,7 @@ void GameChar::AnimateSprite(const char* spriteFrameName, int startFrame, int fr
 		Animation* animation = Animation::createWithSpriteFrames(animationFrames, delay);
 		Animate* animated = Animate::create(animation);
 
-		mainSprite->runAction(RepeatForever::create(animated));
+		mainSprite->runAction(RepeatForever::create(animated));*/
 	}
 }
 //All old stuff
