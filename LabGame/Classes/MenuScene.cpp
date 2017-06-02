@@ -38,6 +38,9 @@ bool MenuScene::init()
 		return false;
 	}
 
+	// Read file
+	sceneManager->ReadFile("levels/Level1.txt");
+
 	touchableSprites.clear();
 
 	visibleSize = Director::getInstance()->getVisibleSize();
@@ -45,9 +48,9 @@ bool MenuScene::init()
 	Size playingSize = Size(visibleSize.width, visibleSize.height - (visibleSize.height / 8));
 	auto nodeItems = Node::create();
 	nodeItems->setName("nodeItems");
-
+	
 	// Background
-	backgroundSprite = Sprite::create("4.png");
+	backgroundSprite = Sprite::create(sceneManager->getBackground().c_str());
 	backgroundSprite->setAnchorPoint(Vec2::ZERO);
 	backgroundSprite->setContentSize(playingSize);
 	backgroundSprite->setScaleX((visibleSize.width / backgroundSprite->getContentSize().width) * 1);
@@ -112,19 +115,19 @@ bool MenuScene::init()
 	}
 
 	// Text on button
-	start->SetText("START GAME", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0);
+	start->SetText("START GAME", 1, sceneManager->getFont().c_str(), ccc3(255, 255, 255), 0, 0);
 	start->GetLabel("label")->disableEffect();
 
-	shop->SetText("SHOP", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0);
+	shop->SetText("SHOP", 1, sceneManager->getFont().c_str(), ccc3(255, 255, 255), 0, 0);
 	shop->GetLabel("label")->disableEffect();
 
-	settings->SetText("SETTINGS", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0);
+	settings->SetText("SETTINGS", 1, sceneManager->getFont().c_str(), ccc3(255, 255, 255), 0, 0);
 	settings->GetLabel("label")->disableEffect();
 
-	instructions->SetText("INSTRUCTIONS", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0);
+	instructions->SetText("INSTRUCTIONS", 1, sceneManager->getFont().c_str(), ccc3(255, 255, 255), 0, 0);
 	instructions->GetLabel("label")->disableEffect();
 
-	exit->SetText("EXIT", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0);
+	exit->SetText("EXIT", 1, sceneManager->getFont().c_str(), ccc3(255, 255, 255), 0, 0);
 	exit->GetLabel("label")->disableEffect();
 
 	auto moveEvent = MoveBy::create(1, Vec2(200, 0));  // Move to 200 pixels in 1 second
@@ -430,7 +433,7 @@ void MenuScene::onMouseUp(Event *event)
 			{
 				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, SelectLevel::createScene(), Color3B(0, 255, 255)));
 				//CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/click.wav");
-				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");
+				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(sceneManager->getButtonClickSound().c_str());
 				//CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic(true);
 				break;
 			}
@@ -438,20 +441,20 @@ void MenuScene::onMouseUp(Event *event)
 			{
 				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, Shop::createScene(), Color3B(0, 255, 255)));
 				//CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/click.wav");
-				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");
+				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(sceneManager->getButtonClickSound().c_str());
 				break;
 			}
 			case Touchables::T_SETTINGS:
 			{
 				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, Settings::createScene(), Color3B(0, 255, 255)));
 				//CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/click.wav");
-				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");
+				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(sceneManager->getButtonClickSound().c_str());
 				break;
 			}
 			case Touchables::T_INSTRUCTIONS:
 			{
 				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, Instructions::createScene(), Color3B(0, 255, 255)));
-				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");
+				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(sceneManager->getButtonClickSound().c_str());
 			}
 			case Touchables::T_EXIT:
 			{
