@@ -276,6 +276,7 @@ bool HelloWorld::init()
 
 	//Load Sound
 	//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("audio/bgm2.wav", true);
+	//audioMng->playBGM("game", 1);
 
 	return true;
 }
@@ -434,6 +435,7 @@ void HelloWorld::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
 }
 void HelloWorld::onMouseMove(Event *event)
 {
+	//audioMng->playBGM("game", 1);
 	//HOVERING change sprite
 	EventMouse* e = (EventMouse*)event;
 

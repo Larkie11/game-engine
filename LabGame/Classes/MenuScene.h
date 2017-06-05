@@ -4,7 +4,8 @@
 #include "cocos2d.h"
 #include "Character.h"
 #include "Touchables.h"
-#include  "SceneManager.h"
+#include "SceneManager.h"
+#include "AudioManager.h"
 
 
 using namespace cocos2d;
@@ -20,6 +21,7 @@ private:
 	Touchables* a;
 	GameChar* b;
 	GLProgram* proPostProcess;
+	AudioManager* audioMng;
 	RenderTexture *rendtex;
 	Sprite* rendtexSprite;
 	Sprite* backgroundSprite;

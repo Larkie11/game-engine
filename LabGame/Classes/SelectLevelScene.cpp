@@ -151,7 +151,7 @@ bool SelectLevel::init()
 	this->scheduleUpdate();
 
 	// Load sound
-	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/click.wav");
+	//CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/click.wav");
 
 	return true;
 }
@@ -268,6 +268,8 @@ void SelectLevel::onMouseUp(Event *event)
 				case Touchables::T_LEVEL1:
 					CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, HelloWorld::createScene(), Color3B(0, 0, 0)));
 					//CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic(true);
+					audioMng->playSFX("click", 0);
+					//audioMng->stopBGM();
 					break;
 				case Touchables::T_LEVEL2:
 					CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, HelloWorld::createScene(), Color3B(0, 255, 255)));
@@ -279,7 +281,8 @@ void SelectLevel::onMouseUp(Event *event)
 					break;
 				case Touchables::T_BACK:
 					CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, MenuScene::createScene(), Color3B(0, 255, 255)));
-					CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");
+					//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");
+					audioMng->playSFX("click", 0);
 					break;
 				}
 			}
