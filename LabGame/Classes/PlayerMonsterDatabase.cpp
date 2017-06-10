@@ -71,4 +71,5 @@ Touchables PlayerMonsterDatabase::addIntoGame(const char* buttonSprite, const ch
 {
 	Touchables newTouch;
 	newTouch.init(buttonSprite, name, x, y, tag,scale);
+	return newTouch;
 }
