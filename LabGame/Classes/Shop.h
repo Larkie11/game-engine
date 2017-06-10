@@ -4,14 +4,24 @@
 #include "cocos2d.h"
 #include "Character.h"
 #include "Touchables.h"
+#include "PlayerMonsterDatabase.h"
 
 using namespace cocos2d;
 #include <vector>
+#include <string>
+
 using std::vector;
+using std::string;
 
 class Shop : public cocos2d::Layer
 {
-
+	struct ShopItems
+	{
+		string type;
+		int price;
+		string tooltip;
+		string spriteImage;
+	};
 private:
 	Vec2 mLoc;
 	Vec2 mLocInc;
@@ -24,6 +34,7 @@ private:
 	Sprite* sprite;
 	Size visibleSize;
 	vector<Touchables*> touchableSprites;
+	vector<ShopItems*> shopItems;
 	Label* label;
 	int moveDir;
 	Label* label2;
@@ -34,6 +45,8 @@ private:
 	Label* health2;
 	GLProgram* shaderCharEffect;
 	GLProgramState* state;
+	int number_of_lines = 0;
+	PlayerMonsterDatabase database;
 public:
 	static cocos2d::Scene* createScene();
 	virtual void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* e);
@@ -42,6 +55,9 @@ public:
 
 	virtual void onMouseUp(Event *event);
 	virtual void onMouseMove(Event *event);
+
+	void ReadFileSize();
+	void PassInShopItems();
 
 	virtual bool init();
 	virtual void update(float);

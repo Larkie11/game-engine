@@ -41,7 +41,7 @@ bool Shop::init()
 	visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	Size playingSize = Size(visibleSize.width, visibleSize.height - (visibleSize.height / 8));
-	
+
 	auto nodeItems = Node::create();
 	nodeItems->setName("nodeItems");
 	// Background
@@ -65,24 +65,39 @@ bool Shop::init()
 	shop->GetLabel("label")->disableEffect();
 	spriteNode->addChild(shop->getSprite());
 
+
+	ReadFileSize();
+	PassInShopItems();
+
+
+	database.ReadFileSize("levels/Database.txt");
+	database.PassInData();
+	//vector<PlayerMonsterDatabase::MonsterTypes*> mt - new ;
+	//mt = database.ReturnDatabase;
+	// Back button
+
+	float x = 0.05;
+	bool a = false;
+	for (int i = 0; i < shopItems.size(); i++)
+	{
+		if (shopItems[i] != NULL)
+		{
+			if (database.checkIfExist(shopItems[i]->type))
+			{
+				Touchables* itemsToBuy = new Touchables();
+				itemsToBuy->init("ShopHover.png", shopItems[i]->type.c_str(), visibleSize.width * x, visibleSize.height * 0.3, Touchables::T_SHOP1, 0.3);
+				itemsToBuy->SetToolTip(database.GetFromDatabase(shopItems[i]->type)->tooltip, "wood.png", 200, 0, -itemsToBuy->getSprite()->getContentSize().height, 2);
+				string firstSprite = database.GetFromDatabase(shopItems[i]->type)->animationSprites;
+				itemsToBuy->SetImage(firstSprite.append("1.png").c_str(), shopItems[i]->type.c_str(), 3);
+				touchableSprites.push_back(itemsToBuy);
+			}
+			x += 0.3;
+		}
+	}
 	// Back button
 	Touchables* back = new Touchables();
-	back->init("back_button.png", "mainSprite", visibleSize.width * 0.8, visibleSize.height * 0.05, Touchables::T_BACK,1.2);
-
-	Touchables* monster1 = new Touchables();
-	monster1->init("ShopHover.png", "mainSprite", visibleSize.width * 0.05, visibleSize.height * 0.3, Touchables::T_SHOP1,0.3);
-
-	Touchables* monster2 = new Touchables();
-	monster2->init("Shop2Hover.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.3, Touchables::T_SHOP2,0.3);
-
-	Touchables* monster3 = new Touchables();
-	monster3->init("ShopHover.png", "mainSprite", visibleSize.width * 0.65, visibleSize.height * 0.3, Touchables::T_SHOP3,0.3);
-
-	// push back sprite vector
+	back->init("back_button.png", "mainSprite", visibleSize.width * 0.8, visibleSize.height * 0.05, Touchables::T_BACK, 1.2);
 	touchableSprites.push_back(back);
-	touchableSprites.push_back(monster1);
-	touchableSprites.push_back(monster2);
-	touchableSprites.push_back(monster3);
 
 	for (auto* s : touchableSprites)
 	{
@@ -91,17 +106,6 @@ bool Shop::init()
 		else
 			scrollNode->addChild(s->getSprite(), 1);
 	}
-
-	//Tool tips (Pop up UI)
-	//Image in the middle of button
-	monster1->SetToolTip("Monster unlock: YO", "wood.png",200,0, -monster1->getSprite()->getContentSize().height,2);
-	monster1->SetImage("walk_1.png", "but1",3);
-
-	monster2->SetToolTip("Monster unlock: TOOOO", "wood.png", 200, 0, -monster2->getSprite()->getContentSize().height, 2);
-	monster2->SetImage("walk_1.png", "but1",3);
-
-	monster3->SetToolTip("Monster unlock: BOOOO", "wood.png", 200, 0, -monster2->getSprite()->getContentSize().height, 2);
-	monster3->SetImage("walk_1.png", "but1",3);
 
 	auto listener = EventListenerKeyboard::create();
 
@@ -131,6 +135,40 @@ bool Shop::init()
 
 	return true;
 }
+
+void Shop::ReadFileSize()
+{
+	std::string line;
+	std::ifstream myfile("levels/Shop.txt");
+	string op;
+	std::stringstream oss;
+	while (std::getline(myfile, line))
+	{
+		++number_of_lines;
+		oss.clear();
+		oss << line;
+	}
+	std::cout << shopItems.size();
+	std::cout << "Number of lines in text file: " << number_of_lines << op;
+	myfile.close();
+}
+
+void Shop::PassInShopItems()
+{
+	std::ifstream myfile("levels/Shop.txt");
+	std::stringstream oss;
+	string temp;
+	myfile.clear();
+	for (int i = 0; i < number_of_lines; i++)
+	{
+		std::getline(myfile, temp);
+		ShopItems* newItem = new ShopItems;
+		newItem->type = temp;
+		shopItems.push_back(newItem);
+		string a;
+	}
+}
+
 void Shop::update(float deltaTime)
 {
 	if (moveDir != 0)
@@ -173,40 +211,47 @@ void Shop::onMouseMove(Event *event)
 			}
 			else
 			{
-				if(s->GetImg("but1")->getActionManager()!=nullptr)
-				s->GetImg("but1")->stopAllActions();
+				/*if(s->GetImg("but1")->getActionManager()!=nullptr)
+				s->GetImg("but1")->stopAllActions();*/
 			}
 			switch (s->GetType())
 			{
-				
+
 			case Touchables::T_SHOP1:
-					if (s->GetDisabled() != true)
+				if (s->GetDisabled() != true)
+				{
 					{
+						s->getSprite()->setTexture("ShopNoHover.png");
+						for (int i = 0; i < touchableSprites.size(); i++)
 						{
-							s->getSprite()->setTexture("ShopNoHover.png");
-							s->AnimateImage("Sprites/cat/walk/walk_", 1, 7, 177, 177,0.1);
+							if (touchableSprites[i]->checkMouseDown(event))
+							{
+								string a = database.GetFromDatabase(touchableSprites[i]->getSprite()->getName())->animationSprites;
+								s->AnimateImage(a.c_str(), 1, 7, 177, 177, 0.1);
+							}
 						}
 					}
+				}
 				break;
 			case Touchables::T_SHOP3:
 				if (s->GetDisabled() != true)
 				{
 					{
 						s->getSprite()->setTexture("ShopNoHover.png");
-						s->AnimateImage("Sprites/cat/walk/walk_", 1, 7, 177, 177,0.1);
+						//s->AnimateImage("Sprites/cat/walk/walk_", 1, 7, 177, 177,0.1);
 					}
 				}
-				
-			break;
+
+				break;
 			case Touchables::T_SHOP2:
 				if (s->GetDisabled() != true)
 				{
 					{
 						s->getSprite()->setTexture("Shop2NoHover.png");
-						s->AnimateImage("Sprites/cat/walk/walk_", 1, 7, 177, 177,0.1);
+						//s->AnimateImage("Sprites/cat/walk/walk_", 1, 7, 177, 177,0.1);
 					}
 				}
-			break;
+				break;
 			}
 
 		}
@@ -214,20 +259,21 @@ void Shop::onMouseMove(Event *event)
 		{
 			if (s->GetToolTip() != nullptr)
 				s->GetToolTip()->setVisible(false);
+
 			s->StopAnimation();
 			switch (s->GetType())
 			{
 			case Touchables::T_SHOP1:
 			case Touchables::T_SHOP3:
 			{
-				
-					s->getSprite()->setTexture("ShopHover.png");
-				
+
+				s->getSprite()->setTexture("ShopHover.png");
+
 			}
-			break; 
+			break;
 			case Touchables::T_SHOP2:
 			{
-				
+
 				s->getSprite()->setTexture("Shop2Hover.png");
 			}
 			break;
@@ -249,29 +295,30 @@ void Shop::onMouseUp(Event *event)
 		{
 			switch (s->GetType())
 			{
-				case Touchables::T_BACK:
+			case Touchables::T_BACK:
+			{
+				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, MenuScene::createScene(), Color3B(0, 0, 0)));
+				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");
+				break;
+			}
+			case Touchables::T_SHOP1:
+			case Touchables::T_SHOP2:
+			case Touchables::T_SHOP3:
+			{
+				if (!s->GetDisabled())
 				{
-					CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, MenuScene::createScene(), Color3B(0, 0, 0)));
-					CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");
-					break;
+					CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/purchase.wav");
+					s->SetDisabled(true);
+					s->SetImage("ducttape.png", "purchased", 1);
+					s->StopAnimation();
 				}
-				case Touchables::T_SHOP1:
-				case Touchables::T_SHOP2:
-				case Touchables::T_SHOP3:
+				else
 				{
-					if (!s->GetDisabled())
-					{
-						CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/purchase.wav");
-						s->SetDisabled(true);
-						s->SetImage("ducttape.png", "purchased", 1);
-					}
-					else
-					{
-						CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/disabled.mp3");
-					}
-					break;
+					CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/disabled.mp3");
 				}
-			}	
+				break;
+			}
+			}
 		}
 	}
 

@@ -4,10 +4,11 @@
 using namespace cocos2d;
 #include <string>
 #include <vector>
+using std::string;
 
 class Touchables
 {
-public: 
+public:
 	enum Types
 	{
 		T_LEVEL1,
@@ -26,10 +27,14 @@ public:
 		T_SHOP1,
 		T_SHOP2,
 		T_SHOP3,
+		T_MONKEY,
+		T_DOG,
 		T_MAX,
 	};
 
 	void init(const char* sprite, const char* name, float x, float y, Touchables::Types t, float scale);
+	void init(const char* sprite, const char* name, float x, float y, string t, float scale);
+
 	void Update(float);
 	void SetDisabled(bool disabled);
 	virtual bool checkMouseDown(Event *event);
