@@ -1,0 +1,3 @@
+monkey,100,Unlock monkey,Sprites/cat/walk/walk_
+dog,200,Unlock dog,Sprites/dog/walk/walk_
+cat,200,Unlock cat,Sprites/dog/walk/walk_
