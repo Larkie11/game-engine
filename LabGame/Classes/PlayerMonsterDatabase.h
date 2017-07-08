@@ -16,6 +16,9 @@ public:
 		int price;
 		string tooltip;
 		string animationSprites;
+		int spriteCount;
+		float spriteX;
+		float spriteY;
 	};
 
 	void ReadFileSize(string fileName);

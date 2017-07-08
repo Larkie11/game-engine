@@ -332,9 +332,6 @@ bool HelloWorld::onContactBegin(PhysicsContact& contact)
 
 	if (bodyA->getCollisionBitmask() != bodyB->getCollisionBitmask())
 	{
-		a->move = false;
-		b->move = false;
-
 		if (a->GetType() == GameChar::C_CAT)
 		{
 			a->AnimateSprite("Sprites/cat/attack/attack_", 1, 7, 177, 177, 0.1);

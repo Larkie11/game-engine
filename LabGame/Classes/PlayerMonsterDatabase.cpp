@@ -2,6 +2,7 @@
 #include <sstream>>
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 void PlayerMonsterDatabase::ReadFileSize(string fileName)
 {
 	std::string line;
@@ -32,9 +33,16 @@ void PlayerMonsterDatabase::PassInData()
 		std::getline(myfile, temp, ',');
 		newMonster->price = stoi(temp);
 		std::getline(myfile, temp, ',');
+		std::replace(temp.begin(), temp.end(), '`', '\n');
 		newMonster->tooltip = temp;
-		std::getline(myfile, temp);
+		std::getline(myfile, temp, ',');
 		newMonster->animationSprites = temp;
+		std::getline(myfile, temp, ',');
+		newMonster->spriteCount = stoi(temp);
+		std::getline(myfile, temp, ',');
+		newMonster->spriteX = stoi(temp);
+		std::getline(myfile, temp);
+		newMonster->spriteY = stoi(temp);
 		monsterDatabase.push_back(newMonster);
 	}
 }

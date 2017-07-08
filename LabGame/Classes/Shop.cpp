@@ -3,6 +3,7 @@
 #include "HelloWorldScene.h"
 #include "SelectLevelScene.h"
 #include "SimpleAudioEngine.h"
+#include "ui\/CocosGUI.h"
 #include <string>
 using std::string;
 #include <iostream>
@@ -35,13 +36,29 @@ bool Shop::init()
 	{
 		return false;
 	}
-
+	
 	touchableSprites.clear();
 
 	visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	Size playingSize = Size(visibleSize.width, visibleSize.height - (visibleSize.height / 8));
 
+
+	ui::ScrollView * scrollManager = ui::ScrollView::create();
+	scrollManager->setDirection(ui::ScrollView::Direction::VERTICAL);
+	scrollManager->setBackGroundImage("2.png");
+	scrollManager->setBounceEnabled(true);
+	scrollManager->setAnchorPoint(Vec2::ZERO);
+	scrollManager->setPosition(Vec2(0, 50));
+	scrollManager->setContentSize(playingSize);
+	scrollManager->setInnerContainerSize(Size(1280,3000));
+
+	ui::ScrollView * scrollView = ui::ScrollView::create();
+	scrollView->setDirection(ui::ScrollView::Direction::HORIZONTAL);
+	scrollView->setBackGroundImage("2.png");
+	scrollView->setBounceEnabled(true);
+	scrollView->setAnchorPoint(Vec2::ZERO);
+	scrollView->setPosition(Vec2(0, 0));
 	auto nodeItems = Node::create();
 	nodeItems->setName("nodeItems");
 	// Background
@@ -50,7 +67,7 @@ bool Shop::init()
 	backgroundSprite->setContentSize(playingSize);
 	backgroundSprite->setScaleX((visibleSize.width / backgroundSprite->getContentSize().width) * 1);
 	backgroundSprite->setScaleY((visibleSize.height / backgroundSprite->getContentSize().height) * 1);
-	nodeItems->addChild(backgroundSprite, -1);
+	//nodeItems->addChild(backgroundSprite, -1);
 
 	auto spriteNode = Node::create();
 	spriteNode->setName("spriteNode");
@@ -78,20 +95,29 @@ bool Shop::init()
 
 	float x = 0.05;
 	bool a = false;
+	float widthX = 0.5;
+	float heightY = 100;
+	scrollView->setContentSize(Size(visibleSize.width,visibleSize.height));
+
+	scrollView->setInnerContainerSize(Size(310 * shopItems.size(),1200));
 	for (int i = 0; i < shopItems.size(); i++)
 	{
+		/*ui::Button* button = ui::Button::create("ShopHover.png", "ShopNoHover.png");
+		button->setPosition(Vec2(scrollView->getContentSize().width / 2, 100));
+		scrollView->addChild(button);*/
+
 		if (shopItems[i] != NULL)
 		{
 			if (database.checkIfExist(shopItems[i]->type))
 			{
 				Touchables* itemsToBuy = new Touchables();
-				itemsToBuy->init("ShopHover.png", shopItems[i]->type.c_str(), visibleSize.width * x, visibleSize.height * 0.3, Touchables::T_SHOP1, 0.3);
+				itemsToBuy->init("ShopHover.png", shopItems[i]->type.c_str(), scrollView->getContentSize().width * x, scrollView->getContentSize().height- heightY, Touchables::T_SHOP1, 0.3);
 				itemsToBuy->SetToolTip(database.GetFromDatabase(shopItems[i]->type)->tooltip, "wood.png", 200, 0, -itemsToBuy->getSprite()->getContentSize().height, 2);
 				string firstSprite = database.GetFromDatabase(shopItems[i]->type)->animationSprites;
 				itemsToBuy->SetImage(firstSprite.append("1.png").c_str(), shopItems[i]->type.c_str(), 3);
 				touchableSprites.push_back(itemsToBuy);
+				x += 0.3;
 			}
-			x += 0.3;
 		}
 	}
 	// Back button
@@ -104,8 +130,11 @@ bool Shop::init()
 		if (s->GetType() == Touchables::T_BACK)
 			spriteNode->addChild(s->getSprite(), 1);
 		else
-			scrollNode->addChild(s->getSprite(), 1);
+			scrollView->addChild(s->getSprite());
 	}
+	nodeItems->addChild(scrollView);
+	/*nodeItems->addChild(scrollManager);
+	scrollManager->addChild(scrollView);*/
 
 	auto listener = EventListenerKeyboard::create();
 
@@ -227,7 +256,7 @@ void Shop::onMouseMove(Event *event)
 							if (touchableSprites[i]->checkMouseDown(event))
 							{
 								string a = database.GetFromDatabase(touchableSprites[i]->getSprite()->getName())->animationSprites;
-								s->AnimateImage(a.c_str(), 1, 7, 177, 177, 0.1);
+								s->AnimateImage(a.c_str(), 1, database.GetFromDatabase(touchableSprites[i]->getSprite()->getName())->spriteCount, database.GetFromDatabase(touchableSprites[i]->getSprite()->getName())->spriteX, database.GetFromDatabase(touchableSprites[i]->getSprite()->getName())->spriteY, 0.1);
 							}
 						}
 					}

@@ -107,6 +107,12 @@ void Touchables::SetText(std::string text, float scale, std::string font, cocos2
 }
 bool Touchables::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event)
 {
+	Vec2 posInWorldSpace = touch->getLocationInView();
+	if (mainSprite->getBoundingBox().containsPoint(mainSprite->getParent()->convertToNodeSpace(posInWorldSpace)))
+	{
+		return false;
+	}
+
 	Rect rect1 = mainSprite->getBoundingBox();
 	Point touchPoint = touch->getLocation();
 
@@ -119,15 +125,16 @@ bool Touchables::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event)
 		log("Not touched");
 	}
 
-	return true; // true if the function wants to swallow the touch
+	//return true; // true if the function wants to swallow the touch
 }
 
 bool Touchables::checkMouseDown(Event *event)
 {
 	//Check if this is getting touched
 	EventMouse* e = (EventMouse*)event;
+	Vec2 posInWorldSpace = e->getLocationInView();
 
-	if (mainSprite->getBoundingBox().containsPoint(e->getLocationInView()))
+	if (mainSprite->getBoundingBox().containsPoint(mainSprite->getParent()->convertToNodeSpace(posInWorldSpace)))
 	{
 		return true;
 	}
