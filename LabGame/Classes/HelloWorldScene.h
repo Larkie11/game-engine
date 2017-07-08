@@ -41,6 +41,9 @@ private:
 	Label* incomeSpeed;
 	int money = 0;
 	float speedOfIncome = 60;
+	bool inContact = false;
+	float spawnTimer;
+	float dt;
 
 public:
     static cocos2d::Scene* createScene();
@@ -50,7 +53,9 @@ public:
 
 	virtual void onMouseUp(Event *event);
 	virtual void onMouseMove(Event *event);
+	virtual bool onInContact(PhysicsContact& contact);
 
+	virtual bool onContactBegin(PhysicsContact& contact);
     virtual bool init();
 	virtual void update(float);
     // a selector callback

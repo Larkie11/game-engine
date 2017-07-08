@@ -13,7 +13,7 @@ USING_NS_CC;
 Scene* HelloWorld::createScene()
 {
     // 'scene' is an autorelease object
-    auto scene = Scene::create();
+    auto scene = Scene::createWithPhysics();
     
     // 'layer' is an autorelease object
     auto layer = HelloWorld::create();
@@ -36,6 +36,7 @@ bool HelloWorld::init()
 	}
 
 	touchableSprites.clear();
+	spawnTimer = 2;
 
 	visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -46,6 +47,9 @@ bool HelloWorld::init()
 	auto sprite = Sprite::create("ZigzagGrass_Mud_Round.png");
 	sprite->setAnchorPoint(Vec2::ZERO);
 	float width = sprite->getContentSize().width;
+	auto physicsBody = PhysicsBody::createBox(Size(sprite->getContentSize().width, sprite->getContentSize().height), PhysicsMaterial(0.1, 1.0, 0.0));
+	physicsBody->setDynamic(false);
+	sprite->addComponent(physicsBody);
 
 	backgroundSprite = Sprite::create("1.png");
 	backgroundSprite->setAnchorPoint(Vec2::ZERO);
@@ -67,6 +71,9 @@ bool HelloWorld::init()
 		auto sprite2 = Sprite::create("ZigzagGrass_Mud_Round.png");
 		sprite2->setAnchorPoint(Vec2::ZERO);
 		sprite2->setPosition(i * width, (visibleSize.height / 2) - sprite2->getContentSize().height);
+		auto physicsBody2 = PhysicsBody::createBox(Size(sprite2->getContentSize().width, sprite2->getContentSize().height), PhysicsMaterial(0.1, 1.0, 0.0));
+		physicsBody2->setDynamic(false);
+		sprite2->addComponent(physicsBody2);
 		nodeItems->addChild(sprite2, 1);
 	}
 
@@ -133,8 +140,8 @@ bool HelloWorld::init()
 
 	a->SetImage("walk_1.png", "but1",1);
 	b->SetImage("walk_2.png", "but2",1);
-	a->SetText("Summon 1",3, "fonts/Soos.ttf", ccc3(0, 200, 255),0, -a->getSprite()->getContentSize().width*.3);
-	b->SetText("Summon 2", 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, -a->getSprite()->getContentSize().width*.3);
+	a->SetText("50 GOLD",3, "fonts/Soos.ttf", ccc3(0, 200, 255),0, -a->getSprite()->getContentSize().width*.3);
+	b->SetText("150 GOLD", 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, -a->getSprite()->getContentSize().width*.3);
 	c->SetText("Summon 3", 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, -a->getSprite()->getContentSize().width*.3);
 
 	auto tower = new GameChar();
@@ -185,6 +192,11 @@ bool HelloWorld::init()
 	_mouseListener->onMouseUp = CC_CALLBACK_1(HelloWorld::onMouseUp, this);
 	_mouseListener->onMouseMove = CC_CALLBACK_1(HelloWorld::onMouseMove, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
+
+	auto contactListener = EventListenerPhysicsContact::create();
+	contactListener->onContactBegin = CC_CALLBACK_1(HelloWorld::onContactBegin, this);
+	contactListener->onContactPostSolve = CC_CALLBACK_1(HelloWorld::onInContact, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 
 	auto listener1 = EventListenerTouchOneByOne::create();
 	listener1->onTouchEnded = CC_CALLBACK_2(HelloWorld::onTouchEnded, this);
@@ -280,9 +292,88 @@ bool HelloWorld::init()
 
 	return true;
 }
+bool HelloWorld::onInContact(PhysicsContact& contact)
+{
+	auto bodyA = contact.getShapeA()->getBody();
+	auto bodyB = contact.getShapeB()->getBody();
+	GameChar* a = (GameChar*)bodyA->getOwner()->getUserData();
+	GameChar* b = (GameChar*)bodyB->getOwner()->getUserData();
+	
+	if (bodyA->getCollisionBitmask() != bodyB->getCollisionBitmask())
+	{
+		a->ReduceTimer(dt);
+		b->ReduceTimer(dt);
+
+		if (a->GetAttackTimer() <= 0)
+		{
+			b->MinusHealth(a->GetDamage());
+			a->ResetAttackTime();
+		}
+		if (b->GetAttackTimer() <= 0)
+		{
+			a->MinusHealth(b->GetDamage());
+			b->ResetAttackTime();
+		}
+		return true;
+	}
+	else
+	{
+		a->move = true;
+		b->move = true;
+		return false;
+	}
+}
+bool HelloWorld::onContactBegin(PhysicsContact& contact)
+{
+	auto bodyA = contact.getShapeA()->getBody();
+	auto bodyB = contact.getShapeB()->getBody();
+	GameChar* a = (GameChar*)bodyA->getOwner()->getUserData();
+	GameChar* b = (GameChar*)bodyB->getOwner()->getUserData();
+
+	if (bodyA->getCollisionBitmask() != bodyB->getCollisionBitmask())
+	{
+		a->move = false;
+		b->move = false;
+
+		if (a->GetType() == GameChar::C_CAT)
+		{
+			a->AnimateSprite("Sprites/cat/attack/attack_", 1, 7, 177, 177, 0.1);
+		}
+		if (a->GetType() == GameChar::C_DOG)
+		{
+			a->AnimateSprite("Sprites/dog/attack/attack_", 1, 7, 150, 173, 0.1);
+		}
+		if (a->GetType() == GameChar::C_DOGENEMY)
+		{
+			a->AnimateSprite("Sprites/dog/attack/attack_", 1, 7, 150, 173, 0.1);
+		}
+		if (b->GetType() == GameChar::C_CAT)
+		{
+			b->AnimateSprite("Sprites/cat/attack/attack_", 1, 7, 177, 177, 0.1);
+		}
+		if (b->GetType() == GameChar::C_DOG)
+		{
+			b->AnimateSprite("Sprites/dog/attack/attack_", 1, 7, 150, 173, 0.1);
+		}
+		if (b->GetType() == GameChar::C_DOGENEMY)
+		{
+			b->AnimateSprite("Sprites/dog/attack/attack_", 1, 7, 150, 173, 0.1);
+		}
+		bodyA->setVelocity(Vec2::ZERO);
+		bodyB->setVelocity(Vec2::ZERO);
+		return true;
+	}
+	else
+	{
+		return false;
+		a->move = true;
+		b->move = true;
+	}
+}
 void HelloWorld::update(float deltaTime)
 {
 	// Gold
+	dt = deltaTime;
 	money += 1 * speedOfIncome * deltaTime;
 	std::stringstream oss;
 	oss << "Gold: " << money;
@@ -298,6 +389,29 @@ void HelloWorld::update(float deltaTime)
 		s->Update(deltaTime);
 	}
 	
+	if (spawnTimer > 0)
+		spawnTimer -= deltaTime;
+
+	else if (spawnTimer <= 0)
+	{
+		GameChar* enemy = new GameChar();
+		enemy->init("walk_2.png", "dog", visibleSize.width - 50, visibleSize.height*0.5, GameChar::C_DOGENEMY, 10, 5, 2, 0);
+		enemy->getSprite()->setFlippedX(true);
+		enemy->getSprite()->setScale(0.5);
+		enemy->AnimateSprite("Sprites/dog/walk/walk_", 1, 7, 150, 173, 0.1);
+		enemy->getSprite()->setGLProgram(shaderCharEffect);
+		enemy->getSprite()->setGLProgramState(state);
+		this->getChildByName("spriteNode")->addChild(enemy->getSprite(), 1);
+		auto a = PhysicsBody::createBox(Size(enemy->getSprite()->getContentSize().width, enemy->getSprite()->getContentSize().height), PhysicsMaterial(0.1, 1.0, 0.0));
+		a->setCollisionBitmask(1);
+		a->setTag(1);
+		a->setContactTestBitmask(true);
+		enemy->getSprite()->addComponent(a);
+		a->getNode()->setUserData(enemy);
+		monsters.push_back(enemy);
+		spawnTimer = 2;
+	}
+
 	//Movement of monsters/player monsters
 	//Play their respective animation sprites for movement here
 	for (auto* s : monsters)
@@ -306,122 +420,130 @@ void HelloWorld::update(float deltaTime)
 
 		if (s != nullptr)
 		{
-			if (s->move && s->getSprite() != nullptr)
+			if (s->move && s->getSprite() != nullptr && s->GetHealth() >= 0)
 			{
+				PhysicsBody* curPhysics = s->getSprite()->getPhysicsBody();
+				curPhysics->setRotationEnable(false);
 				if (s->GetType() == GameChar::C_DOG)
 				{
-					s->getSprite()->setPosition(s->getSprite()->getPosition().x - s->GetSpeed() * deltaTime, s->getSprite()->getPosition().y);
+					curPhysics->setVelocity(Vec2(100.0, 0.0f));
+				}
+				if (s->GetType() == GameChar::C_DOGENEMY)
+				{
+					curPhysics->setVelocity(Vec2(-100.0, 0.0f));
 				}
 				if (s->GetType() == GameChar::C_CAT)
 				{
-					s->getSprite()->setPosition(s->getSprite()->getPosition().x + s->GetSpeed() * deltaTime, s->getSprite()->getPosition().y);
+					curPhysics->setVelocity(Vec2(100.0, 0.0f));
+
 				}
 			}
-
+			if (s->GetHealth() <= 0)
+			{
+				s->RemoveSprite();
+				monsters.erase(std::remove(monsters.begin(), monsters.end(),s), monsters.end());
+			}
 		}
 	}
 	//Collision detection between monsters/player's monsters
-	for (std::vector<GameChar *>::iterator a = monsters.begin(); a != monsters.end(); ++a)
-	{
-		GameChar *go = (GameChar *)*a;
-		for (std::vector<GameChar*>::iterator it2 = a + 1; it2 != monsters.end(); ++it2)
-		{
-			GameChar*other = (GameChar*)*it2;
-			GameChar *goA = go, *goB = other;
-			
-			if (goA != NULL && goB != NULL)
-			{
-				if (goA->getSprite() != nullptr && goB->getSprite() != nullptr)
-				{
-					Rect rect1 = goA->getSprite()->getBoundingBox();
-					Rect rect2 = goB->getSprite()->getBoundingBox();
-					{
-						//If anything is in collision
-						if (rect1.intersectsRect(rect2))
-						{
-							//Check if the tag not the same, all monsters have same tags, all players have same tags
-							if (goA->GetType() != goB->GetType())
-							{
-								if (goA->move)
-								{
-									goA->move = false;
-									if(goA->GetType() == GameChar::C_CAT)
-										goA->AnimateSprite("Sprites/cat/attack/attack_", 1, 7, 177, 177,0.1);
-									if (goA->GetType() == GameChar::C_DOG)
-										goA->AnimateSprite("Sprites/dog/attack/attack_", 1, 7, 150, 173,0.1);
-								}
-								if (goB->move)
-								{
-									goB->move = false;
-									if (goB->GetType() == GameChar::C_CAT)
-										goB->AnimateSprite("Sprites/cat/attack/attack_", 1, 7, 177, 177, 0.1);
-									if (goB->GetType() == GameChar::C_DOG)
-										goB->AnimateSprite("Sprites/dog/attack/attack_", 1, 7, 150, 173, 0.1);
-								}
-								goA->ReduceTimer(deltaTime);
-								goB->ReduceTimer(deltaTime);
-								std::stringstream oss;
+	//for (std::vector<GameChar *>::iterator a = monsters.begin(); a != monsters.end(); ++a)
+	//{
+	//	GameChar *go = (GameChar *)*a;
+	//	for (std::vector<GameChar*>::iterator it2 = a + 1; it2 != monsters.end(); ++it2)
+	//	{
+	//		GameChar*other = (GameChar*)*it2;
+	//		GameChar *goA = go, *goB = other;
+	//		
+	//		if (goA != NULL && goB != NULL)
+	//		{
+	//			if (goA->getSprite() != nullptr && goB->getSprite() != nullptr)
+	//			{
+	//				Rect rect1 = goA->getSprite()->getBoundingBox();
+	//				Rect rect2 = goB->getSprite()->getBoundingBox();
+	//				{
+	//					//If anything is in collision
+	//					if (rect1.intersectsRect(rect2))
+	//					{
+	//						//Check if the tag not the same, all monsters have same tags, all players have same tags
+	//						if (goA->GetType() != goB->GetType())
+	//						{
+	//							
+	//								//goA->move = false;
+	//								if(goA->GetType() == GameChar::C_CAT)
+	//									goA->AnimateSprite("Sprites/cat/attack/attack_", 1, 7, 177, 177,0.1);
+	//								if (goA->GetType() == GameChar::C_DOG)
+	//									goA->AnimateSprite("Sprites/dog/attack/attack_", 1, 7, 150, 173,0.1);
+	//							
+	//								//goB->move = false;
+	//								if (goB->GetType() == GameChar::C_CAT)
+	//									goB->AnimateSprite("Sprites/cat/attack/attack_", 1, 7, 177, 177, 0.1);
+	//								if (goB->GetType() == GameChar::C_DOG)
+	//									goB->AnimateSprite("Sprites/dog/attack/attack_", 1, 7, 150, 173, 0.1);
+	//							
+	//							goA->ReduceTimer(deltaTime);
+	//							goB->ReduceTimer(deltaTime);
+	//							std::stringstream oss;
 
-								oss << goA->GetAttackTimer() << "      " << goA->GetHealth();
+	//							oss << goA->GetAttackTimer() << "      " << goA->GetHealth();
 
-								//health1->setString(oss.str());
+	//							//health1->setString(oss.str());
 
-								oss.str("");
-								oss << goB->GetAttackTimer() << "      " << goB->GetHealth();
-								//health2->setString(oss.str());
-								oss.str("");
+	//							oss.str("");
+	//							oss << goB->GetAttackTimer() << "      " << goB->GetHealth();
+	//							//health2->setString(oss.str());
+	//							oss.str("");
 
-								//Attack timing?? Not really needed right now
-								//Can play any animations here
-								if (goA->GetAttackTimer() <= 0)
-								{
-									goB->MinusHealth(goA->GetDamage());									
-									goA->ResetAttackTime();
-								}
-								if (goB->GetAttackTimer() <= 0)
-								{
-									goA->MinusHealth(goB->GetDamage());
-									goB->ResetAttackTime();
-								}
-							}
-						}
-						if (goA->GetHealth() <= 0)
-						{
-							goA->RemoveSprite();
-							for (std::vector<GameChar *>::iterator a = monsters.begin(); a != monsters.end(); ++a)
-							{
-								GameChar *go = (GameChar *)*a;
-								if (go->GetType() != goA->GetType())
-								{
-									go->move = true;
-									if (go->GetType() == GameChar::C_CAT)
-										go->AnimateSprite("Sprites/cat/walk/walk_", 1, 7, 177, 177, 0.05);
-									if (go->GetType() == GameChar::C_DOG)
-										go->AnimateSprite("Sprites/dog/walk/walk_", 1, 7, 150, 173, 0.1);
-								}
-							}
-						}
-						if (goB->GetHealth() <= 0)
-						{
-							goB->RemoveSprite();
-							for (std::vector<GameChar *>::iterator a = monsters.begin(); a != monsters.end(); ++a)
-							{
-								GameChar *go = (GameChar *)*a;
-								if (go->GetType() != goB->GetType())
-								{
-									go->move = true;
-									if (go->GetType() == GameChar::C_CAT)
-										go->AnimateSprite("Sprites/cat/walk/walk_", 1, 7, 177, 177, 0.05);
-									if (go->GetType() == GameChar::C_DOG)
-										go->AnimateSprite("Sprites/dog/walk/walk_", 1, 7, 150, 173, 0.1);
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+	//							//Attack timing?? Not really needed right now
+	//							//Can play any animations here
+	//							if (goA->GetAttackTimer() <= 0)
+	//							{
+	//								goB->MinusHealth(goA->GetDamage());									
+	//								goA->ResetAttackTime();
+	//							}
+	//							if (goB->GetAttackTimer() <= 0)
+	//							{
+	//								goA->MinusHealth(goB->GetDamage());
+	//								goB->ResetAttackTime();
+	//							}
+	//						}
+	//					}
+	//					if (goA->GetHealth() <= 0)
+	//					{
+	//						goA->RemoveSprite();
+	//						for (std::vector<GameChar *>::iterator a = monsters.begin(); a != monsters.end(); ++a)
+	//						{
+	//							GameChar *go = (GameChar *)*a;
+	//							if (go->GetType() != goA->GetType())
+	//							{
+	//								go->move = true;
+	//								if (go->GetType() == GameChar::C_CAT)
+	//									go->AnimateSprite("Sprites/cat/walk/walk_", 1, 7, 177, 177, 0.05);
+	//								if (go->GetType() == GameChar::C_DOG)
+	//									go->AnimateSprite("Sprites/dog/walk/walk_", 1, 7, 150, 173, 0.1);
+	//							}
+	//						}
+	//					}
+	//					if (goB->GetHealth() <= 0)
+	//					{
+	//						goB->RemoveSprite();
+	//						for (std::vector<GameChar *>::iterator a = monsters.begin(); a != monsters.end(); ++a)
+	//						{
+	//							GameChar *go = (GameChar *)*a;
+	//							if (go->GetType() != goB->GetType())
+	//							{
+	//								go->move = true;
+	//								if (go->GetType() == GameChar::C_CAT)
+	//									go->AnimateSprite("Sprites/cat/walk/walk_", 1, 7, 177, 177, 0.05);
+	//								if (go->GetType() == GameChar::C_DOG)
+	//									go->AnimateSprite("Sprites/dog/walk/walk_", 1, 7, 150, 173, 0.1);
+	//							}
+	//						}
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
 }
 void HelloWorld::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
 {
@@ -476,49 +598,68 @@ void HelloWorld::onMouseUp(Event *event)
 	EventMouse* e = (EventMouse*)event;
 
 	//Detection for touching any touchable sprite
+	GameChar* dc = new GameChar();
 
 	//Buttons to summon monsters/players
 	for (auto* s : touchableSprites)
 	{	
 		std::stringstream oss;
+		PhysicsBody* a;
 
 		//Checking if point is within sprite's box, and the tag of sprite
 		if (s->checkMouseDown(event))
 		{
 			CCUserDefault *def = CCUserDefault::sharedUserDefault();
-			GameChar* dc = new GameChar();
-
 			switch (s->GetType())
 			{
 			case Touchables::T_SUMMONBUT1:
 				//s->getSprite()->setPosition(Vec2(100, 400));
 				//Spawn monster
-				dc->init("walk_1.png", "monster", visibleSize.width - visibleSize.width, visibleSize.height*0.5, GameChar::C_CAT, 10, 3, 1,50);
-				dc->getSprite()->setScale(0.5);
-				//dc->Left();
-				dc->AnimateSprite("Sprites/cat/walk/walk_",1,7,177,177, 0.05);
-				this->getChildByName("spriteNode")->addChild(dc->getSprite(), 1);
-				dc->getSprite()->setGLProgram(shaderCharEffect);
-				dc->getSprite()->setGLProgramState(state);
-				monsters.push_back(dc);
-
+				if (money > 50)
+				{
+					money -= 50;
+					dc->init("walk_1.png", "cat", visibleSize.width - visibleSize.width, visibleSize.height*0.5, GameChar::C_CAT, 15, 3, 1, 0);
+					dc->getSprite()->setScale(0.5);
+					//dc->Left();
+					dc->AnimateSprite("Sprites/cat/walk/walk_", 1, 7, 177, 177, 0.05);
+					this->setName("cat");
+					this->getChildByName("spriteNode")->addChild(dc->getSprite(), 1);
+					dc->getSprite()->setGLProgram(shaderCharEffect);
+					dc->getSprite()->setGLProgramState(state);
+					a = PhysicsBody::createBox(Size(dc->getSprite()->getContentSize().width, dc->getSprite()->getContentSize().height), PhysicsMaterial(0.1, 1.0, 0.0));
+					a->setCollisionBitmask(2);
+					a->setTag(1);
+					a->setContactTestBitmask(true);
+					dc->getSprite()->addComponent(a);
+					a->getNode()->setUserData(dc);
+					monsters.push_back(dc);
+				}
 				break;
 			case Touchables::T_SUMMONBUT2:
 				//s->getSprite()->setPosition(Vec2(300, 100));
 				//Spawn monster
-				dc->init("walk_2.png", "monster", visibleSize.width, visibleSize.height*0.5, GameChar::C_DOG, 10, 5, 2,40);
-				dc->getSprite()->setFlippedX(true);
-				dc->getSprite()->setScale(0.5);
-				dc->AnimateSprite("Sprites/dog/walk/walk_", 1, 7, 150, 173, 0.1);
-				dc->getSprite()->setGLProgram(shaderCharEffect);
-				dc->getSprite()->setGLProgramState(state);
-				this->getChildByName("spriteNode")->addChild(dc->getSprite(), 1);
-				monsters.push_back(dc);
+				if (money > 150)
+				{
+					money -= 150;
+					dc->init("walk_2.png", "dog", visibleSize.width - visibleSize.width, visibleSize.height*0.5, GameChar::C_DOG, 10, 5, 2, 0);
+					dc->getSprite()->setFlippedX(false);
+					dc->getSprite()->setScale(0.5);
+					dc->AnimateSprite("Sprites/dog/walk/walk_", 1, 7, 150, 173, 0.1);
+					dc->getSprite()->setGLProgram(shaderCharEffect);
+					dc->getSprite()->setGLProgramState(state);
+					this->getChildByName("spriteNode")->addChild(dc->getSprite(), 1);
+					a = PhysicsBody::createBox(Size(dc->getSprite()->getContentSize().width, dc->getSprite()->getContentSize().height), PhysicsMaterial(0.1, 1.0, 0.0));
+					a->setCollisionBitmask(2);
+					a->setTag(1);
+					a->setContactTestBitmask(true);
+					dc->getSprite()->addComponent(a);
+					a->getNode()->setUserData(dc);
+					monsters.push_back(dc);
+				}
 				break;
 			case Touchables::T_SUMMONBUT3:
 				break;
 			case Touchables::T_BACK:
-				
 				def->setIntegerForKey("LevelUnlockedTest", 2);
 				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, MenuScene::createScene(), Color3B(0, 0, 0)));
 				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");

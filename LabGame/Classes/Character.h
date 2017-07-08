@@ -14,6 +14,7 @@ public:
 	{
 		C_DOG,
 		C_CAT,
+		C_DOGENEMY,
 		C_MAX,
 	};
 	void init(const char* sprite, const char* name, float x, float y, CharacterType type, int health, float attackTimer, int damage, float speed);
