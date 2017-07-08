@@ -1,0 +1,20 @@
+Things done-
+Collision between player's monsters and tower's monsters (Animation, attacking done) with physics
+Shop - read from text to display what player can purchase (Scrollable according to how many items in the shop text file)
+1 database - holds all the available monsters stats (AnimationSprite name, tooltip for shop description, (Going to implement: tooltip for in-game), number of sprites, size of sprite, etc)
+Main menu
+Mouse collision touch with buttons 
+Animation manager
+
+
+To Be Done -
+Inventory - add in to inventory when buy from shop, maybe add button on main menu to change between what monsters player wants to use in game
+Audio is not even playing anymore (Fix it please)
+Adding more gameplay features (up to you all)
+Maybe add different kind of enemies (Like shooting fire ball (Ownself add collision for those thanks (Use distance checking to shoot bullet, then use physics for monster and bullet collision))
+Gacha Feature?? (Random a monster and add in to inventory, special event monsters not available in shops?)
+Upgrade system (Upgrade tower (Health or ulti, etc)) - Allow player to upgrade from menu (Add a button for it)
+
+Can be done
+Bosses?
+Particle System?
