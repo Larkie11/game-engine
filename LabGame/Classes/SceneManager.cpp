@@ -1,5 +1,7 @@
 #include "SceneManager.h"
 
+SceneManager* SceneManager::sceneInstance = 0;
+
 SceneManager::SceneManager()
 {
 

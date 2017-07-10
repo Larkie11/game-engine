@@ -6,10 +6,10 @@
 #include "ui\/CocosGUI.h"
 #include <string>
 using std::string;
+#include "PlayerMonsterDatabase.h"
 #include <iostream>
 #include <sstream>>
-
-
+#include <fstream>
 USING_NS_CC;
 
 Scene* Shop::createScene()
@@ -82,13 +82,17 @@ bool Shop::init()
 	shop->GetLabel("label")->disableEffect();
 	spriteNode->addChild(shop->getSprite());
 
-
 	ReadFileSize();
 	PassInShopItems();
 
 
-	database.ReadFileSize("levels/Database.txt");
-	database.PassInData();
+
+	//database.ReadFileSize("levels/Database.txt");
+	//database.PassInData();
+	PlayerMonsterDatabase::getInstance()->GetFromDatabase("cat")->damage;
+	
+	std::cout << PlayerMonsterDatabase::getInstance()->GetFromDatabase("cat")->damage;
+
 	//vector<PlayerMonsterDatabase::MonsterTypes*> mt - new ;
 	//mt = database.ReturnDatabase;
 	// Back button
@@ -105,15 +109,14 @@ bool Shop::init()
 		/*ui::Button* button = ui::Button::create("ShopHover.png", "ShopNoHover.png");
 		button->setPosition(Vec2(scrollView->getContentSize().width / 2, 100));
 		scrollView->addChild(button);*/
-
 		if (shopItems[i] != NULL)
 		{
-			if (database.checkIfExist(shopItems[i]->type))
+			if (PlayerMonsterDatabase::getInstance()->checkIfExist(shopItems[i]->type))
 			{
 				Touchables* itemsToBuy = new Touchables();
 				itemsToBuy->init("ShopHover.png", shopItems[i]->type.c_str(), scrollView->getContentSize().width * x, scrollView->getContentSize().height- heightY, Touchables::T_SHOP1, 0.3);
-				itemsToBuy->SetToolTip(database.GetFromDatabase(shopItems[i]->type)->tooltip, "wood.png", 200, 0, -itemsToBuy->getSprite()->getContentSize().height, 2);
-				string firstSprite = database.GetFromDatabase(shopItems[i]->type)->animationSprites;
+				itemsToBuy->SetToolTip(PlayerMonsterDatabase::getInstance()->GetFromDatabase(shopItems[i]->type)->tooltip + '\n' + std::to_string(PlayerMonsterDatabase::getInstance()->GetFromDatabase(shopItems[i]->type)->goldNeededShop) + " gold" + '\n' + std::to_string(PlayerMonsterDatabase::getInstance()->GetFromDatabase(shopItems[i]->type)->damage) + " damage", "wood.png", 200, 0, -itemsToBuy->getSprite()->getContentSize().height, 2);
+				string firstSprite = PlayerMonsterDatabase::getInstance()->GetFromDatabase(shopItems[i]->type)->animationSprites;
 				itemsToBuy->SetImage(firstSprite.append("1.png").c_str(), shopItems[i]->type.c_str(), 3);
 				touchableSprites.push_back(itemsToBuy);
 				x += 0.3;
@@ -255,8 +258,8 @@ void Shop::onMouseMove(Event *event)
 						{
 							if (touchableSprites[i]->checkMouseDown(event))
 							{
-								string a = database.GetFromDatabase(touchableSprites[i]->getSprite()->getName())->animationSprites;
-								s->AnimateImage(a.c_str(), 1, database.GetFromDatabase(touchableSprites[i]->getSprite()->getName())->spriteCount, database.GetFromDatabase(touchableSprites[i]->getSprite()->getName())->spriteX, database.GetFromDatabase(touchableSprites[i]->getSprite()->getName())->spriteY, 0.1);
+								string a = PlayerMonsterDatabase::getInstance()->GetFromDatabase(touchableSprites[i]->getSprite()->getName())->animationSprites;
+								s->AnimateImage(a.c_str(), 1, PlayerMonsterDatabase::getInstance()->GetFromDatabase(touchableSprites[i]->getSprite()->getName())->spriteCount, PlayerMonsterDatabase::getInstance()->GetFromDatabase(touchableSprites[i]->getSprite()->getName())->spriteX, PlayerMonsterDatabase::getInstance()->GetFromDatabase(touchableSprites[i]->getSprite()->getName())->spriteY, 0.1);
 							}
 						}
 					}

@@ -4,7 +4,6 @@
 #include "cocos2d.h"
 #include "Character.h"
 #include "Touchables.h"
-#include "PlayerMonsterDatabase.h"
 
 using namespace cocos2d;
 #include <vector>
@@ -46,7 +45,7 @@ private:
 	GLProgram* shaderCharEffect;
 	GLProgramState* state;
 	int number_of_lines = 0;
-	PlayerMonsterDatabase database;
+	//PlayerMonsterDatabase database;
 public:
 	static cocos2d::Scene* createScene();
 	virtual void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* e);

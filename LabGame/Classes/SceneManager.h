@@ -10,6 +10,12 @@ using std::ifstream;
 
 class SceneManager
 {
+private:
+	static SceneManager* sceneInstance;
+	string font;
+	string background;
+	string buttonClickSound;
+
 public:
 	SceneManager();
 	~SceneManager();
@@ -18,16 +24,16 @@ public:
 	string getBackground();
 	string getButtonClickSound();
 
+	
 	static SceneManager* getInstance()
 	{
-		static SceneManager* instance;
-		return instance;
+		if (sceneInstance == 0)
+		{
+			sceneInstance = new SceneManager();
+		}
+		return sceneInstance;
 	}
 
-private:
-	string font;
-	string background;
-	string buttonClickSound;
 };
 
 

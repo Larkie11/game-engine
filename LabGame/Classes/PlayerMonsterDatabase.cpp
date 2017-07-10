@@ -3,6 +3,10 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+
+
+PlayerMonsterDatabase* PlayerMonsterDatabase::dataInstance = 0;
+
 void PlayerMonsterDatabase::ReadFileSize(string fileName)
 {
 	std::string line;
@@ -41,8 +45,14 @@ void PlayerMonsterDatabase::PassInData()
 		newMonster->spriteCount = stoi(temp);
 		std::getline(myfile, temp, ',');
 		newMonster->spriteX = stoi(temp);
-		std::getline(myfile, temp);
+		std::getline(myfile, temp, ',');
 		newMonster->spriteY = stoi(temp);
+		std::getline(myfile, temp, ',');
+		newMonster->goldNeededShop = stoi(temp);
+		std::getline(myfile, temp, ',');
+		newMonster->goldNeededGame = stoi(temp);
+		std::getline(myfile, temp);
+		newMonster->damage = stoi(temp);
 		monsterDatabase.push_back(newMonster);
 	}
 }

@@ -4,7 +4,6 @@
 #include "cocos2d.h"
 #include "Character.h"
 #include "Touchables.h"
-#include "SceneManager.h"
 #include "AudioManager.h"
 
 
@@ -37,7 +36,6 @@ private:
 	Label* health2;
 	GLProgram* shaderCharEffect;
 	GLProgramState* state;
-	SceneManager* sceneManager = new SceneManager();
 public:
 	static cocos2d::Scene* createScene();
 	virtual void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* e);
