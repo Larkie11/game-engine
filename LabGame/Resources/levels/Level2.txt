@@ -1,0 +1,3 @@
+fonts/Soos.ttf
+backgrounds/3.png
+audio/click.wav
