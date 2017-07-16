@@ -2,7 +2,7 @@
 #include "HelloWorldScene.h"
 #include "MenuScene.h"
 #include "SceneManager.h"
-
+#include "PlayerMonsterDatabase.h"
 
 #include "SelectLevelScene.h"
 
@@ -78,6 +78,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     register_all_packages();
 	SceneManager::getInstance()->ReadFile("levels/Level2.txt");
+	PlayerMonsterDatabase::getInstance()->ReadFileSize("levels/Database.txt");
+	PlayerMonsterDatabase::getInstance()->PassInData();
     // create a scene. it's an autorelease object
     auto scene = HelloWorld::createScene();
 	auto selectlevel = SelectLevel::createScene();

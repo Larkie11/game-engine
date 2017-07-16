@@ -29,7 +29,33 @@ void GameChar::init(const char* sprite, const char* name, float x, float y, Game
 	charEffect->updateUniforms();*/
 	move = true;
 }
+void GameChar::init(const char* sprite, const char* name, float x, float y, std::string tag, int health, float attackTimer, int damage, float speed)
+{
+	intDir = 0;
+	fSpeed = speed;
 
+	mainSprite = Sprite::create(sprite);
+	//mainSprite = SpriteLoader();
+	mainSprite->setAnchorPoint(Vec2(0, 0));
+	mainSprite->setPosition(x, y);
+	mainSprite->setName(name);
+	this->tag = tag;
+	this->health = health;
+	this->defaultAttackTimer = attackTimer;
+	this->attackTimer = defaultAttackTimer;
+	this->damage = damage;
+	mainSprite->setScale(10);
+	mLoc.set(.5f, .5f);
+	mLocInc.set(.005f, .01f);
+	/*charEffect = new GLProgram();
+	charEffect->initWithFilenames("Basic.vsh", "CharEffect.fsh");
+	charEffect->bindAttribLocation(GLProgram::ATTRIBUTE_NAME_POSITION, GLProgram::VERTEX_ATTRIB_POSITION);
+	charEffect->bindAttribLocation(GLProgram::ATTRIBUTE_NAME_COLOR, GLProgram::VERTEX_ATTRIB_COLOR);
+	charEffect->bindAttribLocation(GLProgram::ATTRIBUTE_NAME_TEX_COORD, GLProgram::VERTEX_ATTRIB_TEX_COORDS);
+	charEffect->link();
+	charEffect->updateUniforms();*/
+	move = true;
+}
 void GameChar::MoveChar(int dirX)
 {
 	intDir = dirX;

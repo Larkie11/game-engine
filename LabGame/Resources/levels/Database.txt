@@ -1,3 +1,4 @@
-cat,100,Unlock Cat,Sprites/cat/walk/walk_,7,177,177, 150, 50, 10
-dog,200,Unlock dog,Sprites/dog/walk/walk_,7,150,173, 200, 100, 15
-zombie,200,Unlock Zombie Girl,Sprites/zombiegirl/walk/Walk_,10,130,144, 300, 130, 20
+cat,100,Unlock Cat,Sprites/cat/walk/walk_,Sprites/cat/attack/attack_,7,177,177, 150, 50, 10, 50
+dog,200,Unlock dog,Sprites/dog/walk/walk_,Sprites/dog/attack/attack_,7,150,173, 200, 100, 15, 100
+enemydog,200,-,Sprites/dog/walk/walk_,Sprites/dog/attack/attack_,7,150,173, 200, 0, 15, -100
+zombie,200,Unlock Zombie Girl,Sprites/zombiegirl/walk/Walk_,Sprites/zombiegirl/walk/Walk_,10,130,144, 300, 130, 20, 150

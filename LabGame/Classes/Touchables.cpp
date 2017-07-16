@@ -37,6 +37,7 @@ void Touchables::init(const char* sprite, const char* name, float x, float y, st
 	mainSprite->setName(name);
 	mainSprite->setScale(scale);
 	this->tag = t;
+	t = Touchables::T_SUMMONBUT1;
 	disabled = false;
 	//Only for shader effect
 	/*mLoc.set(.5f, .5f);

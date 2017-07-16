@@ -42,6 +42,8 @@ void PlayerMonsterDatabase::PassInData()
 		std::getline(myfile, temp, ',');
 		newMonster->animationSprites = temp;
 		std::getline(myfile, temp, ',');
+		newMonster->attackSprite = temp;
+		std::getline(myfile, temp, ',');
 		newMonster->spriteCount = stoi(temp);
 		std::getline(myfile, temp, ',');
 		newMonster->spriteX = stoi(temp);
@@ -51,8 +53,10 @@ void PlayerMonsterDatabase::PassInData()
 		newMonster->goldNeededShop = stoi(temp);
 		std::getline(myfile, temp, ',');
 		newMonster->goldNeededGame = stoi(temp);
-		std::getline(myfile, temp);
+		std::getline(myfile, temp, ',');
 		newMonster->damage = stoi(temp);
+		std::getline(myfile, temp);
+		newMonster->speed = stoi(temp);
 		monsterDatabase.push_back(newMonster);
 	}
 }

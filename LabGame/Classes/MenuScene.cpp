@@ -41,8 +41,6 @@ bool MenuScene::init()
 	}
 
 	// Read file
-	PlayerMonsterDatabase::getInstance()->ReadFileSize("levels/Database.txt");
-	PlayerMonsterDatabase::getInstance()->PassInData();
 	//SceneManager::getInstance()->ReadFile("levels/Level2.txt");
 
 	touchableSprites.clear();

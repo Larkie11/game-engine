@@ -2,6 +2,7 @@
 #include "SelectLevelScene.h"
 #include "MenuScene.h"
 #include "SimpleAudioEngine.h"
+#include "PlayerMonsterDatabase.h"
 #include <string>
 using std::string;
 #include <iostream>
@@ -79,20 +80,22 @@ bool HelloWorld::init()
 
 	auto spriteNode = Node::create();
 	spriteNode->setName("spriteNode");
-
+	Inventory = { "cat","dog","zombie" };
 	//Adding touchable sprites to vector, different type of sprites different vectors?
 	//Enemy 1 vector
 	//Player monsters 1 vector
 	//Touchable sprites 1 vector, etc
-	a = new Touchables();
-	a->init("Button1.png", "mainSprite", visibleSize.width * 0.1, visibleSize.height * 0.1, Touchables::T_SUMMONBUT1,0.5);
+	float x = 0.1;
+	
+	PlayerMonsterDatabase::getInstance()->GetFromDatabase("cat")->damage;
 
-	Touchables* b = new Touchables();
-	b->init("Button1.png", "mainSprite", visibleSize.width * 0.3, visibleSize.height * 0.1, Touchables::T_SUMMONBUT2, 0.5);
-	b->getSprite()->setScale(0.5);
-
-	Touchables* c = new Touchables();
-	c->init("Button1.png", "mainSprite", visibleSize.width * 0.5, visibleSize.height * 0.1, Touchables::T_SUMMONBUT3, 0.5);
+	for (int i = 0; i < Inventory.size(); i++)
+	{
+		Touchables* inventorySummon = new Touchables();
+		inventorySummon->init("Button1.png", PlayerMonsterDatabase::getInstance()->GetFromDatabase(Inventory[i])->type.c_str(), visibleSize.width * x, visibleSize.height * 0.1, PlayerMonsterDatabase::getInstance()->GetFromDatabase(Inventory[i])->type, 0.5f);
+		summonButtons.push_back(inventorySummon);
+		x += 0.2;
+	}
 
 	// Back button
 	Touchables* back = new Touchables();
@@ -127,9 +130,9 @@ bool HelloWorld::init()
 	incomeSpeed->setPositionZ(10);
 	nodeItems->addChild(incomeSpeed, 1);
 
-	touchableSprites.push_back(a);
-	touchableSprites.push_back(b);
-	touchableSprites.push_back(c);
+	//touchableSprites.push_back(a);
+	//touchableSprites.push_back(b);
+	//touchableSprites.push_back(c);
 	touchableSprites.push_back(back);
 	touchableSprites.push_back(goldUpgrade);
 
@@ -137,23 +140,43 @@ bool HelloWorld::init()
 	{
 		spriteNode->addChild(s->getSprite(), 1);
 	}
-
-	a->SetImage("walk_1.png", "but1",1);
-	b->SetImage("walk_2.png", "but2",1);
-	a->SetText("50 GOLD",3, "fonts/Soos.ttf", ccc3(0, 200, 255),0, -a->getSprite()->getContentSize().width*.3);
-	b->SetText("150 GOLD", 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, -a->getSprite()->getContentSize().width*.3);
-	c->SetText("Summon 3", 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, -a->getSprite()->getContentSize().width*.3);
+	for (auto* s : summonButtons)
+	{
+		spriteNode->addChild(s->getSprite(), 1);
+	}
+	for (int i = 0; i < summonButtons.size(); i++)
+	{
+		string temp = PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->animationSprites;
+		temp.append("1.png");
+		summonButtons[i]->SetImage(temp.c_str(), "but1", 1);
+		string goldTemp = std::to_string(PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->goldNeededGame) + " GOLD";
+		summonButtons[i]->SetText(goldTemp, 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, summonButtons[i]->getSprite()->getContentSize().width*.3);
+	}
 
 	auto tower = new GameChar();
-	tower->init("tower.png", "tower", 0, visibleSize.height*0.5, GameChar::C_MAX,10, 3, 1, 0);
+	tower->init("tower.png", "tower", 0, visibleSize.height*0.5, "tower",10, 3, 1, 0);
 	tower->getSprite()->setPositionX(0-(tower->getSprite()->getContentSize().width*0.38));
 	tower->getSprite()->setScale(1);
+	auto physicsBodyTower1 = PhysicsBody::createBox(Size(tower->getSprite()->getContentSize().width, tower->getSprite()->getContentSize().height), PhysicsMaterial(0.1, 1.0, 0.0));
+	physicsBodyTower1->setDynamic(false);
+	physicsBodyTower1->setCollisionBitmask(0x0000002);
+	physicsBodyTower1->setContactTestBitmask(true);
+	tower->getSprite()->addComponent(physicsBodyTower1);
+
 	auto tower2 = new GameChar();
-	tower2->init("tower.png", "tower", visibleSize.width, visibleSize.height*0.5, GameChar::C_MAX, 10, 3, 1, 0);
+	tower2->init("tower.png", "tower", visibleSize.width, visibleSize.height*0.5, "tower", 10, 3, 1, 0);
 	tower2->getSprite()->setPositionX(visibleSize.width - tower->getSprite()->getContentSize().width * 0.6);
 	tower2->getSprite()->setScale(1);
+	auto physicsBodyTower2 = PhysicsBody::createBox(Size(tower2->getSprite()->getContentSize().width, tower2->getSprite()->getContentSize().height), PhysicsMaterial(0.1, 1.0, 0.0));
+	physicsBodyTower2->setDynamic(false);
+	physicsBodyTower2->setCollisionBitmask(0x0000001);
+	physicsBodyTower2->setContactTestBitmask(true);
+
+	tower2->getSprite()->addComponent(physicsBodyTower2);
 	spriteNode->addChild(tower->getSprite(), 2);
 	spriteNode->addChild(tower2->getSprite(), 2);
+	physicsBodyTower1->getNode()->setUserData(tower);
+	physicsBodyTower2->getNode()->setUserData(tower2);
 
 	//Amos try out animation
 	// Sprite Sheet Animation Code Start
@@ -327,45 +350,27 @@ bool HelloWorld::onContactBegin(PhysicsContact& contact)
 {
 	auto bodyA = contact.getShapeA()->getBody();
 	auto bodyB = contact.getShapeB()->getBody();
-	GameChar* a = (GameChar*)bodyA->getOwner()->getUserData();
-	GameChar* b = (GameChar*)bodyB->getOwner()->getUserData();
+	GameChar* a;
+	GameChar* b;
+	if(bodyA->getOwner()->getUserData()!= NULL)
+	a = (GameChar*)bodyA->getOwner()->getUserData();
+	if (bodyB->getOwner()->getUserData() != NULL)
+	b = (GameChar*)bodyB->getOwner()->getUserData();
 
 	if (bodyA->getCollisionBitmask() != bodyB->getCollisionBitmask())
 	{
-		if (a->GetType() == GameChar::C_CAT)
-		{
-			a->AnimateSprite("Sprites/cat/attack/attack_", 1, 7, 177, 177, 0.1);
-		}
-		if (a->GetType() == GameChar::C_DOG)
-		{
-			a->AnimateSprite("Sprites/dog/attack/attack_", 1, 7, 150, 173, 0.1);
-		}
-		if (a->GetType() == GameChar::C_DOGENEMY)
-		{
-			a->AnimateSprite("Sprites/dog/attack/attack_", 1, 7, 150, 173, 0.1);
-		}
-		if (b->GetType() == GameChar::C_CAT)
-		{
-			b->AnimateSprite("Sprites/cat/attack/attack_", 1, 7, 177, 177, 0.1);
-		}
-		if (b->GetType() == GameChar::C_DOG)
-		{
-			b->AnimateSprite("Sprites/dog/attack/attack_", 1, 7, 150, 173, 0.1);
-		}
-		if (b->GetType() == GameChar::C_DOGENEMY)
-		{
-			b->AnimateSprite("Sprites/dog/attack/attack_", 1, 7, 150, 173, 0.1);
-		}
-		bodyA->setVelocity(Vec2::ZERO);
-		bodyB->setVelocity(Vec2::ZERO);
+
+		
+		if (a->GetTag() != "tower")
+		a->AnimateSprite(PlayerMonsterDatabase::getInstance()->GetFromDatabase(a->GetTag())->attackSprite.c_str(), 1, PlayerMonsterDatabase::getInstance()->GetFromDatabase(a->GetTag())->spriteCount, PlayerMonsterDatabase::getInstance()->GetFromDatabase(a->GetTag())->spriteX, PlayerMonsterDatabase::getInstance()->GetFromDatabase(a->GetTag())->spriteY, 0.1);
+		if (b->GetTag() != "tower")
+		b->AnimateSprite(PlayerMonsterDatabase::getInstance()->GetFromDatabase(b->GetTag())->attackSprite.c_str(), 1, PlayerMonsterDatabase::getInstance()->GetFromDatabase(b->GetTag())->spriteCount, PlayerMonsterDatabase::getInstance()->GetFromDatabase(b->GetTag())->spriteX, PlayerMonsterDatabase::getInstance()->GetFromDatabase(b->GetTag())->spriteY, 0.1);
+
 		return true;
 	}
 	else
-	{
 		return false;
-		a->move = true;
-		b->move = true;
-	}
+
 }
 void HelloWorld::update(float deltaTime)
 {
@@ -392,7 +397,7 @@ void HelloWorld::update(float deltaTime)
 	else if (spawnTimer <= 0)
 	{
 		GameChar* enemy = new GameChar();
-		enemy->init("walk_2.png", "dog", visibleSize.width - 50, visibleSize.height*0.5, GameChar::C_DOGENEMY, 10, 5, 2, 0);
+		enemy->init("walk_2.png", "dog", visibleSize.width - 50, visibleSize.height*0.5, "enemydog", 10, 5, 2, 0);
 		enemy->getSprite()->setFlippedX(true);
 		enemy->getSprite()->setScale(0.5);
 		enemy->AnimateSprite("Sprites/dog/walk/walk_", 1, 7, 150, 173, 0.1);
@@ -400,7 +405,7 @@ void HelloWorld::update(float deltaTime)
 		enemy->getSprite()->setGLProgramState(state);
 		this->getChildByName("spriteNode")->addChild(enemy->getSprite(), 1);
 		auto a = PhysicsBody::createBox(Size(enemy->getSprite()->getContentSize().width, enemy->getSprite()->getContentSize().height), PhysicsMaterial(0.1, 1.0, 0.0));
-		a->setCollisionBitmask(1);
+		a->setCollisionBitmask(00000001);
 		a->setTag(1);
 		a->setContactTestBitmask(true);
 		enemy->getSprite()->addComponent(a);
@@ -421,19 +426,10 @@ void HelloWorld::update(float deltaTime)
 			{
 				PhysicsBody* curPhysics = s->getSprite()->getPhysicsBody();
 				curPhysics->setRotationEnable(false);
-				if (s->GetType() == GameChar::C_DOG)
-				{
-					curPhysics->setVelocity(Vec2(100.0, 0.0f));
-				}
-				if (s->GetType() == GameChar::C_DOGENEMY)
-				{
-					curPhysics->setVelocity(Vec2(-100.0, 0.0f));
-				}
-				if (s->GetType() == GameChar::C_CAT)
-				{
-					curPhysics->setVelocity(Vec2(100.0, 0.0f));
 
-				}
+				PlayerMonsterDatabase::getInstance()->GetFromDatabase(s->GetTag())->speed;
+
+				curPhysics->setVelocity(Vec2(PlayerMonsterDatabase::getInstance()->GetFromDatabase(s->GetTag())->speed, 0.f));
 			}
 			if (s->GetHealth() <= 0)
 			{
@@ -558,6 +554,35 @@ void HelloWorld::onMouseMove(Event *event)
 	//HOVERING change sprite
 	EventMouse* e = (EventMouse*)event;
 
+	for (auto* s : summonButtons)
+	{
+		if (s->checkMouseDown(event))
+		{
+			if (s->GetType() != Touchables::T_BACK && s->GetType() != Touchables::T_GOLDUPGRADE)
+				s->getSprite()->setTexture("Button2.png");
+
+			if (s->GetToolTip() != nullptr && s->GetDisabled() != true)
+				s->GetToolTip()->setVisible(true);
+
+			if (s->GetLabel("label") != nullptr)
+			{
+				s->GetLabel("label")->setColor(ccc3(0, 0, 255));
+			}
+		}
+		else
+		{
+			if (s->GetToolTip() != nullptr)
+				s->GetToolTip()->setVisible(false);
+
+			if (s->GetType() != Touchables::T_BACK && s->GetType() != Touchables::T_GOLDUPGRADE)
+
+				s->getSprite()->setTexture("Button1.png");
+			if (s->GetLabel("label") != nullptr)
+			{
+				s->GetLabel("label")->setColor(ccc3(0, 200, 255));
+			}
+		}
+	}
 	for (auto* s : touchableSprites)
 	{
 		if (s->checkMouseDown(event))
@@ -597,6 +622,32 @@ void HelloWorld::onMouseUp(Event *event)
 	//Detection for touching any touchable sprite
 	GameChar* dc = new GameChar();
 
+	for (int i = 0; i < summonButtons.size(); i++)
+	{
+		if (summonButtons[i]->checkMouseDown(event))
+		{
+			PhysicsBody* body;
+			if (money > PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->goldNeededGame)
+			{
+				money -= PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->goldNeededGame;
+				string a = PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->animationSprites;
+				string temp = a;
+				temp.append("1.png");
+				dc->init(temp.c_str(), PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->type.c_str(), visibleSize.width - visibleSize.width, visibleSize.height*0.5, PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->type.c_str(), 15, 3, 1, 0);
+				dc->getSprite()->setScale(0.5);
+				dc->AnimateSprite(a.c_str(), 1, PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->getSprite()->getName())->spriteCount, PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->getSprite()->getName())->spriteX, PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->getSprite()->getName())->spriteY, 0.1);
+				this->setName(PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->type);
+				this->getChildByName("spriteNode")->addChild(dc->getSprite(), 1);
+				body = PhysicsBody::createBox(Size(dc->getSprite()->getContentSize().width, dc->getSprite()->getContentSize().height), PhysicsMaterial(0.1, 1.0, 0.0));
+				body->setCollisionBitmask(00000002);
+				body->setTag(1);
+				body->setContactTestBitmask(true);
+				dc->getSprite()->addComponent(body);
+				body->getNode()->setUserData(dc);
+				monsters.push_back(dc);
+			}
+		}
+	}
 	//Buttons to summon monsters/players
 	for (auto* s : touchableSprites)
 	{	
@@ -609,51 +660,6 @@ void HelloWorld::onMouseUp(Event *event)
 			CCUserDefault *def = CCUserDefault::sharedUserDefault();
 			switch (s->GetType())
 			{
-			case Touchables::T_SUMMONBUT1:
-				//s->getSprite()->setPosition(Vec2(100, 400));
-				//Spawn monster
-				if (money > 50)
-				{
-					money -= 50;
-					dc->init("walk_1.png", "cat", visibleSize.width - visibleSize.width, visibleSize.height*0.5, GameChar::C_CAT, 15, 3, 1, 0);
-					dc->getSprite()->setScale(0.5);
-					//dc->Left();
-					dc->AnimateSprite("Sprites/cat/walk/walk_", 1, 7, 177, 177, 0.05);
-					this->setName("cat");
-					this->getChildByName("spriteNode")->addChild(dc->getSprite(), 1);
-					dc->getSprite()->setGLProgram(shaderCharEffect);
-					dc->getSprite()->setGLProgramState(state);
-					a = PhysicsBody::createBox(Size(dc->getSprite()->getContentSize().width, dc->getSprite()->getContentSize().height), PhysicsMaterial(0.1, 1.0, 0.0));
-					a->setCollisionBitmask(2);
-					a->setTag(1);
-					a->setContactTestBitmask(true);
-					dc->getSprite()->addComponent(a);
-					a->getNode()->setUserData(dc);
-					monsters.push_back(dc);
-				}
-				break;
-			case Touchables::T_SUMMONBUT2:
-				//s->getSprite()->setPosition(Vec2(300, 100));
-				//Spawn monster
-				if (money > 150)
-				{
-					money -= 150;
-					dc->init("walk_2.png", "dog", visibleSize.width - visibleSize.width, visibleSize.height*0.5, GameChar::C_DOG, 10, 5, 2, 0);
-					dc->getSprite()->setFlippedX(false);
-					dc->getSprite()->setScale(0.5);
-					dc->AnimateSprite("Sprites/dog/walk/walk_", 1, 7, 150, 173, 0.1);
-					dc->getSprite()->setGLProgram(shaderCharEffect);
-					dc->getSprite()->setGLProgramState(state);
-					this->getChildByName("spriteNode")->addChild(dc->getSprite(), 1);
-					a = PhysicsBody::createBox(Size(dc->getSprite()->getContentSize().width, dc->getSprite()->getContentSize().height), PhysicsMaterial(0.1, 1.0, 0.0));
-					a->setCollisionBitmask(2);
-					a->setTag(1);
-					a->setContactTestBitmask(true);
-					dc->getSprite()->addComponent(a);
-					a->getNode()->setUserData(dc);
-					monsters.push_back(dc);
-				}
-				break;
 			case Touchables::T_SUMMONBUT3:
 				break;
 			case Touchables::T_BACK:

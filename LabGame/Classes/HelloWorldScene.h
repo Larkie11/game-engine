@@ -19,6 +19,7 @@ private:
 	Touchables* a;
 	GameChar* b;
 	GLProgram* proPostProcess;
+	vector<string> Inventory;
 	AudioManager* audioMng;
 	RenderTexture *rendtex;
 	Sprite* rendtexSprite;
@@ -26,6 +27,8 @@ private:
 	Sprite* character1, character2;
 	Size visibleSize;
 	vector<Touchables*> touchableSprites;
+	vector<Touchables*> summonButtons;
+
 	Label* label;
 	int moveDir;
 	Label* label2;

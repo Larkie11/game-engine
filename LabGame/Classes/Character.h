@@ -18,6 +18,8 @@ public:
 		C_MAX,
 	};
 	void init(const char* sprite, const char* name, float x, float y, CharacterType type, int health, float attackTimer, int damage, float speed);
+	void init(const char* sprite, const char* name, float x, float y, std::string Tag, int health, float attackTimer, int damage, float speed);
+
 	void MoveChar(int);
 	void AnimateSprite(const char* spriteFrameName,int startFrame, int frameCount, float width, float height, float delay);
 	void SpriteAnimation(int, const char*);
@@ -50,6 +52,10 @@ public:
 	CharacterType GetType()
 	{
 		return charType;
+	}
+	std::string GetTag()
+	{
+		return tag;
 	}
 	int GetHealth()
 	{

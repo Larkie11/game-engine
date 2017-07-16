@@ -24,6 +24,7 @@ struct MonsterTypes
 		int goldNeededGame;
 		int damage;
 		float speed;
+		string attackSprite;
 	};
 
 private:
