@@ -81,8 +81,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	PlayerMonsterDatabase::getInstance()->ReadFileSize("levels/Database.txt");
 	PlayerMonsterDatabase::getInstance()->PassInData();
     // create a scene. it's an autorelease object
-    auto scene = HelloWorld::createScene();
-	auto selectlevel = SelectLevel::createScene();
+
 	auto menuscene = MenuScene::createScene();
 
     // run

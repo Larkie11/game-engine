@@ -249,7 +249,7 @@ bool MenuScene::init()
 
 	// Load sound
 	//CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/click.wav");
-	//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("audio/bgm.wav", true);
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("audio/bgm.wav", true);
 	//audioMng->playBGM("menu", 1);
 
 	return true;

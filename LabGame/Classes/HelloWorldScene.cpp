@@ -80,21 +80,21 @@ bool HelloWorld::init()
 
 	auto spriteNode = Node::create();
 	spriteNode->setName("spriteNode");
-	Inventory = { "cat","dog","zombie" };
+	Inventory = { "cat","dog","zombie" ,"cat"};
 	//Adding touchable sprites to vector, different type of sprites different vectors?
 	//Enemy 1 vector
 	//Player monsters 1 vector
 	//Touchable sprites 1 vector, etc
-	float x = 0.1;
+	float x = 0.05;
 	
 	PlayerMonsterDatabase::getInstance()->GetFromDatabase("cat")->damage;
 
 	for (int i = 0; i < Inventory.size(); i++)
 	{
 		Touchables* inventorySummon = new Touchables();
-		inventorySummon->init("Button1.png", PlayerMonsterDatabase::getInstance()->GetFromDatabase(Inventory[i])->type.c_str(), visibleSize.width * x, visibleSize.height * 0.1, PlayerMonsterDatabase::getInstance()->GetFromDatabase(Inventory[i])->type, 0.5f);
+		inventorySummon->init("Button1.png", PlayerMonsterDatabase::getInstance()->GetFromDatabase(Inventory[i])->type.c_str(), visibleSize.width * x, visibleSize.height * 0.1, PlayerMonsterDatabase::getInstance()->GetFromDatabase(Inventory[i])->type, 0.4f);
 		summonButtons.push_back(inventorySummon);
-		x += 0.2;
+		x += 0.15;
 	}
 
 	// Back button
@@ -152,6 +152,7 @@ bool HelloWorld::init()
 		string goldTemp = std::to_string(PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->goldNeededGame) + " GOLD";
 		summonButtons[i]->SetText(goldTemp, 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, summonButtons[i]->getSprite()->getContentSize().width*.3);
 	}
+	CocosDenshion::SimpleAudioEngine::getInstance()->setEffectsVolume(0.2);
 
 	auto tower = new GameChar();
 	tower->init("tower.png", "tower", 0, visibleSize.height*0.5, "tower",10, 3, 1, 0);
@@ -310,7 +311,7 @@ bool HelloWorld::init()
 	rendtexSprite->setGLProgram(proPostProcess);
 
 	//Load Sound
-	//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("audio/bgm2.wav", true);
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("audio/bgm2.wav", true);
 	//audioMng->playBGM("game", 1);
 
 	return true;
@@ -629,6 +630,17 @@ void HelloWorld::onMouseUp(Event *event)
 			PhysicsBody* body;
 			if (money > PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->goldNeededGame)
 			{
+
+				if (PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->type == "cat")
+				{
+					CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/meow.mp3");
+				}
+				if (PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->type == "dog")
+				{
+					CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/woof.mp3");
+
+				}
+
 				money -= PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->goldNeededGame;
 				string a = PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->animationSprites;
 				string temp = a;
