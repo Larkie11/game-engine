@@ -5,14 +5,20 @@
 
 using namespace cocos2d;
 
-class AudioManager 
+class AudioManager
 {
+private:
+	bool isPlaying;
 public:
 	void init();
-	void playBGM(const char*, bool);
-	void playSFX(const char*, bool);
+	void playBGM(char*, bool);
+	void playSFX(char*, bool);
+	void volUp(char*);
+	void volDwn(char*);
 	void pauseBGM();
 	void stopBGM();
+
+	float getVolume();
 
 	AudioManager();
 	~AudioManager();

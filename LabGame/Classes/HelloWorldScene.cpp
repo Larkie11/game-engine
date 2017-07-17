@@ -330,8 +330,8 @@ bool HelloWorld::init()
 	rendtexSprite->setGLProgram(proPostProcess);
 
 	//Load Sound
-	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("audio/bgm2.wav", true);
-	//audioMng->playBGM("game", 1);
+	//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("audio/bgm2.wav", true);
+	audioMng->playBGM("game", 1);
 
 	return true;
 }

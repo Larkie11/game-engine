@@ -251,7 +251,8 @@ bool MenuScene::init()
 	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("audio/bgm.wav", true);
 
 	//CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/click.wav");
-	//audioMng->playBGM("menu", 1);
+	//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("audio/bgm.wav", true);
+	audioMng->playBGM("menu", 1);
 
 	return true;
 }
@@ -288,6 +289,7 @@ void MenuScene::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
 }
 void MenuScene::onMouseMove(Event *event)
 {
+	
 	//HOVERING change sprite
 	EventMouse* e = (EventMouse*)event;
 
@@ -463,6 +465,7 @@ void MenuScene::onMouseUp(Event *event)
 				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, Instructions::createScene(), Color3B(0, 255, 255)));
 				//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(sceneManager->getButtonClickSound().c_str());
 				audioMng->playSFX("click", 0);
+				break;
 			}
 			case Touchables::T_EXIT:
 			{

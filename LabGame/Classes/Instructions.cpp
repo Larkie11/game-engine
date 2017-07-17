@@ -89,7 +89,7 @@ bool Instructions::init()
 	std::stringstream oss;
 	oss << levelunlocked;
 	//Texts for debugging
-	label = Label::createWithTTF("label test", "fonts/Marker Felt.ttf", 32);
+	/*label = Label::createWithTTF("label test", "fonts/Marker Felt.ttf", 32);
 	label->setPosition(500, 500);
 	nodeItems->addChild(label, 1);
 	label2 = Label::createWithTTF(oss.str(), "fonts/Marker Felt.ttf", 32);
@@ -100,7 +100,7 @@ bool Instructions::init()
 	nodeItems->addChild(health1, 1);
 	health2 = Label::createWithTTF("", "fonts/Marker Felt.ttf", 32);
 	health2->setPosition(400, 300);
-	nodeItems->addChild(health2, 1);
+	nodeItems->addChild(health2, 1);*/
 
 	//touchableSprites.push_back(a);
 	//touchableSprites.push_back(b);
@@ -351,9 +351,9 @@ void Instructions::onMouseUp(Event *event)
 {
 	EventMouse* e = (EventMouse*)event;
 
-	std::stringstream oss;
+	/*std::stringstream oss;
 	oss << e->getLocationInView().x;
-	label2->setString(oss.str());
+	label2->setString(oss.str());*/
 
 	//Detection for touching any touchable sprite
 
