@@ -26,7 +26,7 @@ private:
 	Size visibleSize;
 	vector<Touchables*> touchableSprites;
 	vector<Touchables*> summonButtons;
-
+	vector<GameChar*> towers;
 	Label* label;
 	int moveDir;
 	Label* label2;
@@ -45,6 +45,9 @@ private:
 	bool inContact = false;
 	float spawnTimer;
 	float dt;
+	Node* spriteNode;
+	Label* tower1Health;
+	Label* tower2Health;
 
 public:
     static cocos2d::Scene* createScene();
@@ -55,6 +58,7 @@ public:
 	virtual void onMouseUp(Event *event);
 	virtual void onMouseMove(Event *event);
 	virtual bool onInContact(PhysicsContact& contact);
+	virtual bool onContactEnd(PhysicsContact& contact);
 
 	virtual bool onContactBegin(PhysicsContact& contact);
     virtual bool init();

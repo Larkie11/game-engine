@@ -94,7 +94,7 @@ bool SelectLevel::init()
 	touchableSprites.push_back(shop);
 
 	//Test multi generating locked levels
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		Touchables* c = new Touchables();
 		c->init("Button1.png", "mainSprite", visibleSize.width * widthX, visibleSize.height * heightY, Touchables::T_LEVEL3, 0.45);

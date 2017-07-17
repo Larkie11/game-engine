@@ -14,7 +14,7 @@ struct MonsterTypes
 	{
 		Touchables a;
 		string type;
-		int price;
+		float health;
 		string tooltip;
 		string animationSprites;
 		int spriteCount;

@@ -69,6 +69,12 @@ bool Shop::init()
 	backgroundSprite->setScaleY((visibleSize.height / backgroundSprite->getContentSize().height) * 1);
 	//nodeItems->addChild(backgroundSprite, -1);
 
+
+	playerGold = Label::createWithTTF("", "fonts/Marker Felt.ttf", 35);
+	playerGold->setPosition(885, 670);
+	playerGold->setPositionZ(10);
+	nodeItems->addChild(playerGold, 1);
+
 	auto spriteNode = Node::create();
 	spriteNode->setName("spriteNode");
 	auto scrollNode = Node::create();
@@ -102,6 +108,13 @@ bool Shop::init()
 	float widthX = 0.5;
 	float heightY = 100;
 	scrollView->setContentSize(Size(visibleSize.width,visibleSize.height));
+
+
+	CCUserDefault *def = CCUserDefault::sharedUserDefault();
+	def->setIntegerForKey("currency", 2000);
+	currency = def->getIntegerForKey("currency");
+	def->flush();
+
 
 	scrollView->setInnerContainerSize(Size(310 * shopItems.size(),1200));
 	for (int i = 0; i < shopItems.size(); i++)
@@ -208,13 +221,10 @@ void Shop::update(float deltaTime)
 		auto cam = Camera::getDefaultCamera();
 		cam->setPosition(Vec2(cam->getPosition().x + moveDir, cam->getPosition().y));
 	}
+	std::stringstream oss;
+	oss << "Gold: " << currency;
+	playerGold->setString(oss.str());
 
-	for (auto* s : touchableSprites)
-	{
-		s->Update(deltaTime);
-		if (s->GetImg("purchased") != nullptr)
-			int a;
-	}
 }
 void Shop::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
 {
@@ -319,7 +329,7 @@ void Shop::onMouseUp(Event *event)
 {
 	//Detection for touching any touchable sprite
 	EventMouse* e = (EventMouse*)event;
-
+	
 	for (auto* s : touchableSprites)
 	{
 		std::stringstream oss;
@@ -339,10 +349,16 @@ void Shop::onMouseUp(Event *event)
 			{
 				if (!s->GetDisabled())
 				{
-					CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/purchase.wav");
-					s->SetDisabled(true);
-					s->SetImage("ducttape.png", "purchased", 1);
-					s->StopAnimation();
+					int a = PlayerMonsterDatabase::getInstance()->GetFromDatabase(s->getSprite()->getName())->goldNeededShop;
+					if (currency >= a)
+					{
+						currency -= a;
+
+						CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/purchase.wav");
+						s->SetDisabled(true);
+						s->SetImage("ducttape.png", "purchased", 1);
+						s->StopAnimation();
+					}
 				}
 				else
 				{

@@ -248,8 +248,9 @@ bool MenuScene::init()
 	//this->addChild(rendtexSprite, 2);
 
 	// Load sound
-	//CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/click.wav");
 	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("audio/bgm.wav", true);
+
+	//CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/click.wav");
 	//audioMng->playBGM("menu", 1);
 
 	return true;
@@ -287,7 +288,6 @@ void MenuScene::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
 }
 void MenuScene::onMouseMove(Event *event)
 {
-	audioMng->playBGM("menu", 1);
 	//HOVERING change sprite
 	EventMouse* e = (EventMouse*)event;
 

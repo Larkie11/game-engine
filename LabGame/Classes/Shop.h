@@ -25,6 +25,8 @@ private:
 	Vec2 mLoc;
 	Vec2 mLocInc;
 	Touchables* a;
+	int currency;
+	Label* playerGold;
 	GameChar* b;
 	GLProgram* proPostProcess;
 	RenderTexture *rendtex;

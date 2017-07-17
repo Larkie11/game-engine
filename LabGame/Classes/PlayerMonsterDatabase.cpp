@@ -29,15 +29,15 @@ void PlayerMonsterDatabase::PassInData()
 	std::stringstream oss;
 	string temp;
 	myfile.clear();
+	std::getline(myfile, temp);
 	for (int i = 0; i < number_of_lines; i++)
 	{
 		std::getline(myfile, temp, ',');
 		MonsterTypes* newMonster = new MonsterTypes;
 		newMonster->type = temp;
 		std::getline(myfile, temp, ',');
-		newMonster->price = stoi(temp);
+		newMonster->health = stoi(temp);
 		std::getline(myfile, temp, ',');
-		std::replace(temp.begin(), temp.end(), '`', '\n');
 		newMonster->tooltip = temp;
 		std::getline(myfile, temp, ',');
 		newMonster->animationSprites = temp;

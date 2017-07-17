@@ -63,7 +63,7 @@ bool HelloWorld::init()
 	float towerWidth = towerSprite->getContentSize().width;
 
 	nodeItems->addChild(backgroundSprite, -1);
-	int loop = std::ceil(visibleSize.width / width);
+	int loop = std::ceil(visibleSize.width / width) +3;
 
 	sprite->setPosition(0, 0);
 
@@ -71,14 +71,14 @@ bool HelloWorld::init()
 	{
 		auto sprite2 = Sprite::create("ZigzagGrass_Mud_Round.png");
 		sprite2->setAnchorPoint(Vec2::ZERO);
-		sprite2->setPosition(i * width, (visibleSize.height / 2) - sprite2->getContentSize().height);
+		sprite2->setPosition((i * width)+(-sprite2->getContentSize().width), (visibleSize.height / 2) - sprite2->getContentSize().height);
 		auto physicsBody2 = PhysicsBody::createBox(Size(sprite2->getContentSize().width, sprite2->getContentSize().height), PhysicsMaterial(0.1, 1.0, 0.0));
 		physicsBody2->setDynamic(false);
 		sprite2->addComponent(physicsBody2);
 		nodeItems->addChild(sprite2, 1);
 	}
 
-	auto spriteNode = Node::create();
+	spriteNode = Node::create();
 	spriteNode->setName("spriteNode");
 	Inventory = { "cat","dog","zombie" ,"cat"};
 	//Adding touchable sprites to vector, different type of sprites different vectors?
@@ -92,7 +92,8 @@ bool HelloWorld::init()
 	for (int i = 0; i < Inventory.size(); i++)
 	{
 		Touchables* inventorySummon = new Touchables();
-		inventorySummon->init("Button1.png", PlayerMonsterDatabase::getInstance()->GetFromDatabase(Inventory[i])->type.c_str(), visibleSize.width * x, visibleSize.height * 0.1, PlayerMonsterDatabase::getInstance()->GetFromDatabase(Inventory[i])->type, 0.4f);
+		inventorySummon->init("Button1.png", PlayerMonsterDatabase::getInstance()->GetFromDatabase(Inventory[i])->type.c_str(), visibleSize.width * x,
+			visibleSize.height * 0.1, PlayerMonsterDatabase::getInstance()->GetFromDatabase(Inventory[i])->type, 0.4f);
 		summonButtons.push_back(inventorySummon);
 		x += 0.15;
 	}
@@ -125,6 +126,18 @@ bool HelloWorld::init()
 	gold->setPositionZ(10);
 	nodeItems->addChild(gold, 1);
 
+
+	tower1Health = Label::createWithTTF("", "fonts/Marker Felt.ttf", 35);
+	tower1Health->setPosition(visibleSize.width * 0.2, visibleSize.height * 0.3);
+	tower1Health->setPositionZ(10);
+	nodeItems->addChild(tower1Health, 1);
+
+
+	tower2Health = Label::createWithTTF("", "fonts/Marker Felt.ttf", 35);
+	tower2Health->setPosition(visibleSize.width * 0.7, visibleSize.height * 0.3);
+	tower2Health->setPositionZ(10);
+	nodeItems->addChild(tower2Health, 1);
+
 	incomeSpeed = Label::createWithTTF("", "fonts/Marker Felt.ttf", 35);
 	incomeSpeed->setPosition(700, 670);
 	incomeSpeed->setPositionZ(10);
@@ -155,7 +168,7 @@ bool HelloWorld::init()
 	CocosDenshion::SimpleAudioEngine::getInstance()->setEffectsVolume(0.2);
 
 	auto tower = new GameChar();
-	tower->init("tower.png", "tower", 0, visibleSize.height*0.5, "tower",10, 3, 1, 0);
+	tower->init("tower.png", "tower1", 0, visibleSize.height*0.5, "tower1",1000, 3, 1, 0);
 	tower->getSprite()->setPositionX(0-(tower->getSprite()->getContentSize().width*0.38));
 	tower->getSprite()->setScale(1);
 	auto physicsBodyTower1 = PhysicsBody::createBox(Size(tower->getSprite()->getContentSize().width, tower->getSprite()->getContentSize().height), PhysicsMaterial(0.1, 1.0, 0.0));
@@ -165,13 +178,17 @@ bool HelloWorld::init()
 	tower->getSprite()->addComponent(physicsBodyTower1);
 
 	auto tower2 = new GameChar();
-	tower2->init("tower.png", "tower", visibleSize.width, visibleSize.height*0.5, "tower", 10, 3, 1, 0);
+	tower2->init("tower.png", "tower2", visibleSize.width, visibleSize.height*0.5, "tower2",  1000, 3, 1, 0);
 	tower2->getSprite()->setPositionX(visibleSize.width - tower->getSprite()->getContentSize().width * 0.6);
 	tower2->getSprite()->setScale(1);
 	auto physicsBodyTower2 = PhysicsBody::createBox(Size(tower2->getSprite()->getContentSize().width, tower2->getSprite()->getContentSize().height), PhysicsMaterial(0.1, 1.0, 0.0));
 	physicsBodyTower2->setDynamic(false);
 	physicsBodyTower2->setCollisionBitmask(0x0000001);
 	physicsBodyTower2->setContactTestBitmask(true);
+
+
+	towers.push_back(tower);
+	towers.push_back(tower2);
 
 	tower2->getSprite()->addComponent(physicsBodyTower2);
 	spriteNode->addChild(tower->getSprite(), 2);
@@ -220,6 +237,8 @@ bool HelloWorld::init()
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(HelloWorld::onContactBegin, this);
 	contactListener->onContactPostSolve = CC_CALLBACK_1(HelloWorld::onInContact, this);
+	contactListener->onContactSeparate = CC_CALLBACK_1(HelloWorld::onContactEnd, this);
+
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 
 	auto listener1 = EventListenerTouchOneByOne::create();
@@ -316,13 +335,57 @@ bool HelloWorld::init()
 
 	return true;
 }
+bool HelloWorld::onContactEnd(PhysicsContact& contact)
+{
+	auto bodyA = contact.getShapeA()->getBody();
+	auto bodyB = contact.getShapeB()->getBody();
+	GameChar* a;
+	GameChar* b;
+
+	if (bodyA->getOwner()->getUserData() != NULL)
+		a = (GameChar*)bodyA->getOwner()->getUserData();
+	if (bodyB->getOwner()->getUserData() != NULL)
+		b = (GameChar*)bodyB->getOwner()->getUserData();
+
+	if (bodyA->getCollisionBitmask() != bodyB->getCollisionBitmask())
+	{
+		if (a->GetTag() != "tower1" && a->GetTag() != "tower2")
+		{
+			a->getSprite()->getPhysicsBody()->setVelocity(Vec2(PlayerMonsterDatabase::getInstance()->GetFromDatabase(a->GetTag())->speed, 0));
+
+			if (!a->move)
+			{
+				a->AnimateSprite(PlayerMonsterDatabase::getInstance()->GetFromDatabase(a->GetTag())->animationSprites.c_str(), 1, PlayerMonsterDatabase::getInstance()->GetFromDatabase(a->GetTag())->spriteCount, PlayerMonsterDatabase::getInstance()->GetFromDatabase(a->GetTag())->spriteX, PlayerMonsterDatabase::getInstance()->GetFromDatabase(a->GetTag())->spriteY, 0.1);
+				a->move = true;
+			}
+		}
+		if (b->GetTag() != "tower1" && b->GetTag() != "tower2")
+		{
+			b->getSprite()->getPhysicsBody()->setVelocity(Vec2(PlayerMonsterDatabase::getInstance()->GetFromDatabase(b->GetTag())->speed, 0));
+
+			if (!b->move)
+			{
+				b->AnimateSprite(PlayerMonsterDatabase::getInstance()->GetFromDatabase(b->GetTag())->animationSprites.c_str(), 1, PlayerMonsterDatabase::getInstance()->GetFromDatabase(b->GetTag())->spriteCount, PlayerMonsterDatabase::getInstance()->GetFromDatabase(b->GetTag())->spriteX, PlayerMonsterDatabase::getInstance()->GetFromDatabase(b->GetTag())->spriteY, 0.1);
+				b->move = true;
+			}
+		}
+		return true;
+	}
+	else
+		return false;
+}
 bool HelloWorld::onInContact(PhysicsContact& contact)
 {
 	auto bodyA = contact.getShapeA()->getBody();
 	auto bodyB = contact.getShapeB()->getBody();
-	GameChar* a = (GameChar*)bodyA->getOwner()->getUserData();
-	GameChar* b = (GameChar*)bodyB->getOwner()->getUserData();
-	
+
+	GameChar* a;
+	GameChar* b;
+
+	if (bodyA->getOwner()->getUserData() != NULL)
+		a = (GameChar*)bodyA->getOwner()->getUserData();
+	if (bodyB->getOwner()->getUserData() != NULL)
+		b = (GameChar*)bodyB->getOwner()->getUserData();
 	if (bodyA->getCollisionBitmask() != bodyB->getCollisionBitmask())
 	{
 		a->ReduceTimer(dt);
@@ -342,8 +405,6 @@ bool HelloWorld::onInContact(PhysicsContact& contact)
 	}
 	else
 	{
-		a->move = true;
-		b->move = true;
 		return false;
 	}
 }
@@ -360,13 +421,25 @@ bool HelloWorld::onContactBegin(PhysicsContact& contact)
 
 	if (bodyA->getCollisionBitmask() != bodyB->getCollisionBitmask())
 	{
+		if (a->GetTag() != "tower1" && a->GetTag() != "tower2")
+		{
+			if(a->move)
+			a->AnimateSprite(PlayerMonsterDatabase::getInstance()->GetFromDatabase(a->GetTag())->attackSprite.c_str(), 1, PlayerMonsterDatabase::getInstance()->GetFromDatabase(a->GetTag())->spriteCount, PlayerMonsterDatabase::getInstance()->GetFromDatabase(a->GetTag())->spriteX, PlayerMonsterDatabase::getInstance()->GetFromDatabase(a->GetTag())->spriteY, 0.1);
+			a->getSprite()->getPhysicsBody()->setVelocity(Vec2(0, 0));
+			a->getSprite()->getPhysicsBody()->setAngularDamping(1);
+			a->getSprite()->getPhysicsBody()->setMoment(0);
 
-		
-		if (a->GetTag() != "tower")
-		a->AnimateSprite(PlayerMonsterDatabase::getInstance()->GetFromDatabase(a->GetTag())->attackSprite.c_str(), 1, PlayerMonsterDatabase::getInstance()->GetFromDatabase(a->GetTag())->spriteCount, PlayerMonsterDatabase::getInstance()->GetFromDatabase(a->GetTag())->spriteX, PlayerMonsterDatabase::getInstance()->GetFromDatabase(a->GetTag())->spriteY, 0.1);
-		if (b->GetTag() != "tower")
-		b->AnimateSprite(PlayerMonsterDatabase::getInstance()->GetFromDatabase(b->GetTag())->attackSprite.c_str(), 1, PlayerMonsterDatabase::getInstance()->GetFromDatabase(b->GetTag())->spriteCount, PlayerMonsterDatabase::getInstance()->GetFromDatabase(b->GetTag())->spriteX, PlayerMonsterDatabase::getInstance()->GetFromDatabase(b->GetTag())->spriteY, 0.1);
-
+			a->move = false;
+		}
+		if (b->GetTag() != "tower1" && b->GetTag() != "tower2")
+		{
+			if(b->move)
+			b->AnimateSprite(PlayerMonsterDatabase::getInstance()->GetFromDatabase(b->GetTag())->attackSprite.c_str(), 1, PlayerMonsterDatabase::getInstance()->GetFromDatabase(b->GetTag())->spriteCount, PlayerMonsterDatabase::getInstance()->GetFromDatabase(b->GetTag())->spriteX, PlayerMonsterDatabase::getInstance()->GetFromDatabase(b->GetTag())->spriteY, 0.1);
+			b->getSprite()->getPhysicsBody()->setVelocity(Vec2(0, 0));
+			b->getSprite()->getPhysicsBody()->setAngularDamping(1);
+			b->getSprite()->getPhysicsBody()->setMoment(0);
+			b->move = false;
+		}
 		return true;
 	}
 	else
@@ -382,6 +455,25 @@ void HelloWorld::update(float deltaTime)
 	oss << "Gold: " << money;
 	gold->setString(oss.str());
 
+
+	oss.str("");
+
+	for (auto* s : towers)
+	{
+		oss.str("");
+
+		if (s->GetTag() == "tower1")
+		{
+			oss << "Own Tower: " << s->GetHealth();
+			tower1Health->setString(oss.str());
+		}
+
+		if (s->GetTag() == "tower2")
+		{
+			oss << "Enemy Tower: " << s->GetHealth();
+			tower2Health->setString(oss.str());
+		}
+	}
 	oss.str("");
 
 	oss << "Gold Speed: " << speedOfIncome;
@@ -398,21 +490,27 @@ void HelloWorld::update(float deltaTime)
 	else if (spawnTimer <= 0)
 	{
 		GameChar* enemy = new GameChar();
-		enemy->init("walk_2.png", "dog", visibleSize.width - 50, visibleSize.height*0.5, "enemydog", 10, 5, 2, 0);
-		enemy->getSprite()->setFlippedX(true);
-		enemy->getSprite()->setScale(0.5);
-		enemy->AnimateSprite("Sprites/dog/walk/walk_", 1, 7, 150, 173, 0.1);
-		enemy->getSprite()->setGLProgram(shaderCharEffect);
-		enemy->getSprite()->setGLProgramState(state);
-		this->getChildByName("spriteNode")->addChild(enemy->getSprite(), 1);
-		auto a = PhysicsBody::createBox(Size(enemy->getSprite()->getContentSize().width, enemy->getSprite()->getContentSize().height), PhysicsMaterial(0.1, 1.0, 0.0));
-		a->setCollisionBitmask(00000001);
-		a->setTag(1);
-		a->setContactTestBitmask(true);
-		enemy->getSprite()->addComponent(a);
-		a->getNode()->setUserData(enemy);
-		monsters.push_back(enemy);
-		spawnTimer = 2;
+		string testingEnemy = "enemydog";
+		if (PlayerMonsterDatabase::getInstance()->checkIfExist(testingEnemy) != false)
+		{
+			enemy->init("walk_2.png", "dog", visibleSize.width + 50, visibleSize.height*0.5, "enemydog", PlayerMonsterDatabase::getInstance()->GetFromDatabase(testingEnemy)->health, 1, PlayerMonsterDatabase::getInstance()->GetFromDatabase(testingEnemy)->damage, PlayerMonsterDatabase::getInstance()->GetFromDatabase(testingEnemy)->speed);
+			enemy->getSprite()->setFlippedX(true);
+			enemy->getSprite()->setScale(0.5);
+			enemy->AnimateSprite(PlayerMonsterDatabase::getInstance()->GetFromDatabase(testingEnemy)->animationSprites.c_str(), 1, 7, 150, 173, 0.1);
+			enemy->getSprite()->setGLProgram(shaderCharEffect);
+			enemy->getSprite()->setGLProgramState(state);
+			this->getChildByName("spriteNode")->addChild(enemy->getSprite(), 1);
+			auto a = PhysicsBody::createBox(Size(enemy->getSprite()->getContentSize().width, enemy->getSprite()->getContentSize().height), PhysicsMaterial(0.1, 1.0, 0.0));
+			a->setCollisionBitmask(00000001);
+			a->setTag(1);
+			a->setRotationEnable(false);
+			a->setVelocity(Vec2(enemy->GetSpeed(), 0));
+			a->setContactTestBitmask(true);
+			enemy->getSprite()->addComponent(a);
+			a->getNode()->setUserData(enemy);
+			monsters.push_back(enemy);
+			spawnTimer = 7;
+		}
 	}
 
 	//Movement of monsters/player monsters
@@ -423,15 +521,14 @@ void HelloWorld::update(float deltaTime)
 
 		if (s != nullptr)
 		{
-			if (s->move && s->getSprite() != nullptr && s->GetHealth() >= 0)
+			/*if (s->move && s->getSprite() != nullptr && s->GetHealth() >= 0)
 			{
 				PhysicsBody* curPhysics = s->getSprite()->getPhysicsBody();
 				curPhysics->setRotationEnable(false);
-
 				PlayerMonsterDatabase::getInstance()->GetFromDatabase(s->GetTag())->speed;
-
 				curPhysics->setVelocity(Vec2(PlayerMonsterDatabase::getInstance()->GetFromDatabase(s->GetTag())->speed, 0.f));
-			}
+			}*/
+
 			if (s->GetHealth() <= 0)
 			{
 				s->RemoveSprite();
@@ -638,14 +735,13 @@ void HelloWorld::onMouseUp(Event *event)
 				if (PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->type == "dog")
 				{
 					CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/woof.mp3");
-
 				}
 
 				money -= PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->goldNeededGame;
 				string a = PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->animationSprites;
 				string temp = a;
 				temp.append("1.png");
-				dc->init(temp.c_str(), PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->type.c_str(), visibleSize.width - visibleSize.width, visibleSize.height*0.5, PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->type.c_str(), 15, 3, 1, 0);
+				dc->init(temp.c_str(), PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->type.c_str(), visibleSize.width - visibleSize.width - 100, visibleSize.height*0.5, PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->type.c_str(), PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->health,1, PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->damage, PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->speed);
 				dc->getSprite()->setScale(0.5);
 				dc->AnimateSprite(a.c_str(), 1, PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->getSprite()->getName())->spriteCount, PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->getSprite()->getName())->spriteX, PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->getSprite()->getName())->spriteY, 0.1);
 				this->setName(PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->type);
@@ -653,6 +749,8 @@ void HelloWorld::onMouseUp(Event *event)
 				body = PhysicsBody::createBox(Size(dc->getSprite()->getContentSize().width, dc->getSprite()->getContentSize().height), PhysicsMaterial(0.1, 1.0, 0.0));
 				body->setCollisionBitmask(00000002);
 				body->setTag(1);
+				body->setRotationEnable(false);
+				body->setVelocity(Vec2(dc->GetSpeed(), 0));
 				body->setContactTestBitmask(true);
 				dc->getSprite()->addComponent(body);
 				body->getNode()->setUserData(dc);
