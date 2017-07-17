@@ -4,6 +4,8 @@
 #include "cocos2d.h"
 #include "Character.h"
 #include "Touchables.h"
+#include "AudioManager.h"
+
 
 using namespace cocos2d;
 #include <vector>
@@ -18,6 +20,7 @@ private:
 	Touchables* a;
 	GameChar* b;
 	GLProgram* proPostProcess;
+	AudioManager* audioMng;
 	vector<string> Inventory;
 	RenderTexture *rendtex;
 	Sprite* rendtexSprite;
