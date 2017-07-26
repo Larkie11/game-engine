@@ -94,8 +94,16 @@ void Touchables::SetToolTip(std::string text, const char* sprite, int opacity, f
 	imgSprite->addChild(label, 3);
 	imgSprite->setVisible(false);
 }
-void Touchables::SetText(std::string text, float scale, std::string font, cocos2d::Color3B & color, float offsetx = 0, float offsety = 0)
+void Touchables::SetText(std::string text, float scale, std::string font, cocos2d::Color3B & color, float offsetx = 0, float offsety = 0, bool overwrite)
 {
+	if (overwrite == true)
+	{
+		if (mainSprite->getChildByName("label") != NULL)
+		{
+			mainSprite->removeChildByName("label");
+		}
+	}
+
 	auto label = Label::createWithTTF(text, font, 32);
 	this->color = color;
 	label->setColor(color);
@@ -106,6 +114,7 @@ void Touchables::SetText(std::string text, float scale, std::string font, cocos2
 	label->setName("label");
 	mainSprite->addChild(label, 1);
 }
+
 bool Touchables::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event)
 {
 	Vec2 posInWorldSpace = touch->getLocationInView();

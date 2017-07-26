@@ -2,6 +2,8 @@
 #include "UpgradeScreen.h"
 #include "MenuScene.h"
 #include "SimpleAudioEngine.h"
+#include "PlayerMonsterDatabase.h"
+#include "Player.h"
 #include <string>
 using std::string;
 #include <iostream>
@@ -85,23 +87,39 @@ bool UpgradeScreen::init()
 
 	// Upgrade Tower Button
 	Touchables* upgTower = new Touchables();
-	upgTower->init("purple_button1.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.06, Touchables::T_UPGTOWER, 1.2);
+	upgTower->init("red_button1.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.6, Touchables::T_UPGTOWER, 1.2);
 	upgTower->SetText("UPGRADE TOWER", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0);
+	upgTower->GetLabel("label")->disableEffect();
 
-	// Upgrade Monster 1 Button
+	// Upgrade Monsters Button
 	Touchables* upgUnit1 = new Touchables();
 	upgUnit1->init("red_button1.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.5, Touchables::T_UPGUNIT1, 1.2);
 	upgUnit1->SetText("UPGRADE CAT", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0);
+	upgUnit1->GetLabel("label")->disableEffect();
+
+	Touchables* upgUnit2 = new Touchables();
+	upgUnit2->init("red_button1.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.4, Touchables::T_UPGUNIT2, 1.2);
+	upgUnit2->SetText("UPGRADE DOG", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0);
+	upgUnit2->GetLabel("label")->disableEffect();
+
+	Touchables* upgUnit3 = new Touchables();
+	upgUnit3->init("red_button1.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.3, Touchables::T_UPGUNIT3, 1.2);
+	upgUnit3->SetText("UPGRADE ZOMBIE", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0);
+	upgUnit3->GetLabel("label")->disableEffect();
 
 	// Title Panel
 	Touchables* upgScreen = new Touchables();
-	upgScreen->init("purple_button1.png", "mainSprite", visibleSize.width * 0.1, visibleSize.height * 0.05, Touchables::T_UPGSCREEN, 1.2);
+	upgScreen->init("purple_button1.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.8, Touchables::T_UPGSCREEN, 1.2);
 	upgScreen->SetText("UPGRADES", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0);
 	upgScreen->GetLabel("label")->disableEffect();
 
 	// push back sprite vector
 	touchableSprites.push_back(back);
 	touchableSprites.push_back(upgTower);
+	touchableSprites.push_back(upgUnit1);
+	touchableSprites.push_back(upgUnit2);
+	//touchableSprites.push_back(upgUnit3);
+	touchableSprites.push_back(upgScreen);
 
 	std::stringstream oss;
 	oss << levelunlocked;
@@ -321,14 +339,17 @@ void UpgradeScreen::onMouseMove(Event *event)
 			{
 			case Touchables::T_BACK:
 				break;
-
 			case Touchables::T_UPGTOWER:
-				s->getSprite()->setTexture("purple_button2.png");
+				s->getSprite()->setTexture("red_button2.png");
 				break;
-
-			case Touchables::T_LEVEL2:
+			case Touchables::T_UPGUNIT1:
+				s->getSprite()->setTexture("red_button2.png");
 				break;
-			case Touchables::T_LEVEL3:
+			case Touchables::T_UPGUNIT2:
+				s->getSprite()->setTexture("red_button2.png");
+				break;
+			case Touchables::T_UPGUNIT3:
+				s->getSprite()->setTexture("red_button2.png");
 				break;
 			}
 
@@ -353,13 +374,16 @@ void UpgradeScreen::onMouseMove(Event *event)
 				break;
 
 			case Touchables::T_UPGTOWER:
-				s->getSprite()->setTexture("purple_button1.png");
+				s->getSprite()->setTexture("red_button1.png");
 				break;
-
-			case Touchables::T_LEVEL2:
+			case Touchables::T_UPGUNIT1:
+				s->getSprite()->setTexture("red_button1.png");
 				break;
-
-			case Touchables::T_LEVEL3:
+			case Touchables::T_UPGUNIT2:
+				s->getSprite()->setTexture("red_button1.png");
+				break;
+			case Touchables::T_UPGUNIT3:
+				s->getSprite()->setTexture("red_button1.png");
 				break;
 			}
 		}
@@ -391,6 +415,51 @@ void UpgradeScreen::onMouseUp(Event *event)
 				case Touchables::T_BACK:
 					CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, SelectLevel::createScene(), Color3B(0, 255, 255)));
 					CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");
+					Player::getInstance()->PassOutData();
+					break;
+				case Touchables::T_UPGTOWER:
+					if (Player::getInstance()->getUpgrades(Player::PlayerCharacter::C_TOWER) < 2)
+					{
+						Player::getInstance()->setUpgrades((Player::PlayerCharacter::C_TOWER), Player::getInstance()->getUpgrades(Player::PlayerCharacter::C_TOWER) + 1);
+					}
+					if (Player::getInstance()->getUpgrades(Player::PlayerCharacter::C_TOWER) >= 2)
+					{
+						s->SetText("MAXIUM UPGRADE", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0, true);
+					}
+					/*else if (x == 1)
+					{
+						Player::getInstance()->setUpgrades((Player::PlayerCharacter::C_TOWER), x++);
+					}*/
+					break;
+				case Touchables::T_UPGUNIT1:
+					if (Player::getInstance()->getUpgrades(Player::PlayerCharacter::C_CAT) <= 2)
+					{
+						Player::getInstance()->setUpgrades((Player::PlayerCharacter::C_CAT), Player::getInstance()->getUpgrades(Player::PlayerCharacter::C_CAT) + 1);
+					}
+					else
+					{
+						s->SetText("MAXIUM UPGRADE", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0, true);
+					}
+					break;
+				case Touchables::T_UPGUNIT2:
+					if (Player::getInstance()->getUpgrades(Player::PlayerCharacter::C_DOG) <= 2)
+					{
+						Player::getInstance()->setUpgrades((Player::PlayerCharacter::C_DOG), Player::getInstance()->getUpgrades(Player::PlayerCharacter::C_DOG) + 1);
+					}
+					else
+					{
+						s->SetText("MAXIUM UPGRADE", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0, true);
+					}
+					break;
+				case Touchables::T_UPGUNIT3:
+					if (Player::getInstance()->getUpgrades(Player::PlayerCharacter::C_ZOMBIE) <= 2)
+					{
+						Player::getInstance()->setUpgrades((Player::PlayerCharacter::C_ZOMBIE), Player::getInstance()->getUpgrades(Player::PlayerCharacter::C_ZOMBIE) + 1);
+					}
+					else
+					{
+						s->SetText("MAXIUM UPGRADE", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0, true);
+					}
 					break;
 				}
 			}

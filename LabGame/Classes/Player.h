@@ -10,6 +10,7 @@ class Player
 public:
 	enum PlayerCharacter
 	{
+		C_TOWER,
 		C_DOG,
 		C_CAT,
 		C_ZOMBIE,
@@ -20,6 +21,15 @@ public:
 	void setUpgrades(PlayerCharacter,int);
 	int getUpgrades(PlayerCharacter);
 	
+	static Player* getInstance()
+	{
+		if (dataInstance == 0)
+		{
+			dataInstance = new Player();
+		}
+		return dataInstance;
+	}
+
 	void PassInData();
 	void PassOutData();
 
@@ -29,6 +39,6 @@ public:
 private:
 	int progress;
 	int upgLevel[(int)PlayerCharacter::C_MAX] = { 0 };
-	string fileName;
-	
+	std::string fileName;
+	static Player* dataInstance;
 };

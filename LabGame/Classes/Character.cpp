@@ -1,6 +1,7 @@
 #include "Character.h"
 #include "HelloWorldScene.h"
 #include "AnimationManager.h"
+#include "Player.h"
 
 void GameChar::init(const char* sprite, const char* name, float x, float y, GameChar::CharacterType type, int health, float attackTimer, int damage,float speed)
 {
@@ -17,6 +18,15 @@ void GameChar::init(const char* sprite, const char* name, float x, float y, Game
 	this->defaultAttackTimer = attackTimer;
 	this->attackTimer = defaultAttackTimer;
 	this->damage = damage;
+	switch (type)
+	{
+	case GameChar::CharacterType::C_CAT:
+		this->damage = this->damage + (Player::getInstance()->getUpgrades(Player::PlayerCharacter::C_CAT) * 20);
+		break;
+	case GameChar::CharacterType::C_DOG:
+		this->damage = this->damage + (Player::getInstance()->getUpgrades(Player::PlayerCharacter::C_DOG) * 20);
+		break;
+	}
 	mainSprite->setScale(10);
 	mLoc.set(.5f, .5f);
 	mLocInc.set(.005f, .01f);
@@ -44,6 +54,10 @@ void GameChar::init(const char* sprite, const char* name, float x, float y, std:
 	this->defaultAttackTimer = attackTimer;
 	this->attackTimer = defaultAttackTimer;
 	this->damage = damage;
+	if (tag == "tower1")
+	{
+		this->health = this->health + (Player::getInstance()->getUpgrades(Player::PlayerCharacter::C_TOWER) * 500);
+	}
 	mainSprite->setScale(10);
 	mLoc.set(.5f, .5f);
 	mLocInc.set(.005f, .01f);

@@ -28,6 +28,7 @@ public:
 		T_UPGTOWER,
 		T_UPGUNIT1,
 		T_UPGUNIT2,
+		T_UPGUNIT3,
 		T_SHOP1,
 		T_SHOP2,
 		T_SHOP3,
@@ -43,7 +44,8 @@ public:
 	void SetDisabled(bool disabled);
 	virtual bool checkMouseDown(Event *event);
 	virtual bool onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event);
-	void SetText(std::string text, float scale, std::string font, cocos2d::Color3B & color, float offsetx, float offsety);
+	void SetText(std::string text, float scale, std::string font, cocos2d::Color3B & color, float offsetx, float offsety, bool overwrite = false);
+
 	void SetToolTip(std::string text, const char* sprite, int opacity, float offsetx, float offsety, float scale);
 	void SetImage(const char* sprite, const char* name, float scale);
 	bool GetDisabled();

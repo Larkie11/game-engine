@@ -4,6 +4,8 @@
 #include <iostream>
 #include <fstream>
 
+Player* Player::dataInstance = 0;
+
 void Player::setProgress(int completedLvl)
 {
 	progress = completedLvl;
@@ -63,7 +65,7 @@ void Player::PassOutData()
 
 Player::Player()
 {
-	fileName = "playerProgress.txt";
+	fileName = "levels/playerProgress.txt";
 	progress = 0;
 	//upgLevel[(int)PlayerCharacter::C_MAX] = ;
 }

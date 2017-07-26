@@ -466,12 +466,24 @@ void HelloWorld::update(float deltaTime)
 		{
 			oss << "Own Tower: " << s->GetHealth();
 			tower1Health->setString(oss.str());
+			if (s->GetHealth() <= 0)
+			{
+				// Disable monsters
+				// Show lose button
+				// Return to level select
+			}
 		}
 
 		if (s->GetTag() == "tower2")
 		{
 			oss << "Enemy Tower: " << s->GetHealth();
 			tower2Health->setString(oss.str());
+			if (s->GetHealth() <= 0)
+			{
+				// Disable monsters
+				// Show win button
+				// Return to level select
+			}
 		}
 	}
 	oss.str("");

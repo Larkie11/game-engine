@@ -3,6 +3,7 @@
 #include "MenuScene.h"
 #include "SceneManager.h"
 #include "PlayerMonsterDatabase.h"
+#include "Player.h"
 
 #include "SelectLevelScene.h"
 
@@ -80,6 +81,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	SceneManager::getInstance()->ReadFile("levels/Level2.txt");
 	PlayerMonsterDatabase::getInstance()->ReadFileSize("levels/Database.csv");
 	PlayerMonsterDatabase::getInstance()->PassInData();
+	Player::getInstance()->PassInData();
     // create a scene. it's an autorelease object
 
 	auto menuscene = MenuScene::createScene();
