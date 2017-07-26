@@ -20,7 +20,7 @@ private:
 	Touchables* a;
 	GameChar* b;
 	GLProgram* proPostProcess;
-	AudioManager* audioMng;
+	AudioManager* audioMng; 
 	vector<string> Inventory;
 	RenderTexture *rendtex;
 	Sprite* rendtexSprite;

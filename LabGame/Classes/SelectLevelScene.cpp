@@ -1,5 +1,6 @@
 #include "HelloWorldScene.h"
 #include "SelectLevelScene.h"
+#include "UpgradeScreen.h"
 #include "MenuScene.h"
 #include "SimpleAudioEngine.h"
 #include <string>
@@ -89,9 +90,17 @@ bool SelectLevel::init()
 	shop->SetText("LEVEL SELECTION", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0);
 	shop->GetLabel("label")->disableEffect();
 
+	// Upgrade Screen Button 
+	Touchables* upgScreen = new Touchables();
+	upgScreen->init("purple_button1.png", "mainSprite", visibleSize.width * 0.1, visibleSize.height * 0.05, Touchables::T_UPGSCREEN, 1.2);
+	//upgScreen->SetDisabled(true);
+	upgScreen->SetText("UPGRADES", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0);
+	//upgScreen->GetLabel("label")->disableEffect();
+
 	// push back sprite vector
 	touchableSprites.push_back(back);
 	touchableSprites.push_back(shop);
+	touchableSprites.push_back(upgScreen);
 
 	//Test multi generating locked levels
 	for (int i = 0; i < 3; i++)
@@ -193,7 +202,7 @@ void SelectLevel::onMouseMove(Event *event)
 
 			if (!s->GetDisabled())
 			{
-				if (s->GetType() != Touchables::T_BACK)
+				if ((s->GetType() != Touchables::T_BACK)&&(s->GetType() != Touchables::T_UPGSCREEN))
 					s->getSprite()->setTexture("Button2.png");
 				if (s->GetLabel("label") != nullptr)
 				{
@@ -222,7 +231,7 @@ void SelectLevel::onMouseMove(Event *event)
 
 			if (!s->GetDisabled())
 			{
-				if (s->GetType() != Touchables::T_BACK)
+				if ((s->GetType() != Touchables::T_BACK) && (s->GetType() != Touchables::T_UPGSCREEN))
 					s->getSprite()->setTexture("Button1.png");
 				if (s->GetLabel("label") != nullptr)
 				{
@@ -273,11 +282,15 @@ void SelectLevel::onMouseUp(Event *event)
 					break;
 				case Touchables::T_LEVEL2:
 					CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, HelloWorld::createScene(), Color3B(0, 255, 255)));
-
+					audioMng->playSFX("click", 0);
 					break;
 				case Touchables::T_LEVEL3:
 					CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, HelloWorld::createScene(), Color3B(0, 255, 255)));
-
+					audioMng->playSFX("click", 0);
+					break;
+				case Touchables::T_UPGSCREEN:
+					CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, UpgradeScreen::createScene(), Color3B(0, 255, 255)));
+					audioMng->playSFX("click", 0);
 					break;
 				case Touchables::T_BACK:
 					CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, MenuScene::createScene(), Color3B(0, 255, 255)));

@@ -152,12 +152,14 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\Instructions.cpp" />
     <ClCompile Include="..\Classes\InventoryManager.cpp" />
     <ClCompile Include="..\Classes\MenuScene.cpp" />
+    <ClCompile Include="..\Classes\Player.cpp" />
     <ClCompile Include="..\Classes\PlayerMonsterDatabase.cpp" />
     <ClCompile Include="..\Classes\SceneManager.cpp" />
     <ClCompile Include="..\Classes\SelectLevelScene.cpp" />
     <ClCompile Include="..\Classes\Settings.cpp" />
     <ClCompile Include="..\Classes\Shop.cpp" />
     <ClCompile Include="..\Classes\Touchables.cpp" />
+    <ClCompile Include="..\Classes\UpgradeScreen.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -169,12 +171,14 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Instructions.h" />
     <ClInclude Include="..\Classes\InventoryManager.h" />
     <ClInclude Include="..\Classes\MenuScene.h" />
+    <ClInclude Include="..\Classes\Player.h" />
     <ClInclude Include="..\Classes\PlayerMonsterDatabase.h" />
     <ClInclude Include="..\Classes\SceneManager.h" />
     <ClInclude Include="..\Classes\SelectLevelScene.h" />
     <ClInclude Include="..\Classes\Settings.h" />
     <ClInclude Include="..\Classes\Shop.h" />
     <ClInclude Include="..\Classes\Touchables.h" />
+    <ClInclude Include="..\Classes\UpgradeScreen.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>

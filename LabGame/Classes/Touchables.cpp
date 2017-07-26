@@ -149,7 +149,7 @@ void Touchables::Update(float delta)
 {
 	if (disabled && GetLabel("label") != nullptr)
 	{
-		if (GetLabel("label")->getString() != "Locked" && t != Touchables::T_SHOP)
+		if (GetLabel("label")->getString() != "Locked" && t != Touchables::T_SHOP && t != Touchables::T_UPGSCREEN)
 		{
 			GetLabel("label")->setString("Locked");
 			GetLabel("label")->setColor(ccc3(0, 0, 0));
