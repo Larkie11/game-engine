@@ -7,6 +7,7 @@
 #include "SimpleAudioEngine.h"
 #include "PlayerMonsterDatabase.h"
 #include "SceneManager.h"
+#include "Player.h"
 #include <string>
 using std::string;
 #include <iostream>
@@ -470,6 +471,7 @@ void MenuScene::onMouseUp(Event *event)
 			case Touchables::T_EXIT:
 			{
 				audioMng->playSFX("click", 0);
+				Player::getInstance()->PassOutData();
 				Director::getInstance()->end();
 				break;
 			}

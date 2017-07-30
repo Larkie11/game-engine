@@ -432,31 +432,31 @@ void UpgradeScreen::onMouseUp(Event *event)
 					}*/
 					break;
 				case Touchables::T_UPGUNIT1:
-					if (Player::getInstance()->getUpgrades(Player::PlayerCharacter::C_CAT) <= 2)
+					if (Player::getInstance()->getUpgrades(Player::PlayerCharacter::C_CAT) < 2)
 					{
 						Player::getInstance()->setUpgrades((Player::PlayerCharacter::C_CAT), Player::getInstance()->getUpgrades(Player::PlayerCharacter::C_CAT) + 1);
 					}
-					else
+					if (Player::getInstance()->getUpgrades(Player::PlayerCharacter::C_CAT) >= 2)
 					{
 						s->SetText("MAXIUM UPGRADE", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0, true);
 					}
 					break;
 				case Touchables::T_UPGUNIT2:
-					if (Player::getInstance()->getUpgrades(Player::PlayerCharacter::C_DOG) <= 2)
+					if (Player::getInstance()->getUpgrades(Player::PlayerCharacter::C_DOG) < 2)
 					{
 						Player::getInstance()->setUpgrades((Player::PlayerCharacter::C_DOG), Player::getInstance()->getUpgrades(Player::PlayerCharacter::C_DOG) + 1);
 					}
-					else
+					if (Player::getInstance()->getUpgrades(Player::PlayerCharacter::C_DOG) >= 2)
 					{
 						s->SetText("MAXIUM UPGRADE", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0, true);
 					}
 					break;
 				case Touchables::T_UPGUNIT3:
-					if (Player::getInstance()->getUpgrades(Player::PlayerCharacter::C_ZOMBIE) <= 2)
+					if (Player::getInstance()->getUpgrades(Player::PlayerCharacter::C_ZOMBIE) < 2)
 					{
 						Player::getInstance()->setUpgrades((Player::PlayerCharacter::C_ZOMBIE), Player::getInstance()->getUpgrades(Player::PlayerCharacter::C_ZOMBIE) + 1);
 					}
-					else
+					if (Player::getInstance()->getUpgrades(Player::PlayerCharacter::C_ZOMBIE) >= 2)
 					{
 						s->SetText("MAXIUM UPGRADE", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0, true);
 					}
