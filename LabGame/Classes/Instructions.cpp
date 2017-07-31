@@ -1,11 +1,10 @@
 #include "HelloWorldScene.h"
 #include "Instructions.h"
 #include "MenuScene.h"
-#include "SimpleAudioEngine.h"
 #include <string>
 using std::string;
 #include <iostream>
-#include <sstream>>
+#include <sstream>
 
 
 USING_NS_CC;
@@ -243,8 +242,6 @@ bool Instructions::init()
 	//}
 
 	// Load sound
-	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/click.wav");
-
 	return true;
 }
 void Instructions::update(float deltaTime)
@@ -383,7 +380,6 @@ void Instructions::onMouseUp(Event *event)
 					break;
 				case Touchables::T_BACK:
 					CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, MenuScene::createScene(), Color3B(0, 255, 255)));
-					CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");
 					break;
 				}
 			}

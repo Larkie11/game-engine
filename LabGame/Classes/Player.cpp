@@ -34,11 +34,11 @@ void Player::PassInData()
 	//myfile.clear();
 	//std::getline(myfile, temp);
 	std::getline(myfile, temp, ',');
-	progress = stoi(temp);
+	progress = atoi(temp.c_str());
 	for (int i = 0; i < PlayerCharacter::C_MAX; i++)
 	{
 		std::getline(myfile, temp, ',');
-		upgLevel[i] = stoi(temp);
+		upgLevel[i] = atoi(temp.c_str());
 	}
 		
 }

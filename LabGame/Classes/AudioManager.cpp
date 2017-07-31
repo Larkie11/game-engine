@@ -47,11 +47,11 @@ void AudioManager::playSFX(char *audioFile, bool repeat)
 	std::string sfxVar = "click";
 	if (audioFile == sfxVar)
 	{
-		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav", repeat);
+		//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav", repeat);
 	}
 	else
 	{
-		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav", repeat);
+		//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav", repeat);
 	}
 }
 

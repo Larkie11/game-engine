@@ -39,6 +39,7 @@ public:
 	virtual void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* e);
 	virtual void onKeyReleased(EventKeyboard::KeyCode keyCode, Event* e);
 	virtual void onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event);
+	bool onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event);
 
 	virtual void onMouseUp(Event *event);
 	virtual void onMouseMove(Event *event);

@@ -43,9 +43,8 @@ public:
 	void Update(float);
 	void SetDisabled(bool disabled);
 	virtual bool checkMouseDown(Event *event);
-	virtual bool onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event);
-	void SetText(std::string text, float scale, std::string font, cocos2d::Color3B & color, float offsetx, float offsety, bool overwrite = false);
-
+	bool onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event);
+	void SetText(std::string text, float scale, const char* font, cocos2d::Color3B color, float offsetx, float offsety);
 	void SetToolTip(std::string text, const char* sprite, int opacity, float offsetx, float offsety, float scale);
 	void SetImage(const char* sprite, const char* name, float scale);
 	bool GetDisabled();

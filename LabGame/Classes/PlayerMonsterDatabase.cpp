@@ -10,10 +10,18 @@ PlayerMonsterDatabase* PlayerMonsterDatabase::dataInstance = 0;
 void PlayerMonsterDatabase::ReadFileSize(string fileName)
 {
 	std::string line;
-	std::ifstream myfile(fileName);
+	ssize_t fileSize = 0;
+	unsigned char * fileContents = NULL;
+	string thisLine, result, fullPath, contents;
+
+	fullPath = FileUtils::getInstance()->fullPathForFilename(fileName.c_str());
+	fileContents = FileUtils::getInstance()->getFileData(fullPath.c_str(),"r",&fileSize);
+	contents.append((char *)fileContents);
+
+	std::istringstream fileStringStream(contents);
 	string op;
 	std::stringstream oss;
-	while (std::getline(myfile, line))
+	while (std::getline(fileStringStream, line))
 	{
 		++number_of_lines;
 		oss.clear();
@@ -21,42 +29,46 @@ void PlayerMonsterDatabase::ReadFileSize(string fileName)
 	}
 	this->fileName = fileName;
 	std::cout << "Number of lines in text file: " << number_of_lines << op;
-	myfile.close();
 }
 void PlayerMonsterDatabase::PassInData()
 {
-	std::ifstream myfile(fileName);
-	std::stringstream oss;
-	string temp;
-	myfile.clear();
-	std::getline(myfile, temp);
+	std::string line;
+	ssize_t fileSize = 0;
+	unsigned char * fileContents = NULL;
+	string thisLine, result, fullPath, contents;
+
+	fullPath = FileUtils::getInstance()->fullPathForFilename(fileName.c_str());
+	fileContents = FileUtils::getInstance()->getFileData(fullPath.c_str(), "r", &fileSize);
+	contents.append((char *)fileContents);
+
+	std::istringstream fileStringStream(contents);
 	for (int i = 0; i < number_of_lines; i++)
 	{
-		std::getline(myfile, temp, ',');
+		std::getline(fileStringStream, line, ',');
 		MonsterTypes* newMonster = new MonsterTypes;
-		newMonster->type = temp;
-		std::getline(myfile, temp, ',');
-		newMonster->health = stoi(temp);
-		std::getline(myfile, temp, ',');
-		newMonster->tooltip = temp;
-		std::getline(myfile, temp, ',');
-		newMonster->animationSprites = temp;
-		std::getline(myfile, temp, ',');
-		newMonster->attackSprite = temp;
-		std::getline(myfile, temp, ',');
-		newMonster->spriteCount = stoi(temp);
-		std::getline(myfile, temp, ',');
-		newMonster->spriteX = stoi(temp);
-		std::getline(myfile, temp, ',');
-		newMonster->spriteY = stoi(temp);
-		std::getline(myfile, temp, ',');
-		newMonster->goldNeededShop = stoi(temp);
-		std::getline(myfile, temp, ',');
-		newMonster->goldNeededGame = stoi(temp);
-		std::getline(myfile, temp, ',');
-		newMonster->damage = stoi(temp);
-		std::getline(myfile, temp);
-		newMonster->speed = stoi(temp);
+		newMonster->type = line;
+		std::getline(fileStringStream, line, ',');
+		newMonster->health = atoi(line.c_str());
+		std::getline(fileStringStream, line, ',');
+		newMonster->tooltip = line;
+		std::getline(fileStringStream, line, ',');
+		newMonster->animationSprites = line;
+		std::getline(fileStringStream, line, ',');
+		newMonster->attackSprite = line;
+		std::getline(fileStringStream, line, ',');
+		newMonster->spriteCount = atoi(line.c_str());
+		std::getline(fileStringStream, line, ',');
+		newMonster->spriteX = atoi(line.c_str());
+		std::getline(fileStringStream, line, ',');
+		newMonster->spriteY = atoi(line.c_str());
+		std::getline(fileStringStream, line, ',');
+		newMonster->goldNeededShop = atoi(line.c_str());
+		std::getline(fileStringStream, line, ',');
+		newMonster->goldNeededGame = atoi(line.c_str());
+		std::getline(fileStringStream, line, ',');
+		newMonster->damage = atoi(line.c_str());
+		std::getline(fileStringStream, line);
+		newMonster->speed = atoi(line.c_str());
 		monsterDatabase.push_back(newMonster);
 	}
 }

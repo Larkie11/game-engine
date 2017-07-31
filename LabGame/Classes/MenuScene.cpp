@@ -1,10 +1,9 @@
 #include "MenuScene.h"
 #include "Shop.h"
 #include "Settings.h"
-#include "Instructions.h"
-#include "HelloWorldScene.h"
-#include "SelectLevelScene.h"
 #include "SimpleAudioEngine.h"
+#include "Instructions.h"
+#include "SelectLevelScene.h"
 #include "PlayerMonsterDatabase.h"
 #include "SceneManager.h"
 #include "Player.h"
@@ -40,20 +39,20 @@ bool MenuScene::init()
 	{
 		return false;
 	}
-
+	this->setTouchEnabled(true);
 	// Read file
 	//SceneManager::getInstance()->ReadFile("levels/Level2.txt");
 
 	touchableSprites.clear();
 
-	visibleSize = Director::getInstance()->getVisibleSize();
+	visibleSize = Director::getInstance()->getWinSizeInPixels();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	Size playingSize = Size(visibleSize.width, visibleSize.height - (visibleSize.height / 8));
 	auto nodeItems = Node::create();
 	nodeItems->setName("nodeItems");
-	
+
 	// Background
-	backgroundSprite = Sprite::create(SceneManager::getInstance()->getBackground().c_str());
+	backgroundSprite = Sprite::create("backgrounds/3.png");
 	backgroundSprite->setAnchorPoint(Vec2::ZERO);
 	backgroundSprite->setContentSize(playingSize);
 	backgroundSprite->setScaleX((visibleSize.width / backgroundSprite->getContentSize().width) * 1);
@@ -71,25 +70,25 @@ bool MenuScene::init()
 
 	// Start game button
 	Touchables* start = new Touchables();
-	start->init("yellow_button1.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.6, Touchables::T_STARTGAME,1.2);
+	start->init("yellow_button1.png", "mainSprite", visibleSize.width * 0.5, visibleSize.height * 0.6, Touchables::T_STARTGAME, 1.2);
 	start->getSprite()->setScale(1.2);
 
 	// Shop button
 	Touchables* shop = new Touchables();
-	shop->init("red_button1.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.5, Touchables::T_SHOP, 1.2);
+	shop->init("red_button1.png", "mainSprite", visibleSize.width * 0.5, visibleSize.height * 0.5, Touchables::T_SHOP, 1.2);
 
 	// Setting button
 	Touchables* settings = new Touchables();
-	settings->init("green_button1.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.4, Touchables::T_SETTINGS, 1.2);
+	settings->init("green_button1.png", "mainSprite", visibleSize.width * 0.5, visibleSize.height * 0.4, Touchables::T_SETTINGS, 1.2);
 
 	// Instructions Button
 	Touchables* instructions = new Touchables();
-	instructions->init("purple_button1.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.3, Touchables::T_INSTRUCTIONS, 1.2);
+	instructions->init("purple_button1.png", "mainSprite", visibleSize.width * 0.5, visibleSize.height * 0.3, Touchables::T_INSTRUCTIONS, 1.2);
 
 	// Exit button
 	Touchables* exit = new Touchables();
-	exit->init("blue_button1.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.2, Touchables::T_EXIT, 1.2);
-	
+	exit->init("blue_button1.png", "mainSprite", visibleSize.width * 0.5, visibleSize.height * 0.2, Touchables::T_EXIT, 1.2);
+
 	// push back sprite vector
 	touchableSprites.push_back(start);
 	touchableSprites.push_back(shop);
@@ -116,21 +115,24 @@ bool MenuScene::init()
 	{
 		spriteNode->addChild(s->getSprite(), 1);
 	}
-
+	label = Label::createWithTTF("HI", "fonts/Marker Felt.ttf", 32);
+	label->setString("HI");
+	label->setPosition(visibleSize.width * 0.35, visibleSize.height * 0.2);
+	spriteNode->addChild(label,2);
 	// Text on button
-	start->SetText("START GAME", 1, SceneManager::getInstance()->getFont().c_str(), ccc3(255, 255, 255), 0, 0);
+	start->SetText("START GAME", 1, "fonts/Marker Felt.ttf", ccc3(255, 255, 255), 0.f, 0.f);
 	start->GetLabel("label")->disableEffect();
 
-	shop->SetText("SHOP", 1, SceneManager::getInstance()->getFont().c_str(), ccc3(255, 255, 255), 0, 0);
+	shop->SetText("SHOP", 1, "fonts/Marker Felt.ttf", ccc3(255, 255, 255), 0.f, 0.f);
 	shop->GetLabel("label")->disableEffect();
 
-	settings->SetText("SETTINGS", 1, SceneManager::getInstance()->getFont().c_str(), ccc3(255, 255, 255), 0, 0);
+	settings->SetText("SETTINGS", 1, "fonts/Marker Felt.ttf", ccc3(255, 255, 255), 0.f, 0.f);
 	settings->GetLabel("label")->disableEffect();
 
-	instructions->SetText("INSTRUCTIONS", 1, SceneManager::getInstance()->getFont().c_str(), ccc3(255, 255, 255), 0, 0);
+	instructions->SetText("INSTRUCTIONS", 1, "fonts/Marker Felt.ttf", ccc3(255, 255, 255), 0.f, 0.f);
 	instructions->GetLabel("label")->disableEffect();
 
-	exit->SetText("EXIT", 1, SceneManager::getInstance()->getFont().c_str(), ccc3(255, 255, 255), 0, 0);
+	exit->SetText("EXIT", 1, "fonts/Marker Felt.ttf", ccc3(255, 255, 255), 0.f, 0.f);
 	exit->GetLabel("label")->disableEffect();
 
 	auto moveEvent = MoveBy::create(1, Vec2(200, 0));  // Move to 200 pixels in 1 second
@@ -143,6 +145,15 @@ bool MenuScene::init()
 	auto delay = DelayTime::create(5.0f);
 	auto delaySequence = Sequence::create(delay, delay->clone(), nullptr);
 	auto sequence = Sequence::create(moveEvent, moveEvent->reverse(), delaySequence, nullptr); //Store all the events, end with nullptr for all sequence
+
+	bool a = false;
+	auto listener1 = EventListenerTouchOneByOne::create();
+	a = listener1->isEnabled();
+	listener1->setSwallowTouches(true);
+	listener1->onTouchBegan = CC_CALLBACK_2(MenuScene::onTouchBegan, this);
+	listener1->onTouchMoved = CC_CALLBACK_2(MenuScene::onTouchMove, this);
+	listener1->onTouchEnded = CC_CALLBACK_2(MenuScene::onTouchEnd, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, this);
 
 	auto listener = EventListenerKeyboard::create();
 
@@ -159,8 +170,7 @@ bool MenuScene::init()
 	_mouseListener->onMouseMove = CC_CALLBACK_1(MenuScene::onMouseMove, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
 
-	auto listener1 = EventListenerTouchOneByOne::create();
-	listener1->onTouchEnded = CC_CALLBACK_2(MenuScene::onTouchEnded, this);
+
 
 	this->scheduleUpdate();
 	/*
@@ -250,10 +260,10 @@ bool MenuScene::init()
 
 	// Load sound
 	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("audio/bgm.wav", true);
+	//AudioEngine::play2d("audio/bgm.wav", true);
 
-	//CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/click.wav");
-	//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("audio/bgm.wav", true);
-	audioMng->playBGM("menu", 1);
+
+	//audioMng->playBGM("menu", 1);
 
 	return true;
 }
@@ -278,13 +288,221 @@ void MenuScene::update(float deltaTime)
 		s->Update(deltaTime);
 	}
 }
-void MenuScene::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
+void MenuScene::onTouchMove(cocos2d::Touch *touch, cocos2d::Event *event)
 {
+	touch->getLocation();
+	label->setString("TOUCH MOVE" + cocos2d::StringUtils::toString(touch->getLocationInView().x));
+}
+bool MenuScene::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event)
+{
+	touch->getLocation();
+	label->setString(cocos2d::StringUtils::toString(touch->getLocationInView().x));
 	for (auto* s : touchableSprites)
 	{
+		// change
 		if (s->onTouchBegan(touch, event))
 		{
+			switch (s->GetType())
+			{
+			case Touchables::T_STARTGAME:
+			{
+				s->getSprite()->setTexture("yellow_button2.png");
+				if (s->GetLabel("label") != nullptr)
+				{
+					s->GetLabel("label")->setColor(ccc3(245, 245, 245));
+				}
+				break;
+			}
+			case Touchables::T_SHOP:
+			{
+				s->getSprite()->setTexture("red_button2.png");
+				if (s->GetLabel("label") != nullptr)
+				{
+					s->GetLabel("label")->setColor(ccc3(245, 245, 245));
+				}
+				break;
+			}
+			case Touchables::T_SETTINGS:
+			{
+				s->getSprite()->setTexture("green_button2.png");
+				if (s->GetLabel("label") != nullptr)
+				{
+					s->GetLabel("label")->setColor(ccc3(245, 245, 245));
+				}
+				break;
+			}
+			case Touchables::T_INSTRUCTIONS:
+			{
+				s->getSprite()->setTexture("purple_button2.png");
+				if (s->GetLabel("label") != nullptr)
+				{
+					s->GetLabel("label")->setColor(ccc3(245, 245, 245));
+				}
+				break;
+			}
+			case Touchables::T_EXIT:
+			{
+				s->getSprite()->setTexture("blue_button2.png");
+				if (s->GetLabel("label") != nullptr)
+				{
+					s->GetLabel("label")->setColor(ccc3(245, 245, 245));
+				}
+				break;
+			}
+			}
+		}
+		else
+		{
+			switch (s->GetType())
+			{
+			case Touchables::T_STARTGAME:
+			{
+				s->getSprite()->setTexture("yellow_button1.png");
+				if (s->GetLabel("label") != nullptr)
+				{
+					s->GetLabel("label")->setColor(ccc3(255, 255, 255));
+				}
+				break;
+			}
+			case Touchables::T_SHOP:
+			{
+				s->getSprite()->setTexture("red_button1.png");
+				if (s->GetLabel("label") != nullptr)
+				{
+					s->GetLabel("label")->setColor(ccc3(255, 255, 255));
+				}
+				break;
+			}
+			case Touchables::T_SETTINGS:
+			{
+				s->getSprite()->setTexture("green_button1.png");
+				if (s->GetLabel("label") != nullptr)
+				{
+					s->GetLabel("label")->setColor(ccc3(255, 255, 255));
+				}
+				break;
+			}
+			case Touchables::T_INSTRUCTIONS:
+			{
+				s->getSprite()->setTexture("purple_button1.png");
+				if (s->GetLabel("label") != nullptr)
+				{
+					s->GetLabel("label")->setColor(ccc3(255, 255, 255));
+				}
+				break;
+			}
+			case Touchables::T_EXIT:
+			{
+				s->getSprite()->setTexture("blue_button1.png");
+				if (s->GetLabel("label") != nullptr)
+				{
+					s->GetLabel("label")->setColor(ccc3(255, 255, 255));
+				}
+				break;
+			}
+			}
+		}
+	}
+	return true;
+}
+void MenuScene::onTouchEnd(cocos2d::Touch *touch, cocos2d::Event *event)
+{
+	touch->getLocation();
+	auto sprite2 = Sprite::create("Blue_Front1.png");
+	sprite2->setPosition(touch->getLocationInView());
+	this->addChild(sprite2);
+	label->setString("AAA" + cocos2d::StringUtils::toString(touch->getLocationInView().x));
 
+	for (auto* s : touchableSprites)
+	{
+		std::stringstream oss;
+		if (s->onTouchBegan(touch,event))
+		{
+			switch (s->GetType())
+			{
+				s->getSprite()->setTexture("yellow_button2.png");
+
+			case Touchables::T_STARTGAME:
+			{
+				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, SelectLevel::createScene(), Color3B(0, 255, 255)));
+				//AudioEngine::play2d("audio/click.wav", false);
+				break;
+			}
+			case Touchables::T_SHOP:
+			{
+				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, Shop::createScene(), Color3B(0, 255, 255)));
+				//AudioEngine::play2d("audio/click.wav", false);
+				break;
+			}
+			case Touchables::T_SETTINGS:
+			{
+				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, Settings::createScene(), Color3B(0, 255, 255)));
+				//AudioEngine::play2d("audio/click.wav", false);
+				break;
+			}
+			case Touchables::T_INSTRUCTIONS:
+			{
+				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, Instructions::createScene(), Color3B(0, 255, 255)));
+				//AudioEngine::play2d("audio/click.wav", false);
+			}
+			case Touchables::T_EXIT:
+			{
+				//AudioEngine::play2d("audio/click.wav", false);
+				Director::getInstance()->end();
+				break;
+			}
+			}
+		}
+		else
+		{
+			switch (s->GetType())
+			{
+			case Touchables::T_STARTGAME:
+			{
+				s->getSprite()->setTexture("yellow_button1.png");
+				if (s->GetLabel("label") != nullptr)
+				{
+					s->GetLabel("label")->setColor(ccc3(255, 255, 255));
+				}
+				break;
+			}
+			case Touchables::T_SHOP:
+			{
+				s->getSprite()->setTexture("red_button1.png");
+				if (s->GetLabel("label") != nullptr)
+				{
+					s->GetLabel("label")->setColor(ccc3(255, 255, 255));
+				}
+				break;
+			}
+			case Touchables::T_SETTINGS:
+			{
+				s->getSprite()->setTexture("green_button1.png");
+				if (s->GetLabel("label") != nullptr)
+				{
+					s->GetLabel("label")->setColor(ccc3(255, 255, 255));
+				}
+				break;
+			}
+			case Touchables::T_INSTRUCTIONS:
+			{
+				s->getSprite()->setTexture("purple_button1.png");
+				if (s->GetLabel("label") != nullptr)
+				{
+					s->GetLabel("label")->setColor(ccc3(255, 255, 255));
+				}
+				break;
+			}
+			case Touchables::T_EXIT:
+			{
+				s->getSprite()->setTexture("blue_button1.png");
+				if (s->GetLabel("label") != nullptr)
+				{
+					s->GetLabel("label")->setColor(ccc3(255, 255, 255));
+				}
+				break;
+			}
+			}
 		}
 	}
 }
@@ -428,7 +646,7 @@ void MenuScene::onMouseUp(Event *event)
 {
 	//Detection for touching any touchable sprite
 	EventMouse* e = (EventMouse*)event;
-
+	//label->setString(cocos2d::StringUtils::toString(e->getLocation().x));
 	for (auto* s : touchableSprites)
 	{
 		std::stringstream oss;
@@ -439,38 +657,32 @@ void MenuScene::onMouseUp(Event *event)
 			case Touchables::T_STARTGAME:
 			{
 				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, SelectLevel::createScene(), Color3B(0, 255, 255)));
-				//CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/click.wav");
-				//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(sceneManager->getButtonClickSound().c_str());
-				//CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic(true);
-				audioMng->playSFX("click", 0);
+				//AudioEngine::play2d("audio/click.wav", false);
 				break;
 			}
 			case Touchables::T_SHOP:
 			{
 				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, Shop::createScene(), Color3B(0, 255, 255)));
-				//CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/click.wav");
-				//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(sceneManager->getButtonClickSound().c_str());
-				audioMng->playSFX("click", 0);
+				//AudioEngine::play2d("audio/click.wav", false);
 				break;
 			}
 			case Touchables::T_SETTINGS:
 			{
 				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, Settings::createScene(), Color3B(0, 255, 255)));
-				//CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/click.wav");
-				//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(sceneManager->getButtonClickSound().c_str());
-				audioMng->playSFX("click", 0);
+				//AudioEngine::play2d("audio/click.wav", false);
 				break;
 			}
 			case Touchables::T_INSTRUCTIONS:
 			{
 				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, Instructions::createScene(), Color3B(0, 255, 255)));
 				//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(sceneManager->getButtonClickSound().c_str());
-				audioMng->playSFX("click", 0);
+				//audioMng->playSFX("click", 0);
 				break;
 			}
 			case Touchables::T_EXIT:
 			{
-				audioMng->playSFX("click", 0);
+				//audioMng->playSFX("click", 0);
+				if(CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM != CC_PLATFORM_IOS)
 				Player::getInstance()->PassOutData();
 				Director::getInstance()->end();
 				break;
@@ -482,11 +694,11 @@ void MenuScene::onMouseUp(Event *event)
 }
 void MenuScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {
-	switch (keyCode)
-	{
-	case EventKeyboard::KeyCode::KEY_SPACE:
-		CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, HelloWorld::createScene(), Color3B(0, 255, 255)));
-	}
+	//switch (keyCode)
+	//{
+	//case EventKeyboard::KeyCode::KEY_SPACE:
+	//	//CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, HelloWorld::createScene(), Color3B(0, 255, 255)));
+	//}
 	if (keyCode == EventKeyboard::KeyCode::KEY_RIGHT_ARROW)
 	{
 		//moveDir = 10;

@@ -29,7 +29,7 @@ void GameChar::init(const char* sprite, const char* name, float x, float y, Game
 	}
 	mainSprite->setScale(10);
 	mLoc.set(.5f, .5f);
-	mLocInc.set(.005f, .01f);
+	mLocInc.set(.005f, .01f);  
 	/*charEffect = new GLProgram();
 	charEffect->initWithFilenames("Basic.vsh", "CharEffect.fsh");
 	charEffect->bindAttribLocation(GLProgram::ATTRIBUTE_NAME_POSITION, GLProgram::VERTEX_ATTRIB_POSITION);
@@ -61,13 +61,16 @@ void GameChar::init(const char* sprite, const char* name, float x, float y, std:
 	mainSprite->setScale(10);
 	mLoc.set(.5f, .5f);
 	mLocInc.set(.005f, .01f);
-	auto label = Label::createWithTTF(std::to_string(fSpeed), "fonts/Soos.ttf", 32);
-	// Position the text in the center of the sprite
-	label->setPosition(Vec2(mainSprite->getContentSize().width*.5, mainSprite->getContentSize().height) );
-	label->setScale(1);
-	label->enableShadow(Color4B(0, 0, 255, 255), Size(2, 5), 0);
-	label->setName("label");
-	mainSprite->addChild(label, 1);
+	if (name != "tower1" && name != "tower2")
+	{
+		auto label = Label::createWithTTF(cocos2d::StringUtils::toString(fSpeed), "fonts/Soos.ttf", 30);
+		// Position the text in the center of the sprite
+		label->setPosition(Vec2(mainSprite->getContentSize().width*.5, mainSprite->getContentSize().height + mainSprite->getContentSize().height * .1));
+		label->setScale(1);
+		label->enableShadow(Color4B(0, 0, 255, 255), Size(2, 5), 0);
+		label->setName("label");
+		mainSprite->addChild(label, 1);
+	}
 	/*charEffect = new GLProgram();
 	charEffect->initWithFilenames("Basic.vsh", "CharEffect.fsh");
 	charEffect->bindAttribLocation(GLProgram::ATTRIBUTE_NAME_POSITION, GLProgram::VERTEX_ATTRIB_POSITION);
@@ -228,9 +231,12 @@ void GameChar::Update(float delta)
 		auto moveEvent = MoveBy::create(0.0f, Vec2(1.0f, 0.f)*intDir * delta);
 		mainSprite->runAction(moveEvent);
 	}
-	Label *s = dynamic_cast<Label*>(mainSprite->getChildByName("label"));
-	if(mainSprite->getPhysicsBody() != nullptr)
-	s->setString("Health: " + std::to_string(health));
+	if (mainSprite->getChildByName("label") != nullptr)
+	{
+		Label *s = dynamic_cast<Label*>(mainSprite->getChildByName("label"));
+		if (mainSprite->getPhysicsBody() != nullptr && mainSprite->getName() != "tower1" && mainSprite->getName() != "tower2" && s != nullptr)
+			s->setString("Health: " + cocos2d::StringUtils::toString(health));
+	}
 	/*
 	if (mainSprite != nullptr)
 	{

@@ -1,13 +1,11 @@
 #include "HelloWorldScene.h"
 #include "SelectLevelScene.h"
 #include "MenuScene.h"
-#include "SimpleAudioEngine.h"
 #include "PlayerMonsterDatabase.h"
 #include <string>
 using std::string;
 #include <iostream>
-#include <sstream>>
-
+#include <sstream>
 
 USING_NS_CC;
 
@@ -80,7 +78,7 @@ bool HelloWorld::init()
 
 	spriteNode = Node::create();
 	spriteNode->setName("spriteNode");
-	Inventory = { "cat","dog","zombie" ,"cat"};
+	Inventory = { "cat","dog","zombie" ,"zombieb"};
 	//Adding touchable sprites to vector, different type of sprites different vectors?
 	//Enemy 1 vector
 	//Player monsters 1 vector
@@ -92,10 +90,13 @@ bool HelloWorld::init()
 	for (int i = 0; i < Inventory.size(); i++)
 	{
 		Touchables* inventorySummon = new Touchables();
-		inventorySummon->init("Button1.png", PlayerMonsterDatabase::getInstance()->GetFromDatabase(Inventory[i])->type.c_str(), visibleSize.width * x,
-			visibleSize.height * 0.1, PlayerMonsterDatabase::getInstance()->GetFromDatabase(Inventory[i])->type, 0.4f);
-		summonButtons.push_back(inventorySummon);
-		x += 0.15;
+		if (PlayerMonsterDatabase::getInstance()->checkIfExist(Inventory[i]))
+		{
+			inventorySummon->init("Button1.png", PlayerMonsterDatabase::getInstance()->GetFromDatabase(Inventory[i])->type.c_str(), visibleSize.width * x,
+				visibleSize.height * 0.1, PlayerMonsterDatabase::getInstance()->GetFromDatabase(Inventory[i])->type, 0.4f);
+			summonButtons.push_back(inventorySummon);
+			x += 0.15;
+		}
 	}
 
 	// Back button
@@ -104,7 +105,7 @@ bool HelloWorld::init()
 
 	// Gold Upgrade
 	Touchables* goldUpgrade = new Touchables();
-	goldUpgrade->init("gold.png", "mainSprite", visibleSize.width * 0.1, visibleSize.height * 0.8, Touchables::T_GOLDUPGRADE,0.3);
+	goldUpgrade->init("gold.png", "mainSprite", visibleSize.width * 0.1, visibleSize.height * 0.6, Touchables::T_GOLDUPGRADE,0.3);
 	goldUpgrade->SetToolTip("Increase gold speed", "wood.png", 200, 0, goldUpgrade->getSprite()->getContentSize().height*0.5, 1.5);
 	goldUpgrade->GetToolTipLabel()->setScale(1.5);
 
@@ -122,24 +123,26 @@ bool HelloWorld::init()
 
 	// Gold
 	gold = Label::createWithTTF("", "fonts/Marker Felt.ttf", 35);
-	gold->setPosition(885, 670);
+	gold->setPosition(visibleSize.width*0.8, visibleSize.height * 0.8);
 	gold->setPositionZ(10);
-	nodeItems->addChild(gold, 1);
+	nodeItems->addChild(gold, 2);
 
 
 	tower1Health = Label::createWithTTF("", "fonts/Marker Felt.ttf", 35);
-	tower1Health->setPosition(visibleSize.width * 0.2, visibleSize.height * 0.3);
+	tower1Health->setPosition(visibleSize.width * 0.05, visibleSize.height * 0.38);
+	tower1Health->setColor(ccc3(255, 0, 0));
 	tower1Health->setPositionZ(10);
 	nodeItems->addChild(tower1Health, 1);
 
 
 	tower2Health = Label::createWithTTF("", "fonts/Marker Felt.ttf", 35);
-	tower2Health->setPosition(visibleSize.width * 0.7, visibleSize.height * 0.3);
+	tower2Health->setPosition(visibleSize.width * 0.95, visibleSize.height * 0.38);
+	tower2Health->setColor(ccc3(255, 0, 0));
 	tower2Health->setPositionZ(10);
 	nodeItems->addChild(tower2Health, 1);
 
 	incomeSpeed = Label::createWithTTF("", "fonts/Marker Felt.ttf", 35);
-	incomeSpeed->setPosition(700, 670);
+	incomeSpeed->setPosition(visibleSize.width * 0.4, visibleSize.height * 0.8);
 	incomeSpeed->setPositionZ(10);
 	nodeItems->addChild(incomeSpeed, 1);
 
@@ -162,10 +165,9 @@ bool HelloWorld::init()
 		string temp = PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->animationSprites;
 		temp.append("1.png");
 		summonButtons[i]->SetImage(temp.c_str(), "but1", 1);
-		string goldTemp = std::to_string(PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->goldNeededGame) + " GOLD";
-		summonButtons[i]->SetText(goldTemp, 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, summonButtons[i]->getSprite()->getContentSize().width*.3);
+		string goldTemp = cocos2d::StringUtils::toString(PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->goldNeededGame) + " GOLD";
+		summonButtons[i]->SetText(cocos2d::StringUtils::toString(goldTemp), 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0.f, summonButtons[i]->getSprite()->getContentSize().width*.3f);
 	}
-	CocosDenshion::SimpleAudioEngine::getInstance()->setEffectsVolume(0.2);
 
 	auto tower = new GameChar();
 	tower->init("tower.png", "tower1", 0, visibleSize.height*0.5, "tower1",1000, 3, 1, 0);
@@ -464,7 +466,7 @@ void HelloWorld::update(float deltaTime)
 
 		if (s->GetTag() == "tower1")
 		{
-			oss << "Own Tower: " << s->GetHealth();
+			oss << " " << s->GetHealth();
 			tower1Health->setString(oss.str());
 			if (s->GetHealth() <= 0)
 			{
@@ -476,7 +478,7 @@ void HelloWorld::update(float deltaTime)
 
 		if (s->GetTag() == "tower2")
 		{
-			oss << "Enemy Tower: " << s->GetHealth();
+			oss << " " << s->GetHealth();
 			tower2Health->setString(oss.str());
 			if (s->GetHealth() <= 0)
 			{
@@ -505,10 +507,10 @@ void HelloWorld::update(float deltaTime)
 		string testingEnemy = "enemydog";
 		if (PlayerMonsterDatabase::getInstance()->checkIfExist(testingEnemy) != false)
 		{
-			enemy->init("walk_2.png", "dog", visibleSize.width + 50, visibleSize.height*0.5, "enemydog", PlayerMonsterDatabase::getInstance()->GetFromDatabase(testingEnemy)->health, 1, PlayerMonsterDatabase::getInstance()->GetFromDatabase(testingEnemy)->damage, PlayerMonsterDatabase::getInstance()->GetFromDatabase(testingEnemy)->speed);
+			enemy->init("walk_2.png", "enemydog", visibleSize.width + 50, visibleSize.height*0.5, "enemydog", PlayerMonsterDatabase::getInstance()->GetFromDatabase(testingEnemy)->health, 1, PlayerMonsterDatabase::getInstance()->GetFromDatabase(testingEnemy)->damage, PlayerMonsterDatabase::getInstance()->GetFromDatabase(testingEnemy)->speed);
 			enemy->getSprite()->setFlippedX(true);
 			enemy->getSprite()->setScale(0.5);
-			enemy->AnimateSprite(PlayerMonsterDatabase::getInstance()->GetFromDatabase(testingEnemy)->animationSprites.c_str(), 1, 7, 150, 173, 0.1);
+			enemy->AnimateSprite(PlayerMonsterDatabase::getInstance()->GetFromDatabase(testingEnemy)->animationSprites.c_str(), 1, PlayerMonsterDatabase::getInstance()->GetFromDatabase(testingEnemy)->spriteCount, PlayerMonsterDatabase::getInstance()->GetFromDatabase(testingEnemy)->spriteX, PlayerMonsterDatabase::getInstance()->GetFromDatabase(testingEnemy)->spriteY, 0.1);
 			enemy->getSprite()->setGLProgram(shaderCharEffect);
 			enemy->getSprite()->setGLProgramState(state);
 			this->getChildByName("spriteNode")->addChild(enemy->getSprite(), 1);
@@ -742,11 +744,11 @@ void HelloWorld::onMouseUp(Event *event)
 
 				if (PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->type == "cat")
 				{
-					CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/meow.mp3");
+					//AudioEngine::play2d("audio/meow.mp3",false);
 				}
 				if (PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->type == "dog")
 				{
-					CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/woof.mp3");
+					//AudioEngine::play2d("audio/woof.mp3", false);
 				}
 
 				money -= PlayerMonsterDatabase::getInstance()->GetFromDatabase(summonButtons[i]->GetTag())->goldNeededGame;
@@ -787,7 +789,7 @@ void HelloWorld::onMouseUp(Event *event)
 			case Touchables::T_BACK:
 				def->setIntegerForKey("LevelUnlockedTest", 2);
 				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, MenuScene::createScene(), Color3B(0, 0, 0)));
-				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");
+				//AudioEngine::play2d("audio/click.wav", false);
 				break;
 			case Touchables::T_GOLDUPGRADE:
 				speedOfIncome += 10;

@@ -2,13 +2,12 @@
 #include "MenuScene.h"
 #include "HelloWorldScene.h"
 #include "SelectLevelScene.h"
-#include "SimpleAudioEngine.h"
-#include "ui\/CocosGUI.h"
+#include "ui\CocosGUI.h"
 #include <string>
 using std::string;
 #include "PlayerMonsterDatabase.h"
 #include <iostream>
-#include <sstream>>
+#include <sstream>
 #include <fstream>
 USING_NS_CC;
 
@@ -39,24 +38,17 @@ bool Shop::init()
 	
 	touchableSprites.clear();
 
-	visibleSize = Director::getInstance()->getVisibleSize();
+	visibleSize = Director::getInstance()->getWinSizeInPixels();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	Size playingSize = Size(visibleSize.width, visibleSize.height - (visibleSize.height / 8));
-
-
-	ui::ScrollView * scrollManager = ui::ScrollView::create();
-	scrollManager->setDirection(ui::ScrollView::Direction::VERTICAL);
-	scrollManager->setBackGroundImage("2.png");
-	scrollManager->setBounceEnabled(true);
-	scrollManager->setAnchorPoint(Vec2::ZERO);
-	scrollManager->setPosition(Vec2(0, 50));
-	scrollManager->setContentSize(playingSize);
-	scrollManager->setInnerContainerSize(Size(1280,3000));
 
 	ui::ScrollView * scrollView = ui::ScrollView::create();
 	scrollView->setDirection(ui::ScrollView::Direction::HORIZONTAL);
 	scrollView->setBackGroundImage("2.png");
 	scrollView->setBounceEnabled(true);
+	scrollView->setContentSize(visibleSize);
+	scrollView->setInnerContainerSize(Size(3000, 3000));
+
 	scrollView->setAnchorPoint(Vec2::ZERO);
 	scrollView->setPosition(Vec2(0, 0));
 	auto nodeItems = Node::create();
@@ -84,21 +76,18 @@ bool Shop::init()
 	Touchables* shop = new Touchables();
 	shop->init("red_button1.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.8, Touchables::T_SHOP, 1.2);
 	shop->SetDisabled(true);
-	shop->SetText("SHOP", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0);
+	shop->SetText("SHOP", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0.f, 0.f);
 	shop->GetLabel("label")->disableEffect();
 	spriteNode->addChild(shop->getSprite());
 
-	ReadFileSize();
-	PassInShopItems();
+	//ReadFileSize();
+	//PassInShopItems();
 
 
 
 	//database.ReadFileSize("levels/Database.txt");
 	//database.PassInData();
-	PlayerMonsterDatabase::getInstance()->GetFromDatabase("cat")->damage;
 	
-	std::cout << PlayerMonsterDatabase::getInstance()->GetFromDatabase("cat")->damage;
-
 	//vector<PlayerMonsterDatabase::MonsterTypes*> mt - new ;
 	//mt = database.ReturnDatabase;
 	// Back button
@@ -106,17 +95,27 @@ bool Shop::init()
 	float x = 0.05;
 	bool a = false;
 	float widthX = 0.5;
-	float heightY = 100;
-	scrollView->setContentSize(Size(visibleSize.width,visibleSize.height));
+	float heightY = -100;
+	//scrollView->setContentSize(Size(visibleSize.width,visibleSize.height));
 
-
+	Inventory = { "cat","dog","zombie" ,"zombieb" };
+	for (int i = 0; i < Inventory.size(); i++)
+	{
+		ShopItems* newItem = new ShopItems;
+		if (PlayerMonsterDatabase::getInstance()->checkIfExist(Inventory[i]))
+		{
+			newItem->type = PlayerMonsterDatabase::getInstance()->GetFromDatabase(Inventory[i])->type;
+			newItem->price = PlayerMonsterDatabase::getInstance()->GetFromDatabase(Inventory[i])->goldNeededShop;
+			shopItems.push_back(newItem);
+		}
+	}
 	CCUserDefault *def = CCUserDefault::sharedUserDefault();
 	def->setIntegerForKey("currency", 2000);
 	currency = def->getIntegerForKey("currency");
 	def->flush();
 
 
-	scrollView->setInnerContainerSize(Size(310 * shopItems.size(),1200));
+	scrollView->setInnerContainerSize(Size(330 * shopItems.size(),1200));
 	for (int i = 0; i < shopItems.size(); i++)
 	{
 		/*ui::Button* button = ui::Button::create("ShopHover.png", "ShopNoHover.png");
@@ -128,7 +127,7 @@ bool Shop::init()
 			{
 				Touchables* itemsToBuy = new Touchables();
 				itemsToBuy->init("ShopHover.png", shopItems[i]->type.c_str(), scrollView->getContentSize().width * x, scrollView->getContentSize().height- heightY, Touchables::T_SHOP1, 0.3);
-				itemsToBuy->SetToolTip(PlayerMonsterDatabase::getInstance()->GetFromDatabase(shopItems[i]->type)->tooltip + '\n' + std::to_string(PlayerMonsterDatabase::getInstance()->GetFromDatabase(shopItems[i]->type)->goldNeededShop) + " gold" + '\n' + std::to_string(PlayerMonsterDatabase::getInstance()->GetFromDatabase(shopItems[i]->type)->damage) + " damage", "wood.png", 200, 0, -itemsToBuy->getSprite()->getContentSize().height, 2);
+				itemsToBuy->SetToolTip(PlayerMonsterDatabase::getInstance()->GetFromDatabase(shopItems[i]->type)->tooltip + '\n' + cocos2d::StringUtils::toString(PlayerMonsterDatabase::getInstance()->GetFromDatabase(shopItems[i]->type)->goldNeededShop) + " gold" + '\n' + cocos2d::StringUtils::toString(PlayerMonsterDatabase::getInstance()->GetFromDatabase(shopItems[i]->type)->damage) + " damage", "wood.png", 200, 0, -itemsToBuy->getSprite()->getContentSize().height, 2);
 				string firstSprite = PlayerMonsterDatabase::getInstance()->GetFromDatabase(shopItems[i]->type)->animationSprites;
 				itemsToBuy->SetImage(firstSprite.append("1.png").c_str(), shopItems[i]->type.c_str(), 3);
 				touchableSprites.push_back(itemsToBuy);
@@ -173,10 +172,6 @@ bool Shop::init()
 
 	this->scheduleUpdate();
 
-	// Load sound
-	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/click.wav");
-	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/purchase.wav");
-	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/disabled.mp3");
 
 	return true;
 }
@@ -184,34 +179,53 @@ bool Shop::init()
 void Shop::ReadFileSize()
 {
 	std::string line;
-	std::ifstream myfile("levels/Shop.txt");
+	ssize_t fileSize = 0;
+	unsigned char * fileContents = NULL;
+	string thisLine, result, fullPath, contents;
+	string fileName = "Levels/Shop.txt";
+
+	fullPath = CCFileUtils::sharedFileUtils()->fullPathForFilename(fileName.c_str());
+	fileContents = CCFileUtils::sharedFileUtils()->getFileData(fullPath.c_str(), "r", &fileSize);
+	contents.append((char *)fileContents);
+
+	std::istringstream fileStringStream(contents);
 	string op;
 	std::stringstream oss;
-	while (std::getline(myfile, line))
+	while (std::getline(fileStringStream, line))
 	{
+		//line.erase(std::remove(line.begin(), line.end(), '\r'), line.end());
 		++number_of_lines;
 		oss.clear();
 		oss << line;
+		//ShopItems* newItem = new ShopItems;
+		//newItem->type = line;
+		//shopItems.push_back(newItem);
 	}
 	std::cout << shopItems.size();
 	std::cout << "Number of lines in text file: " << number_of_lines << op;
-	myfile.close();
 }
-
 void Shop::PassInShopItems()
 {
-	std::ifstream myfile("levels/Shop.txt");
+	/*std::string line;
+	ssize_t fileSize = 0;
+	unsigned char * fileContents = NULL;
+	string thisLine, result, fullPath, contents;
+	string fileName = "Levels/Shop.txt";
+
+	fullPath = CCFileUtils::sharedFileUtils()->fullPathForFilename(fileName.c_str());
+	fileContents = CCFileUtils::sharedFileUtils()->getFileData(fullPath.c_str(), "r", &fileSize);
+	contents.append((char *)fileContents);
+
+	std::istringstream fileStringStream(contents);
+	string op;
 	std::stringstream oss;
-	string temp;
-	myfile.clear();
-	for (int i = 0; i < number_of_lines; i++)
+	while (std::getline(fileStringStream, line))
 	{
-		std::getline(myfile, temp);
 		ShopItems* newItem = new ShopItems;
-		newItem->type = temp;
+		newItem->type = line;
 		shopItems.push_back(newItem);
 		string a;
-	}
+	}*/
 }
 
 void Shop::update(float deltaTime)
@@ -340,7 +354,7 @@ void Shop::onMouseUp(Event *event)
 			case Touchables::T_BACK:
 			{
 				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, MenuScene::createScene(), Color3B(0, 0, 0)));
-				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");
+				//AudioEngine::play2d("audio/click.wav", false);
 				break;
 			}
 			case Touchables::T_SHOP1:
@@ -354,7 +368,7 @@ void Shop::onMouseUp(Event *event)
 					{
 						currency -= a;
 
-						CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/purchase.wav");
+						//AudioEngine::play2d("audio/purchase.wav", false);
 						s->SetDisabled(true);
 						s->SetImage("ducttape.png", "purchased", 1);
 						s->StopAnimation();
@@ -362,7 +376,7 @@ void Shop::onMouseUp(Event *event)
 				}
 				else
 				{
-					CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/disabled.mp3");
+					//AudioEngine::play2d("audio/disabled.wav", false);
 				}
 				break;
 			}

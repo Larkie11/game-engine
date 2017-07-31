@@ -415,6 +415,7 @@ void UpgradeScreen::onMouseUp(Event *event)
 				case Touchables::T_BACK:
 					CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, SelectLevel::createScene(), Color3B(0, 255, 255)));
 					CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");
+					if (CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM != CC_PLATFORM_IOS)
 					Player::getInstance()->PassOutData();
 					break;
 				case Touchables::T_UPGTOWER:
@@ -424,7 +425,9 @@ void UpgradeScreen::onMouseUp(Event *event)
 					}
 					if (Player::getInstance()->getUpgrades(Player::PlayerCharacter::C_TOWER) >= 2)
 					{
-						s->SetText("MAXIUM UPGRADE", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0, true);
+						s->SetText("MAXIUM UPGRADE", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0);
+						//s->SetText("MAXIUM UPGRADE", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0, true);
+
 					}
 					/*else if (x == 1)
 					{
@@ -438,7 +441,9 @@ void UpgradeScreen::onMouseUp(Event *event)
 					}
 					if (Player::getInstance()->getUpgrades(Player::PlayerCharacter::C_CAT) >= 2)
 					{
-						s->SetText("MAXIUM UPGRADE", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0, true);
+						s->SetText("MAXIUM UPGRADE", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0);
+						//s->SetText("MAXIUM UPGRADE", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0, true);
+
 					}
 					break;
 				case Touchables::T_UPGUNIT2:
@@ -448,7 +453,9 @@ void UpgradeScreen::onMouseUp(Event *event)
 					}
 					if (Player::getInstance()->getUpgrades(Player::PlayerCharacter::C_DOG) >= 2)
 					{
-						s->SetText("MAXIUM UPGRADE", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0, true);
+						s->SetText("MAXIUM UPGRADE", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0);
+						//s->SetText("MAXIUM UPGRADE", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0, true);
+
 					}
 					break;
 				case Touchables::T_UPGUNIT3:
@@ -458,7 +465,9 @@ void UpgradeScreen::onMouseUp(Event *event)
 					}
 					if (Player::getInstance()->getUpgrades(Player::PlayerCharacter::C_ZOMBIE) >= 2)
 					{
-						s->SetText("MAXIUM UPGRADE", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0, true);
+						//s->SetText("MAXIUM UPGRADE", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0, true);
+						s->SetText("MAXIUM UPGRADE", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0);
+
 					}
 					break;
 				}

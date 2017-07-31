@@ -41,8 +41,9 @@ public:
     static cocos2d::Scene* createScene();
 	virtual void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* e);
 	virtual void onKeyReleased(EventKeyboard::KeyCode keyCode, Event* e);
-	virtual void onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event);
-
+	void onTouchEnd(cocos2d::Touch *touch, cocos2d::Event *event);
+	void onTouchMove(cocos2d::Touch *touch, cocos2d::Event *event);
+	virtual bool onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event);
 	virtual void onMouseUp(Event *event);
 	virtual void onMouseMove(Event *event);
 

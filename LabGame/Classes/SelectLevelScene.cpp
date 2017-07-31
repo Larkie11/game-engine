@@ -2,7 +2,6 @@
 #include "SelectLevelScene.h"
 #include "UpgradeScreen.h"
 #include "MenuScene.h"
-#include "SimpleAudioEngine.h"
 #include <string>
 using std::string;
 #include <iostream>
@@ -35,6 +34,8 @@ bool SelectLevel::init()
 	{
 		return false;
 	}
+
+	
 	CCUserDefault *def = CCUserDefault::sharedUserDefault();
 	def->setIntegerForKey("LevelUnlockedTest",0);
 	levelunlocked= def->getIntegerForKey("LevelUnlockedTest");
@@ -60,7 +61,10 @@ bool SelectLevel::init()
 	int loop = std::ceil(visibleSize.width / width);
 
 	sprite->setPosition(0, 0);
-
+	label = Label::createWithTTF("HI", "fonts/Marker Felt.ttf", 32);
+	label->setString("HI");
+	label->setPosition(visibleSize.width * 0.35, visibleSize.height * 0.2);
+	this->addChild(label, 2);
 	auto spriteNode = Node::create();
 	spriteNode->setName("spriteNode");
 
@@ -87,7 +91,7 @@ bool SelectLevel::init()
 	Touchables* shop = new Touchables();
 	shop->init("red_button1.png", "mainSprite", visibleSize.width * 0.35, visibleSize.height * 0.8, Touchables::T_SHOP, 1.2);
 	shop->SetDisabled(true);
-	shop->SetText("LEVEL SELECTION", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0, 0);
+	shop->SetText("LEVEL SELECTION", 1, "fonts/Soos.ttf", ccc3(255, 255, 255), 0.f, 0.f);
 	shop->GetLabel("label")->disableEffect();
 
 	// Upgrade Screen Button 
@@ -116,7 +120,7 @@ bool SelectLevel::init()
 		else
 		widthX += 0.2;
 
-		c->SetText("Level 3", 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, 0);
+		c->SetText("Level 3", 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0.f, 0.f);
 		c->SetToolTip("Unlock previous levels", "wood.png", 150, 0, -c->getSprite()->getContentSize().height*1.25, 1.3);
 		c->GetToolTipLabel()->setScale(1.2);
 		c->GetToolTipLabel()->enableShadow();
@@ -130,14 +134,20 @@ bool SelectLevel::init()
 		spriteNode->addChild(s->getSprite(), 1);
 	}
 
-	a->SetText("Level 1",3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, 0);
-	b->SetText("Level 2", 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0, 0);
+	a->SetText("Level 1",3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0.f, 0.f);
+	b->SetText("Level 2", 3, "fonts/Soos.ttf", ccc3(0, 200, 255), 0.f, 0.f);
 	b->SetToolTip("Unlock previous levels", "wood.png", 150, 0, -b->getSprite()->getContentSize().height*1.25, 1.3);
 	b->GetToolTipLabel()->setScale(1.2);
 	b->GetToolTipLabel()->enableShadow();
 	if(levelunlocked < 2)
 	b->SetDisabled(true);
-
+	this->setTouchEnabled(true);
+	auto listener1 = EventListenerTouchOneByOne::create();
+	listener1->setSwallowTouches(true);
+	listener1->onTouchBegan = CC_CALLBACK_2(SelectLevel::onTouchBegan, this);
+	listener1->onTouchMoved = CC_CALLBACK_2(SelectLevel::onTouchMove, this);
+	listener1->onTouchEnded = CC_CALLBACK_2(SelectLevel::onTouchEnd, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, this);
 
 	auto listener = EventListenerKeyboard::create();
 
@@ -153,9 +163,6 @@ bool SelectLevel::init()
 	_mouseListener->onMouseUp = CC_CALLBACK_1(SelectLevel::onMouseUp, this);
 	_mouseListener->onMouseMove = CC_CALLBACK_1(SelectLevel::onMouseMove, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
-
-	auto listener1 = EventListenerTouchOneByOne::create();
-	listener1->onTouchEnded = CC_CALLBACK_2(SelectLevel::onTouchEnded, this);
 
 	this->scheduleUpdate();
 
@@ -175,16 +182,6 @@ void SelectLevel::update(float deltaTime)
 	for (auto* s : touchableSprites)
 	{
 		s->Update(deltaTime);
-	}
-}
-void SelectLevel::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
-{
-	for (auto* s : touchableSprites)
-	{
-		if (s->onTouchBegan(touch, event))
-		{
-
-		}
 	}
 }
 void SelectLevel::onMouseMove(Event *event)
@@ -277,7 +274,7 @@ void SelectLevel::onMouseUp(Event *event)
 				case Touchables::T_LEVEL1:
 					CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, HelloWorld::createScene(), Color3B(0, 0, 0)));
 					//CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic(true);
-					audioMng->playSFX("click", 0);
+					//audioMng->playSFX("click", 0);
 					//audioMng->stopBGM();
 					break;
 				case Touchables::T_LEVEL2:
@@ -295,7 +292,7 @@ void SelectLevel::onMouseUp(Event *event)
 				case Touchables::T_BACK:
 					CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, MenuScene::createScene(), Color3B(0, 255, 255)));
 					//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");
-					audioMng->playSFX("click", 0);
+					//audioMng->playSFX("click", 0);
 					break;
 				}
 			}
@@ -325,6 +322,87 @@ void SelectLevel::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 void SelectLevel::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
 {
 	moveDir = 0;
+}
+void SelectLevel::onTouchEnd(cocos2d::Touch * touch, cocos2d::Event * event)
+{
+	label->setString("END" + cocos2d::StringUtils::toString(touch->getLocationInView().x));
+	for (auto* s : touchableSprites)
+	{
+		std::stringstream oss;
+
+		if (!s->GetDisabled())
+		{
+			//Checking if point is within sprite's box, and the tag of sprite
+			if (s->onTouchBegan(touch, event))
+			{
+				switch (s->GetType())
+				{
+				case Touchables::T_LEVEL1:
+					CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, HelloWorld::createScene(), Color3B(0, 0, 0)));
+					//CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic(true);
+					//audioMng->playSFX("click", 0);
+					//audioMng->stopBGM();
+					break;
+				case Touchables::T_LEVEL2:
+					CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, HelloWorld::createScene(), Color3B(0, 255, 255)));
+
+					break;
+				case Touchables::T_LEVEL3:
+					CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, HelloWorld::createScene(), Color3B(0, 255, 255)));
+
+					break;
+				case Touchables::T_BACK:
+					CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, MenuScene::createScene(), Color3B(0, 255, 255)));
+					//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");
+					//audioMng->playSFX("click", 0);
+					break;
+				}
+			}
+		}
+	}
+}
+void SelectLevel::onTouchMove(cocos2d::Touch * touch, cocos2d::Event * event)
+{
+	label->setString("MOVE" + cocos2d::StringUtils::toString(touch->getLocationInView().x));
+
+}
+bool SelectLevel::onTouchBegan(cocos2d::Touch * touch, cocos2d::Event * event)
+{
+	label->setString("BEGAN" + cocos2d::StringUtils::toString(touch->getLocationInView().x));
+	for (auto* s : touchableSprites)
+	{
+
+		if (s->onTouchBegan(touch, event))
+		{
+			if (s->GetToolTip() != nullptr && s->GetDisabled())
+				s->GetToolTip()->setVisible(true);
+
+			if (!s->GetDisabled())
+			{
+				if (s->GetType() != Touchables::T_BACK)
+					s->getSprite()->setTexture("Button2.png");
+				if (s->GetLabel("label") != nullptr)
+				{
+					s->GetLabel("label")->setColor(ccc3(0, 0, 255));
+				}
+			}
+			switch (s->GetType())
+			{
+			case Touchables::T_BACK:
+				break;
+
+			case Touchables::T_LEVEL1:
+				break;
+
+			case Touchables::T_LEVEL2:
+				break;
+			case Touchables::T_LEVEL3:
+				break;
+			}
+
+		}
+	}
+	return true;
 }
 void SelectLevel::menuCloseCallback(Ref* pSender)
 {

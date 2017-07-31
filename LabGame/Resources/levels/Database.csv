@@ -1,5 +1,5 @@
-type,price,Tool tip in shop,Walking animation,Attacking animation,Normal frame count,X size,Y size,Gold Shop,Gold Game,Damage,Speed
 cat,20,Most basic monster,Sprites/cat/walk/walk_,Sprites/cat/attack/attack_,7,177,177,150,50,15,100
 dog,20,Unlock dog,Sprites/dog/walk/walk_,Sprites/dog/attack/attack_,7,150,173,200,100,15,100
 enemydog,20,-,Sprites/dog/walk/walk_,Sprites/dog/attack/attack_,7,150,173,0,0,5,-100
 zombie,25,Unlock Zombie Girl,Sprites/zombiegirl/walk/Walk_,Sprites/zombiegirl/walk/Walk_,10,130,144,300,130,20,150
+zombieb,35,Unlock Zombie Boy,Sprites/zombieboy/walk/Walk_,Sprites/zombieboy/walk/Walk_,10,140,169,400,150,30,140

@@ -30,6 +30,8 @@ private:
 	GameChar* b;
 	GLProgram* proPostProcess;
 	RenderTexture *rendtex;
+	vector<string> Inventory;
+
 	Sprite* rendtexSprite;
 	Sprite* backgroundSprite;
 	Sprite* sprite;

@@ -3,7 +3,6 @@
 #include "MenuScene.h"
 #include "HelloWorldScene.h"
 #include "SelectLevelScene.h"
-#include "SimpleAudioEngine.h"
 #include <string>
 using std::string;
 #include <iostream>
@@ -105,6 +104,10 @@ bool Settings::init()
 	auto delay = DelayTime::create(5.0f);
 	auto delaySequence = Sequence::create(delay, delay->clone(), nullptr);
 	auto sequence = Sequence::create(moveEvent, moveEvent->reverse(), delaySequence, nullptr); //Store all the events, end with nullptr for all sequence
+	auto listener1 = EventListenerTouchOneByOne::create();
+	listener1->setSwallowTouches(true);
+	listener1->onTouchBegan = CC_CALLBACK_2(Settings::onTouchBegan, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, this);
 
 	auto listener = EventListenerKeyboard::create();
 
@@ -121,9 +124,6 @@ bool Settings::init()
 	_mouseListener->onMouseUp = CC_CALLBACK_1(Settings::onMouseUp, this);
 	_mouseListener->onMouseMove = CC_CALLBACK_1(Settings::onMouseMove, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
-
-	auto listener1 = EventListenerTouchOneByOne::create();
-	listener1->onTouchEnded = CC_CALLBACK_2(Settings::onTouchEnded, this);
 
 	this->scheduleUpdate();
 	/*
@@ -212,7 +212,6 @@ bool Settings::init()
 	//this->addChild(rendtexSprite, 2);
 
 	// Load sound
-	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("audio/click.wav");
 
 	////Shadow for touchable sprites
 	//for (auto* s : touchableSprites)
@@ -243,6 +242,26 @@ void Settings::update(float deltaTime)
 	{
 		s->Update(deltaTime);
 	}
+}
+bool Settings::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event)
+{
+
+	for (auto* s : touchableSprites)
+	{
+		std::stringstream oss;
+		if (s->onTouchBegan(touch,event))
+		{
+			switch (s->GetType())
+			{
+			case Touchables::T_BACK:
+			{
+				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, MenuScene::createScene(), Color3B(0, 255, 255)));
+				break;
+			}
+			}
+		}
+	}
+	return false;
 }
 void Settings::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
 {
@@ -384,8 +403,7 @@ void Settings::onMouseUp(Event *event)
 			{
 			case Touchables::T_BACK:
 			{
-				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, MenuScene::createScene(), Color3B(0, 255, 255)));
-				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/click.wav");
+				//CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, MenuScene::createScene(), Color3B(0, 255, 255)));
 				break;
 			}
 			}

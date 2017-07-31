@@ -25,7 +25,6 @@
 #pragma once
 
 #include <stdint.h>
-
 #include "vorbis/vorbisfile.h"
 
 namespace cocos2d { namespace experimental {

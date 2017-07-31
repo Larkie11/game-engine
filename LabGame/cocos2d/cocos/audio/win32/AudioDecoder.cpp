@@ -25,6 +25,8 @@
 #include "audio/win32/AudioDecoder.h"
 #include "audio/win32/AudioMacros.h"
 #include "platform/CCFileUtils.h"
+#include <cstdlib>
+#include <stdlib.h>
 
 #define LOG_TAG "AudioDecoder"
 

@@ -27,7 +27,8 @@ THE SOFTWARE.
 #include "audio/android/AudioDecoder.h"
 #include "audio/android/AudioResampler.h"
 #include "audio/android/PcmBufferProvider.h"
-
+#include <cstdlib>
+#include <stdlib.h>
 #include <thread>
 #include <chrono>
 
