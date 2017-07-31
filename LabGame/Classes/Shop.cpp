@@ -37,6 +37,7 @@ bool Shop::init()
 	}
 	
 	touchableSprites.clear();
+	this->setTouchEnabled(true);
 
 	visibleSize = Director::getInstance()->getWinSizeInPixels();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -48,6 +49,8 @@ bool Shop::init()
 	scrollView->setBounceEnabled(true);
 	scrollView->setContentSize(visibleSize);
 	scrollView->setInnerContainerSize(Size(3000, 3000));
+	scrollView->setTouchEnabled(true);
+	scrollView->setSwallowTouches(false);
 
 	scrollView->setAnchorPoint(Vec2::ZERO);
 	scrollView->setPosition(Vec2(0, 0));
@@ -150,6 +153,19 @@ bool Shop::init()
 	nodeItems->addChild(scrollView);
 	/*nodeItems->addChild(scrollManager);
 	scrollManager->addChild(scrollView);*/
+	auto listener1 = EventListenerTouchOneByOne::create();
+	a = listener1->isEnabled();
+	listener1->setSwallowTouches(true);
+	listener1->onTouchBegan = CC_CALLBACK_2(Shop::onTouchBegan, this);
+	listener1->onTouchMoved = CC_CALLBACK_2(Shop::onTouchMove, this);
+	listener1->onTouchEnded = CC_CALLBACK_2(Shop::onTouchEnd, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, this);
+
+
+	label = Label::createWithTTF("HI", "fonts/Marker Felt.ttf", 32);
+	label->setString("HI");
+	label->setPosition(visibleSize.width * 0.35, visibleSize.height * 0.2);
+	spriteNode->addChild(label, 2);
 
 	auto listener = EventListenerKeyboard::create();
 
@@ -167,8 +183,6 @@ bool Shop::init()
 	_mouseListener->onMouseMove = CC_CALLBACK_1(Shop::onMouseMove, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
 
-	auto listener1 = EventListenerTouchOneByOne::create();
-	listener1->onTouchEnded = CC_CALLBACK_2(Shop::onTouchEnded, this);
 
 	this->scheduleUpdate();
 
@@ -239,16 +253,6 @@ void Shop::update(float deltaTime)
 	oss << "Gold: " << currency;
 	playerGold->setString(oss.str());
 
-}
-void Shop::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
-{
-	for (auto* s : touchableSprites)
-	{
-		if (s->onTouchBegan(touch, event))
-		{
-
-		}
-	}
 }
 void Shop::onMouseMove(Event *event)
 {
@@ -339,6 +343,147 @@ void Shop::onMouseMove(Event *event)
 
 	}
 }
+void Shop::onTouchEnd(cocos2d::Touch * touch, cocos2d::Event * event)
+{
+	label->setString("TOUCH END" + cocos2d::StringUtils::toString(touch->getLocationInView().x));
+
+	for (auto* s : touchableSprites)
+	{
+		std::stringstream oss;
+		if (s->onTouchBegan(touch,event))
+		{
+			switch (s->GetType())
+			{
+			case Touchables::T_BACK:
+			{
+				CCDirector::getInstance()->replaceScene(TransitionFade::create(1.5, MenuScene::createScene(), Color3B(0, 0, 0)));
+				//AudioEngine::play2d("audio/click.wav", false);
+				break;
+			}
+			case Touchables::T_SHOP1:
+			case Touchables::T_SHOP2:
+			case Touchables::T_SHOP3:
+			{
+				if (!s->GetDisabled())
+				{
+					int a = PlayerMonsterDatabase::getInstance()->GetFromDatabase(s->getSprite()->getName())->goldNeededShop;
+					if (currency >= a)
+					{
+						currency -= a;
+
+						//AudioEngine::play2d("audio/purchase.wav", false);
+						s->SetDisabled(true);
+						s->SetImage("ducttape.png", "purchased", 1);
+						s->StopAnimation();
+					}
+				}
+				else
+				{
+					//AudioEngine::play2d("audio/disabled.wav", false);
+				}
+				break;
+			}
+			}
+		}
+		else
+		{
+			if (s->GetToolTip() != nullptr)
+				s->GetToolTip()->setVisible(false);
+		}
+	}
+}
+void Shop::onTouchMove(cocos2d::Touch * touch, cocos2d::Event * event)
+{
+}
+bool Shop::onTouchBegan(cocos2d::Touch * touch, cocos2d::Event * event)
+{
+	Vec2 opps = touch->getLocationInView();
+	label->setString("TOUCH MOVE" + cocos2d::StringUtils::toString(touch->getLocationInView().x));
+	for (auto* s : touchableSprites)
+	{
+		//change
+		if (s->onTouchBegan(touch,event))
+		{
+			if (s->GetDisabled() != true)
+			{
+				if (s->GetToolTip() != nullptr && s->GetDisabled() != true)
+					s->GetToolTip()->setVisible(true);
+			}
+			else
+			{
+				/*if(s->GetImg("but1")->getActionManager()!=nullptr)
+				s->GetImg("but1")->stopAllActions();*/
+			}
+			switch (s->GetType())
+			{
+
+			case Touchables::T_SHOP1:
+				if (s->GetDisabled() != true)
+				{
+					{
+						s->getSprite()->setTexture("ShopNoHover.png");
+						for (int i = 0; i < touchableSprites.size(); i++)
+						{
+							if (touchableSprites[i]->checkMouseDown(event))
+							{
+								string a = PlayerMonsterDatabase::getInstance()->GetFromDatabase(touchableSprites[i]->getSprite()->getName())->animationSprites;
+								s->AnimateImage(a.c_str(), 1, PlayerMonsterDatabase::getInstance()->GetFromDatabase(touchableSprites[i]->getSprite()->getName())->spriteCount, PlayerMonsterDatabase::getInstance()->GetFromDatabase(touchableSprites[i]->getSprite()->getName())->spriteX, PlayerMonsterDatabase::getInstance()->GetFromDatabase(touchableSprites[i]->getSprite()->getName())->spriteY, 0.1);
+							}
+						}
+					}
+				}
+				break;
+			case Touchables::T_SHOP3:
+				if (s->GetDisabled() != true)
+				{
+					{
+						s->getSprite()->setTexture("ShopNoHover.png");
+						//s->AnimateImage("Sprites/cat/walk/walk_", 1, 7, 177, 177,0.1);
+					}
+				}
+
+				break;
+			case Touchables::T_SHOP2:
+				if (s->GetDisabled() != true)
+				{
+					{
+						s->getSprite()->setTexture("Shop2NoHover.png");
+						//s->AnimateImage("Sprites/cat/walk/walk_", 1, 7, 177, 177,0.1);
+					}
+				}
+				break;
+			}
+
+		}
+		else
+		{
+			if (s->GetToolTip() != nullptr)
+				s->GetToolTip()->setVisible(false);
+
+			s->StopAnimation();
+			switch (s->GetType())
+			{
+			case Touchables::T_SHOP1:
+			case Touchables::T_SHOP3:
+			{
+
+				s->getSprite()->setTexture("ShopHover.png");
+
+			}
+			break;
+			case Touchables::T_SHOP2:
+			{
+
+				s->getSprite()->setTexture("Shop2Hover.png");
+			}
+			break;
+			}
+
+		}
+
+	}
+	return true;
+}
 void Shop::onMouseUp(Event *event)
 {
 	//Detection for touching any touchable sprite
@@ -396,6 +541,7 @@ void Shop::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 void Shop::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
 {
 }
+
 void Shop::menuCloseCallback(Ref* pSender)
 {
 	//Close the cocos2d-x game scene and quit the application
